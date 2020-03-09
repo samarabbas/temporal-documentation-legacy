@@ -1,3 +1,3 @@
 # Video Tutorials
 
-Cadence video tutorials.
+Temporal video tutorials.

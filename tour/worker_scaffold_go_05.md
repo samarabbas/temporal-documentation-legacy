@@ -17,4 +17,4 @@ go build
 ./cadence-scaffold
 ```
 
-Note that you don't need to have the local Cadence service running to execute this test.
+Note that you don't need to have the local Temporal service running to execute this test.

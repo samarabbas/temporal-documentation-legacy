@@ -15,7 +15,7 @@ the activity. Further, the lifecycle of this activity requires management, and t
 requires manual restart if it fails before acquiring the data.
 
 **Signals**, on the other hand, provide a fully asynchronous and durable mechanism for providing data to
-a running workflow. When a signal is received for a running workflow, Cadence persists the event
+a running workflow. When a signal is received for a running workflow, Temporal persists the event
 and the payload in the workflow history. The workflow can then process the signal at any time
 afterwards without the risk of losing the information. The workflow also has the option to stop
 execution by blocking on a **signal channel**.

@@ -24,7 +24,7 @@ For a sample, the Go client implements a [tracing context propagator](https://gi
 
 ### Server-Side Headers Support
 
-On the server side, Cadence provides a mechanism to propagate what it calls headers across different workflow
+On the server side, Temporal provides a mechanism to propagate what it calls headers across different workflow
 transitions.
 
 ```go
@@ -35,7 +35,7 @@ struct Header {
 
 The client leverages this to pass around selected context information. [HeaderReader](https://godoc.org/go.uber.org/cadence/internal#HeaderReader)
 and [HeaderWriter](https://godoc.org/go.uber.org/cadence/internal#HeaderWriter) are interfaces
-that allow reading and writing to the Cadence server headers. The client already provides [implementations](https://github.com/uber-go/cadence-client/blob/master/internal/headers.go)
+that allow reading and writing to the Temporal server headers. The client already provides [implementations](https://github.com/uber-go/cadence-client/blob/master/internal/headers.go)
 for these. `HeaderWriter` sets a field in the header. Headers is a map, so setting a value for the the same key
 multiple times will overwrite the previous values. `HeaderReader` iterates through the headers map and runs the
 provided handler function on each key/value pair, allowing you to deal with the fields you are interested in.

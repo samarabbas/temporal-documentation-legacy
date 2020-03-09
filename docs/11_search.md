@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Cadence supports creating workflows with customized key-value pairs, updating the information within the workflow code, and then listing/searching workflows with a SQL-like query. For example, you can create workflows with keys `city` and `age`, then search all workflows with `city = seattle and age > 22`.
+Temporal supports creating workflows with customized key-value pairs, updating the information within the workflow code, and then listing/searching workflows with a SQL-like query. For example, you can create workflows with keys `city` and `age`, then search all workflows with `city = seattle and age > 22`.
 
 Also note that normal workflow properties like start time and workflow type can be queried as well. For example, the following query could be specified when [listing workflows from the CLI](08_cli#list-closed-or-open-workflow-executions) or using the list APIs ([Go](https://godoc.org/go.uber.org/cadence/client#Client), [Java](https://static.javadoc.io/com.uber.cadence/cadence-client/2.6.0/com/uber/cadence/WorkflowService.Iface.html#ListWorkflowExecutions-com.uber.cadence.ListWorkflowExecutionsRequest-)):
 
@@ -12,7 +12,7 @@ WorkflowType = "main.Workflow" and CloseStatus != 0 and (StartTime > "2019-06-07
 
 ## Memo vs Search Attributes
 
-Cadence offers two methods for creating workflows with key-value pairs: memo and search attributes. Memo can only be provided on workflow start. Also, memo data are not indexed, and are therefore not searchable. Memo data are visible when listing workflows using the list APIs. Search attributes data are indexed so you can search workflows by querying on these attributes. However, search attributes require the use of Elasticsearch.
+Temporal offers two methods for creating workflows with key-value pairs: memo and search attributes. Memo can only be provided on workflow start. Also, memo data are not indexed, and are therefore not searchable. Memo data are visible when listing workflows using the list APIs. Search attributes data are indexed so you can search workflows by querying on these attributes. However, search attributes require the use of Elasticsearch.
 
 Memo and search attributes are available in the Go client in [StartWorkflowOptions](https://godoc.org/go.uber.org/cadence/internal#StartWorkflowOptions).
 
@@ -24,7 +24,7 @@ type StartWorkflowOptions struct {
     Memo map[string]interface{}
 
     // SearchAttributes - Optional indexed info that can be used in query of List/Scan/Count workflow APIs (only
-    // supported when Cadence server is using Elasticsearch). The key and value type must be registered on Cadence server side.
+    // supported when Temporal server is using Elasticsearch). The key and value type must be registered on Temporal server side.
     // Use GetSearchAttributes API to get valid key and corresponding value type.
     SearchAttributes map[string]interface{}
 }
@@ -36,13 +36,13 @@ Some important distinctions between memo and search attributes:
 
 - Memo can support all data types because it is not indexed. Search attributes only support basic data types (including String, Int, Float, Bool, Datetime) because it is indexed by Elasticsearch.
 - Memo does not restrict on key names. Search attributes require that keys are allowlisted before using them because Elasticsearch has a limit on indexed keys.
-- Memo doesn't require Cadence clusters to depend on Elasticsearch while search attributes only works with Elasticsearch.
+- Memo doesn't require Temporal clusters to depend on Elasticsearch while search attributes only works with Elasticsearch.
 
 ## Search Attributes (Go Client Usage)
 
-When using the Cadence Go client, provide key-value pairs as SearchAttributes in [StartWorkflowOptions](https://godoc.org/go.uber.org/cadence/internal#StartWorkflowOptions).
+When using the Temporal Go client, provide key-value pairs as SearchAttributes in [StartWorkflowOptions](https://godoc.org/go.uber.org/cadence/internal#StartWorkflowOptions).
 
-SearchAttributes is `map[string]interface{}` where the keys need to be allowlisted so that Cadence knows the attribute key name and value type. The value provided in the map must be the same type as registered.
+SearchAttributes is `map[string]interface{}` where the keys need to be allowlisted so that Temporal knows the attribute key name and value type. The value provided in the map must be the same type as registered.
 
 ### Allow Listing Search Attributes
 
@@ -128,7 +128,7 @@ We recommend limiting the number of Elasticsearch indexes by enforcing limits on
 - Size of value: 2kb per value
 - Total size of key and values: 40kb per workflow
 
-Cadence reserves keys like DomainID, WorkflowID, and RunID. These can only be used in list queries. The values are not updatable.
+Temporal reserves keys like DomainID, WorkflowID, and RunID. These can only be used in list queries. The values are not updatable.
 
 ### Upsert Search Attributes in Workflow
 
@@ -212,7 +212,7 @@ These can be found by using the CLI get-search-attr command or the GetSearchAttr
 
 There are some special considerations for these attributes:
 
-- CloseStatus, CloseTime, DomainID, ExecutionTime, HistoryLength, RunID, StartTime, WorkflowID, WorkflowType are reserved by Cadence and are read-only
+- CloseStatus, CloseTime, DomainID, ExecutionTime, HistoryLength, RunID, StartTime, WorkflowID, WorkflowType are reserved by Temporal and are read-only
 - CloseStatus is a mapping of int to state:
   - 0 = completed
   - 1 = failed
@@ -231,7 +231,7 @@ If you use retry or the cron feature to query workflows that will start executio
 ### General Notes About Queries
 
 - Pagesize default is 1000, and cannot be larger than 10k
-- Range query on Cadence timestamp (StartTime, CloseTime, ExecutionTime) cannot be larger than 9223372036854775807 (maxInt64 - 1001)
+- Range query on Temporal timestamp (StartTime, CloseTime, ExecutionTime) cannot be larger than 9223372036854775807 (maxInt64 - 1001)
 - Query by time range will have 1ms resolution
 - Query column names are case sensitive
 - ListWorkflow may take longer when retrieving a large number of workflows (10M+)
@@ -242,7 +242,7 @@ If you use retry or the cron feature to query workflows that will start executio
 
 ### CLI
 
-Support for search attributes is available as of version 0.6.0 of the Cadence server. You can also use the CLI from the latest [CLI Docker image](https://hub.docker.com/r/ubercadence/cli) (supported on 0.6.4 or later).
+Support for search attributes is available as of version 0.6.0 of the Temporal server. You can also use the CLI from the latest [CLI Docker image](https://hub.docker.com/r/ubercadence/cli) (supported on 0.6.4 or later).
 
 #### Start Workflow with Search Attributes
 
@@ -274,14 +274,14 @@ cadence --do samples-domain wf list -q 'WorkflowType = "main.Workflow" StartTime
 
 ### Web UI Support
 
-Queries are supported in [Cadence Web](https://github.com/uber/cadence-web) as of release 3.4.0. Use the "Basic/Advanced" button to switch to "Advanced" mode and type the query in the search box.
+Queries are supported in [Temporal Web](https://github.com/uber/cadence-web) as of release 3.4.0. Use the "Basic/Advanced" button to switch to "Advanced" mode and type the query in the search box.
 
 ## Local Testing
 
 1. Increase Docker memory to higher than 6GB. Navigate to Docker -> Preferences -> Advanced -> Memory
-2. Get the Cadence Docker compose file. Run `curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose-es.yml`
-3. Start Cadence Docker (which contains Apache Kafka, Apache Zookeeper, and Elasticsearch) using `docker-compose -f docker-compose-es.yml up`
-4. From the Docker output log, make sure Elasticsearch and Cadence started correctly. If you encounter an insufficient disk space error, try `docker system prune -a --volumes`
+2. Get the Temporal Docker compose file. Run `curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose-es.yml`
+3. Start Temporal Docker (which contains Apache Kafka, Apache Zookeeper, and Elasticsearch) using `docker-compose -f docker-compose-es.yml up`
+4. From the Docker output log, make sure Elasticsearch and Temporal started correctly. If you encounter an insufficient disk space error, try `docker system prune -a --volumes`
 5. Register a local domain and start using it. `cadence --do samples-domain d re`
 6. Allowlist search attributes. `cadence --do domain adm cl asa --search_attr_key NewKey --search_attr_type 1`
 

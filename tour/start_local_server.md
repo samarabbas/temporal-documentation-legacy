@@ -4,13 +4,13 @@ weight: 10
 categories: [tour]
 ---
 
-# Start Cadence Server Locally
+# Start Temporal Server Locally
 
-The exercises in this tour assume that you have a Cadence server running. 
-Fortunately, the entire Cadence server can be run locally using Docker. 
+The exercises in this tour assume that you have a Temporal server running. 
+Fortunately, the entire Temporal server can be run locally using Docker. 
 
 Use the steps below based on your OS. Then run the commands from the right side in a terminal
-to download and start the Cadence server.
+to download and start the Temporal server.
 
 ## Mac requirements
 

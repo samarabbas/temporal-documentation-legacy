@@ -198,7 +198,7 @@ public static class GreetingWorkflowImpl implements GreetingWorkflow {
     public String getGreeting(String name) {
         GreetingChild child = Workflow.newChildWorkflowStub(GreetingChild.class);
         Promise<String> greeting = Async.function(child::composeGreeting, "Hello", name);
-        child.updateName("Cadence");
+        child.updateName("Temporal");
         return greeting.get();
     }
 }
@@ -207,7 +207,7 @@ Calling methods annotated with `@QueryMethod` is not allowed from within workflo
 
 ## Workflow Implementation Constraints
 
-Cadence uses the [Microsoft Azure Event Sourcing pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) to recover
+Temporal uses the [Microsoft Azure Event Sourcing pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) to recover
 the state of a workflow object including its threads and local variable values.
 In essence, every time a workflow state has to be restored, its code is re-executed from the beginning. When replaying, side
 effects (such as activity invocations) are ignored because they are already recorded in the workflow event history.
@@ -238,7 +238,7 @@ Workflow method arguments and return values are serializable to a byte array usi
 interface. The default implementation uses JSON serializer, but you can use any alternative serialization mechanism.
 
 The values passed to workflows through invocation parameters or returned through a result value are recorded in the execution history.
-The entire execution history is transferred from the Cadence service to workflow workers with every event that the workflow logic needs to process.
+The entire execution history is transferred from the Temporal service to workflow workers with every event that the workflow logic needs to process.
 A large execution history can thus adversely impact the performance of your workflow.
 Therefore, be mindful of the amount of data that you transfer via activity invocation parameters or return values.
 Otherwise, no additional limitations exist on activity implementations.

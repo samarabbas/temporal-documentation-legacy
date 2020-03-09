@@ -24,7 +24,7 @@ type (
 	}
 )
 
-// SetupServiceConfig configures worker for local Cadence server
+// SetupServiceConfig configures worker for local Temporal server
 func (h *SampleHelper) SetupServiceConfig() {
 	logger, err := zap.NewDevelopment()
 	if err != nil {

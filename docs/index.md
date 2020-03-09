@@ -6,11 +6,11 @@ The usual approach to building such applications is a hodgepodge of stateless se
 databases, cron jobs, and queuing systems. This negatively impacts the developer productivity as most of the code is
 dedicated to plumbing, obscuring the actual business logic behind a myriad of low-level details. Such systems frequently have availability problems as it is hard to keep all the components healthy.
 
-The Cadence solution is a [_fault-oblivious stateful_ programming model](03_concepts/01_workflows) that obscures most of the complexities of building scalable distributed applications. In essence, Cadence provides a durable virtual memory that is not
+The Temporal solution is a [_fault-oblivious stateful_ programming model](03_concepts/01_workflows) that obscures most of the complexities of building scalable distributed applications. In essence, Temporal provides a durable virtual memory that is not
 linked to a specific process, and preserves the full application state, including function stacks, with local variables across all sorts of host and software failures.
-This allows you to write code using the full power of a programming language while Cadence takes care of durability, availability, and scalability of the application.
+This allows you to write code using the full power of a programming language while Temporal takes care of durability, availability, and scalability of the application.
 
-Cadence consists of a programming framework (or client library) and a managed service (or backend).
+Temporal consists of a programming framework (or client library) and a managed service (or backend).
 The framework enables developers to author and coordinate tasks in familiar languages
 ([Go](https://github.com/uber-go/cadence-client/) and [Java](https://github.com/uber/cadence-java-client)
 are supported today with some projects in [Python](https://github.com/firdaus/cadence-python) and
@@ -28,10 +28,10 @@ are supported. An adapter to any other database that provides multi-row single s
 can be added. There are different service deployment models. At Uber, our team operates multitenant clusters
 that are shared by hundreds of applications.
 
-Watch Maxim's talk from the Uber Open Summit for an introduction to the Cadence programming model and value proposition.
+Watch Maxim's talk from the Uber Open Summit for an introduction to the Temporal programming model and value proposition.
 
 {% include youtubePlayer.html id="llmsBGKOuWI" %}
 
-The GitHub repo for the Cadence server is [uber/cadence](https://github.com/uber/cadence). The docker
-image for the Cadence server is available on Docker Hub at
+The GitHub repo for the Temporal server is [uber/cadence](https://github.com/uber/cadence). The docker
+image for the Temporal server is available on Docker Hub at
 [ubercadence/server](https://hub.docker.com/r/ubercadence/server).

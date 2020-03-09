@@ -1,12 +1,12 @@
 # Queries
 
 If a workflow execution has been stuck at a state for longer than an expected period of time, you
-might want to query the current call stack. You can use the Cadence CLI to perform this query. For
+might want to query the current call stack. You can use the Temporal CLI to perform this query. For
 example:
 
 `cadence-cli --domain samples-domain workflow query -w my_workflow_id -r my_run_id -qt __stack_trace`
 
-This command uses `__stack_trace`, which is a built-in query type supported by the Cadence client
+This command uses `__stack_trace`, which is a built-in query type supported by the Temporal client
 library. You can add custom query types to handle queries such as querying the current state of a
 workflow, or querying how many activities the workflow has completed. To do this, you need to set
 up a query handler using `workflow.SetQueryHandler`.
@@ -51,7 +51,7 @@ You can now query `current_state` by using the CLI:
 
 `cadence-cli --domain samples-domain workflow query -w my_workflow_id -r my_run_id -qt current_state`
 
-You can also issue a query from code using the `QueryWorkflow()` API on a Cadence client object.
+You can also issue a query from code using the `QueryWorkflow()` API on a Temporal client object.
 
 ## Consistent Query
 

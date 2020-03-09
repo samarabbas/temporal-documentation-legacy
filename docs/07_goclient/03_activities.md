@@ -11,7 +11,7 @@ value. The result value can be either a basic type or a struct with the only req
 it is serializable.
 
 The values passed to activities through invocation parameters or returned through the result value
-are recorded in the execution history. The entire execution history is transferred from the Cadence
+are recorded in the execution history. The entire execution history is transferred from the Temporal
 service to workflow workers with every event that the workflow logic needs to process. A large execution
 history can thus adversely impact the performance of your workflow. Therefore, be mindful of the amount
 of data you transfer via activity invocation parameters or return values. Otherwise, no additional
@@ -36,7 +36,7 @@ func init() {
 	activity.Register(SimpleActivity)
 }
 
-// SimpleActivity is a sample Cadence activity function that takes one parameter and
+// SimpleActivity is a sample Temporal activity function that takes one parameter and
 // returns a string containing the parameter value.
 func SimpleActivity(ctx context.Context, value string) (string, error) {
 	activity.GetLogger(ctx).Info("SimpleActivity called.", zap.String("Value", value))
@@ -47,7 +47,7 @@ Let's take a look at each component of this activity.
 
 ### Declaration
 
-In the Cadence programing model, an activity is implemented with a function. The function declaration specifies the parameters the activity accepts as well as any values it might return. An activity function can take zero or many activity specific parameters and can return one or two values. It must always at least return an error value. The activity function can accept as parameters and return as results any serializable type.
+In the Temporal programing model, an activity is implemented with a function. The function declaration specifies the parameters the activity accepts as well as any values it might return. An activity function can take zero or many activity specific parameters and can return one or two values. It must always at least return an error value. The activity function can accept as parameters and return as results any serializable type.
 
 `func SimpleActivity(ctx context.Context, value string) (string, error)`
 
@@ -63,8 +63,8 @@ constructs.
 
 #### Heart Beating
 
-For long-running activities, Cadence provides an API for the activity code to report both liveness and
-progress back to the Cadence managed service.
+For long-running activities, Temporal provides an API for the activity code to report both liveness and
+progress back to the Temporal managed service.
 
 ```go
 progress := 0
@@ -83,7 +83,7 @@ with `TimeoutType_HEARTBEAT`.
 You can also heartbeat an activity from an external source:
 
 ```go
-// Instantiate a Cadence service client.
+// Instantiate a Temporal service client.
 cadence.Client client = cadence.NewClient(...)
 
 // Record heartbeat.

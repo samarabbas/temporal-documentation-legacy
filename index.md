@@ -1,8 +1,8 @@
 ---
 title: Welcome
 layout: marketing
-callout: Fault-Oblivious Stateful Code Platform
-callout_description: Cadence fault-oblivious stateful code platform preserves complete multithreaded application state including thread stacks with local variables across hardware and software failures. It greatly simplifies coding of complex stateful distributed applications. At the same time it is scalable and robust enough to power hundreds of critical use cases at Uber and outside.
+callout: Workflow as Code Platform
+callout_description: Temporal Workflow as Code Platform preserves complete multithreaded application state including thread stacks with local variables across hardware and software failures. It greatly simplifies coding of complex stateful distributed applications. At the same time it is scalable and robust enough to power hundreds of critical use cases at Uber and outside.
 ---
 
 <section class="features">
@@ -33,7 +33,7 @@ callout_description: Cadence fault-oblivious stateful code platform preserves co
     <a href="{{ '/docs/03_concepts' | relative_url }}">
       <span class="description">Concepts</span>
     </a>
-    <p>Learn core Cadence concepts</p>
+    <p>Learn core Temporal concepts</p>
   </div>
 
   <div class="feature open-source">
@@ -89,7 +89,7 @@ callout_description: Cadence fault-oblivious stateful code platform preserves co
     <a href="{{ '/docs/99_contact_us' | relative_url }}">
       <span class="description">Contact Us</span>
     </a>
-    <p>Contact Cadence developers and community</p>
+    <p>Contact Temporal developers and community</p>
   </div>
 
 </section>

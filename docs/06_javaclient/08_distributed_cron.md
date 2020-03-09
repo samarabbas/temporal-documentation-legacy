@@ -1,11 +1,11 @@
 # Distributed CRON
 
-It is relatively straightforward to turn any Cadence workflow into a Cron workflow. All you need
+It is relatively straightforward to turn any Temporal workflow into a Cron workflow. All you need
 is to supply a cron schedule when starting the workflow using the CronSchedule
 parameter of
 [StartWorkflowOptions](https://static.javadoc.io/com.uber.cadence/cadence-client/2.5.1/com/uber/cadence/client/WorkflowOptions.html).
 
-You can also start a workflow using the Cadence CLI with an optional cron schedule using the `--cron` argument.
+You can also start a workflow using the Temporal CLI with an optional cron schedule using the `--cron` argument.
 
 For workflows with CronSchedule:
 
@@ -14,12 +14,12 @@ For workflows with CronSchedule:
 * If a workflow failed and a RetryPolicy is supplied to the StartWorkflowOptions
   as well, the workflow will retry based on the RetryPolicy. While the workflow is
   retrying, the server will not schedule the next cron run.
-* Cadence server only schedules the next cron run after the current run is
+* Temporal server only schedules the next cron run after the current run is
   completed. If the next schedule is due while a workflow is running (or retrying),
   then it will skip that schedule.
 * Cron workflows will not stop until they are terminated or cancelled.
 
-Cadence supports the standard cron spec:
+Temporal supports the standard cron spec:
 
 ```go
 // CronSchedule - Optional cron schedule for workflow. If a cron schedule is specified, the workflow will run
@@ -49,7 +49,7 @@ workflows was to use a delay timer as the last step and then return
 `ContinueAsNew`. One problem with that implementation is that if the workflow
 fails or times out, the cron would stop.
 
-To convert those workflows to make use of Cadence CronSchedule, all you need is to remove the delay timer and return without using
+To convert those workflows to make use of Temporal CronSchedule, all you need is to remove the delay timer and return without using
 `ContinueAsNew`. Then start the workflow with the desired CronSchedule.
 
 

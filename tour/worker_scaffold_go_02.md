@@ -13,4 +13,4 @@ The top-level dependencies are all Uber open source libraries:
 1. [Tally](https://github.com/uber-go/tally) records metrics
 2. [Zap](https://github.com/uber-go/zap) for logging
 3. [YARPC](https://github.com/yarpc/yarpc-go) is a messaging platform
-4. [Cadence](https://github.com/uber-go/cadence-client) is the Cadence Go client
+4. [Temporal](https://github.com/uber-go/cadence-client) is the Temporal Go client

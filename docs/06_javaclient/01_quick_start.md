@@ -1,16 +1,16 @@
 # Quick Start
 
-This topic helps you install the Cadence service and implement a workflow.
+This topic helps you install the Temporal service and implement a workflow.
 
-## Install Cadence Service Locally
+## Install Temporal Service Locally
 
 ### Install docker
 
 Follow the Docker installation instructions found here: https://docs.docker.com/engine/installation/
 
-### Run Cadence Server Using Docker Compose
+### Run Temporal Server Using Docker Compose
 
-Download the Cadence docker-compose file:
+Download the Temporal docker-compose file:
 ```bash
 > curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose.yml
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
@@ -19,7 +19,7 @@ Download the Cadence docker-compose file:
 > ls
 docker-compose.yml
 ```
-Start Cadence Service:
+Start Temporal Service:
 ```bash
 > docker-compose up
 Creating network "quick_start_default" with the default driver
@@ -104,9 +104,9 @@ Bad binaries to reset:
 ```
 ## Implement Hello World Java Workflow
 
-### Include Cadence Java Client Dependency
+### Include Temporal Java Client Dependency
 
-Go to the [Maven Repository Uber Cadence Java Client Page](https://mvnrepository.com/artifact/com.uber.cadence/cadence-client)
+Go to the [Maven Repository Uber Temporal Java Client Page](https://mvnrepository.com/artifact/com.uber.cadence/cadence-client)
 and find the latest version of the library. Include it as a dependency into your Java project. For example if you
 are using Gradle the dependency looks like:
 ```
@@ -135,7 +135,7 @@ public class GettingStarted {
 }
 ```
 If you are having problems setting up the build files use the
-[Cadence Java Samples](https://github.com/uber/cadence-java-samples) GitHub repository as a reference.
+[Temporal Java Samples](https://github.com/uber/cadence-java-samples) GitHub repository as a reference.
 
 Also add the following logback config file somewhere in your classpath:
 ```xml
@@ -181,8 +181,8 @@ public class GettingStarted {
     }
 }
 ```
-To link the workflow implementation to the Cadence framework, it should be registered with a worker that connects to
-a Cadence Service. By default the worker connects to the locally running Cadence service.
+To link the workflow implementation to the Temporal framework, it should be registered with a worker that connects to
+a Temporal Service. By default the worker connects to the locally running Temporal service.
 ```java
     public static void main(String[] args) {
         Worker.Factory factory = new Worker.Factory("test-domain");
@@ -199,7 +199,7 @@ Now run the worker program. Following is an example log:
 13:35:02.671 [main] INFO  c.u.cadence.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.2S, pollBackoffMaximumInterval=PT20S, pollThreadCount=1, pollThreadNamePrefix='Workflow Poller taskList="HelloWorldTaskList", domain="test-domain", type="workflow"'}, identity=45937@maxim-C02XD0AAJGH6}
 13:35:02.673 [main] INFO  c.u.cadence.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.2S, pollBackoffMaximumInterval=PT20S, pollThreadCount=1, pollThreadNamePrefix='null'}, identity=81b8d0ac-ff89-47e8-b842-3dd26337feea}
 ```
-No Hello printed. This is expected because a worker is just a workflow code host. The workflow has to be started to execute. Let's use Cadence CLI to start the workflow:
+No Hello printed. This is expected because a worker is just a workflow code host. The workflow has to be started to execute. Let's use Temporal CLI to start the workflow:
 ```bash
 > docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"World\"
 Started Workflow Id: bcacfabd-9f9a-46ac-9b25-83bcea5d7fd7, run Id: e7c40431-8e23-485b-9649-e8f161219efe
@@ -213,7 +213,7 @@ The output of the program should change to:
 ```
 Let's start another workflow execution:
 ```bash
-> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Cadence\"
+> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Temporal\"
 Started Workflow Id: d2083532-9c68-49ab-90e1-d960175377a7, run Id: 331bfa04-834b-45a7-861e-bcb9f6ddae3e
 ```
 And the output changed to:
@@ -222,7 +222,7 @@ And the output changed to:
 13:35:02.671 [main] INFO  c.u.cadence.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.2S, pollBackoffMaximumInterval=PT20S, pollThreadCount=1, pollThreadNamePrefix='Workflow Poller taskList="HelloWorldTaskList", domain="test-domain", type="workflow"'}, identity=45937@maxim-C02XD0AAJGH6}
 13:35:02.673 [main] INFO  c.u.cadence.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.2S, pollBackoffMaximumInterval=PT20S, pollThreadCount=1, pollThreadNamePrefix='null'}, identity=81b8d0ac-ff89-47e8-b842-3dd26337feea}
 13:40:28.308 [workflow-root] INFO  c.u.c.samples.hello.GettingStarted - Hello World!
-13:42:34.994 [workflow-root] INFO  c.u.c.samples.hello.GettingStarted - Hello Cadence!
+13:42:34.994 [workflow-root] INFO  c.u.c.samples.hello.GettingStarted - Hello Temporal!
 ```
 ### List Workflows and Workflow History
 
@@ -266,38 +266,38 @@ Even for such a trivial workflow, the history gives a lot of useful information.
 Before proceeding to a more complex workflow implementation, let's take a look at the workflow ID semantic.
 When starting a workflow without providing an ID, the client generates one in the form of a UUID. In most real-life scenarios this is not a desired behavior. The business ID should be used instead. Here, we'll specify the ID when starting a workflow:
 ```bash
-> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflow_id "HelloCadence1" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Cadence\"
-Started Workflow Id: HelloCadence1, run Id: 75170c60-6d72-48c6-b509-7c9d9f25a8a8
+> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Temporal\"
+Started Workflow Id: HelloTemporal1, run Id: 75170c60-6d72-48c6-b509-7c9d9f25a8a8
 ```
 Now the list operation is more meaningful as the WORKFLOW ID is our business ID:
 ```bash
 > docker run --network=host --rm ubercadence/cli:master --do test-domain workflow list
              WORKFLOW TYPE            |             WORKFLOW ID              |                RUN ID                | START TIME | EXECUTION TIME | END TIME
-  HelloWorld::sayHello                | HelloCadence1                        | 75170c60-6d72-48c6-b509-7c9d9f25a8a8 | 21:04:46   | 21:04:46       | 21:04:46
+  HelloWorld::sayHello                | HelloTemporal1                        | 75170c60-6d72-48c6-b509-7c9d9f25a8a8 | 21:04:46   | 21:04:46       | 21:04:46
 ```
 Let's try to start workflow with the same ID:
 ```bash
-> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflow_id "HelloCadence1" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Cadence\"
+> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Temporal\"
 Error: Failed to create workflow.
-Error Details: WorkflowExecutionAlreadyStartedError{Message: Workflow execution already finished successfully. WorkflowId: HelloCadence1, RunId: 75170c60-6d72-48c6-b509-7c9d9f25a8a8. Workflow ID reuse policy: allow duplicate workflow ID if last run failed., StartRequestId: 350a03ed-a11f-4959-a424-8ff7166ed457, RunId: 75170c60-6d72-48c6-b509-7c9d9f25a8a8}
+Error Details: WorkflowExecutionAlreadyStartedError{Message: Workflow execution already finished successfully. WorkflowId: HelloTemporal1, RunId: 75170c60-6d72-48c6-b509-7c9d9f25a8a8. Workflow ID reuse policy: allow duplicate workflow ID if last run failed., StartRequestId: 350a03ed-a11f-4959-a424-8ff7166ed457, RunId: 75170c60-6d72-48c6-b509-7c9d9f25a8a8}
 ('export CADENCE_CLI_SHOW_STACKS=1' to see stack traces)
 ```
 
-Oops, Cadence doesn't let us create a workflow with the same ID. But there are use cases when it is desired. For example if there is a need to re-execute the workflow for a particular reason. This is achieved by specifying a special flag _Workflow ID Reuse Policy_. The value of 1 means `AllowDuplicate`:
+Oops, Temporal doesn't let us create a workflow with the same ID. But there are use cases when it is desired. For example if there is a need to re-execute the workflow for a particular reason. This is achieved by specifying a special flag _Workflow ID Reuse Policy_. The value of 1 means `AllowDuplicate`:
 ```bash
-> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflowidreusepolicy 1 --workflow_id "HelloCadence1" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Cadence\"
-Started Workflow Id: HelloCadence1, run Id: 37a740e5-838c-4020-aed6-1111b0689c38
+> docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflowidreusepolicy 1 --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"Temporal\"
+Started Workflow Id: HelloTemporal1, run Id: 37a740e5-838c-4020-aed6-1111b0689c38
 ```
 After the second start the workflow list is:
 ```bash
      WORKFLOW TYPE     |             WORKFLOW ID              |                RUN ID                | START TIME | EXECUTION TIME | END TIME
-  HelloWorld::sayHello | HelloCadence1                        | 37a740e5-838c-4020-aed6-1111b0689c38 | 21:11:47   | 21:11:47       | 21:11:47
-  HelloWorld::sayHello | HelloCadence1                        | 75170c60-6d72-48c6-b509-7c9d9f25a8a8 | 21:04:46   | 21:04:46       | 21:04:46
+  HelloWorld::sayHello | HelloTemporal1                        | 37a740e5-838c-4020-aed6-1111b0689c38 | 21:11:47   | 21:11:47       | 21:11:47
+  HelloWorld::sayHello | HelloTemporal1                        | 75170c60-6d72-48c6-b509-7c9d9f25a8a8 | 21:04:46   | 21:04:46       | 21:04:46
 ```
 It might be clear why every workflow has two IDs: Workflow ID and Run ID. Because the Workflow ID can be reused, the Run ID uniquely identifies a particular run of a workflow. Run ID is system generated and cannot be controlled by client code.
 
 Note that ID Reuse Policy applies only when previous the run of a workflow is completed.
-Under no circumstances does Cadence allow more than one instance of an open workflow with the same ID.
+Under no circumstances does Temporal allow more than one instance of an open workflow with the same ID.
 
 ### CLI Help
 
@@ -368,7 +368,7 @@ The workflow interface now has a new method annotated with @SignalMethod. It is 
 every time a new signal of "HelloWorld::updateGreeting" is delivered to a workflow. The workflow interface can have only
 one @WorkflowMethod which is a _main_ function of the workflow and as many signal methods as needed.
 
-The updated workflow implementation demonstrates a few important Cadence concepts. The first is that workflow is stateful and can
+The updated workflow implementation demonstrates a few important Temporal concepts. The first is that workflow is stateful and can
 have fields of any complex type. Another is that the `Workflow.await` function that blocks until the function it receives as a parameter evaluates to true. The condition is going to be evaluated only on workflow state changes, so it is not a busy wait in traditional sense.
 ```bash
 cadence: docker run --network=host --rm ubercadence/cli:master --do test-domain workflow start  --workflow_id "HelloSignal" --tasklist HelloWorldTaskList --workflow_type HelloWorld::sayHello --execution_timeout 3600 --input \"World\"
@@ -405,12 +405,12 @@ Now shut down the worker and send the same signal again:
 cadence: docker run --network=host --rm ubercadence/cli:master --do test-domain workflow signal --workflow_id "HelloSignal" --name "HelloWorld::updateGreeting" --input \"Welcome\"
 Signal workflow succeeded.
 ```
-Note that sending signals as well as starting workflows does not need a worker running. The requests are queued inside the Cadence service.
+Note that sending signals as well as starting workflows does not need a worker running. The requests are queued inside the Temporal service.
 
 Now bring the worker back. Note that it doesn't log anything besides the standard startup messages.
 This occurs because it ignores the queued signal that contains the same input as the current value of greeting.
 Note that the restart of the worker didn't affect the workflow execution. It is still blocked on the same line of code as before the failure.
-This is the most important feature of Cadence. The workflow code doesn't need to deal with worker failures at all. Its state is fully recovered to its current state that includes all the local variables and threads.
+This is the most important feature of Temporal. The workflow code doesn't need to deal with worker failures at all. Its state is fully recovered to its current state that includes all the local variables and threads.
 
 Let's look at the line where the workflow is blocked:
 ```bash
@@ -439,7 +439,7 @@ workflow execution because it is just migrated to any other available worker.
 ## Query
 
 So far we have learned that the workflow code is fault tolerant and can update its state in reaction to external events in the form of signals.
-Cadence provides a query feature that supports synchronously returning any information from a workflow to an external caller.
+Temporal provides a query feature that supports synchronously returning any information from a workflow to an external caller.
 
 Update the workflow code to:
 ```java
@@ -520,7 +520,7 @@ The Query method can accept parameters. This might be useful if only part of the
 ## Activities
 
 Having fault tolerant code that maintains state, updates it in reaction to external events, and supports querying is already very useful.
-But in most practical applications, the workflow is expected to act upon the external world. Cadence supports such externally-facing code in the form of activities.
+But in most practical applications, the workflow is expected to act upon the external world. Temporal supports such externally-facing code in the form of activities.
 
 An activity is essentially a function that can execute any code like DB updates or service calls. The workflow is not allowed to
 directly call any external APIs; it can do this only through activities. The workflow is essentially an orchestrator of activities.
@@ -554,8 +554,8 @@ activity object can have any dependencies. Examples of real application dependen
   }
 ```
 Let's create a separate main method for the activity worker. It is common to have a single worker that hosts both activities and workflows,
-but here we keep them separate to demonstrate how Cadence deals with worker failures.
-To make the activity implementation known to Cadence, register it with the worker:
+but here we keep them separate to demonstrate how Temporal deals with worker failures.
+To make the activity implementation known to Temporal, register it with the worker:
 ```java
 public class GettingStartedActivityWorker {
 

@@ -29,7 +29,7 @@ RetryPolicy struct {
     // Either MaximumAttempts or ExpirationInterval is required.
     MaximumAttempts int32
 
-    // Non-Retriable errors. This is optional. Cadence server will stop retry if error reason matches this list.
+    // Non-Retriable errors. This is optional. Temporal server will stop retry if error reason matches this list.
     // Error reason for custom error is specified when your activity/workflow returns cadence.NewCustomError(reason).
     // Error reason for panic error is "cadenceInternal:Panic".
     // Error reason for any other error is "cadenceInternal:Generic".

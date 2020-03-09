@@ -6,7 +6,7 @@ workflow, similar to the way it does for an activity that it invoked.
 
 ```go
 cwo := workflow.ChildWorkflowOptions{
-        // Do not specify WorkflowID if you want Cadence to generate a unique ID for the child execution.
+        // Do not specify WorkflowID if you want Temporal to generate a unique ID for the child execution.
         WorkflowID:                   "BID-SIMPLE-CHILD-WORKFLOW",
         ExecutionStartToCloseTimeout: time.Minute * 30,
 }

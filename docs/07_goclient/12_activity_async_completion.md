@@ -3,13 +3,13 @@
 There are certain scenarios when completing an activity upon completion of its function is not possible
 or desirable. For example, you might have an application that requires user input in order to complete
 the activity. You could implement the activity with a polling mechanism, but a simpler and less
-resource-intensive implementation is to asynchronously complete a Cadence activity.
+resource-intensive implementation is to asynchronously complete a Temporal activity.
 
 There two parts to implementing an asynchronously completed activity:
 
 1. The activity provides the information necessary for completion from an external system and notifies
-the Cadence service that it is waiting for that outside callback.
-2. The external service calls the Cadence service to complete the activity.
+the Temporal service that it is waiting for that outside callback.
+2. The external service calls the Temporal service to complete the activity.
 
 The following example demonstrates the first part:
 
@@ -21,7 +21,7 @@ taskToken := activityInfo.TaskToken
 // Send the taskToken to the external service that will complete the activity.
 ...
 
-// Return from the activity a function indicating that Cadence should wait for an async completion
+// Return from the activity a function indicating that Temporal should wait for an async completion
 // message.
 return "", activity.ErrResultPending
 ```
@@ -29,7 +29,7 @@ return "", activity.ErrResultPending
 The following code demonstrates how to complete the activity successfully:
 
 ```go
-// Instantiate a Cadence service client.
+// Instantiate a Temporal service client.
 // The same client can be used to complete or fail any number of activities.
 cadence.Client client = cadence.NewClient(...)
 

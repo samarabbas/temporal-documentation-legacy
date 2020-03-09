@@ -2,7 +2,7 @@
 
 ## Overview
 
-Cadence core abstraction is a **fault-oblivious stateful workflow**. The state of the workflow code, including local variables and threads it creates, is immune to process and Cadence service failures.
+Temporal core abstraction is a **fault-oblivious stateful workflow**. The state of the workflow code, including local variables and threads it creates, is immune to process and Temporal service failures.
 This is a very powerful concept as it encapsulates state, processing threads, durable timers and event handlers.
 
 ## Example
@@ -15,7 +15,7 @@ One approach is to center it around a database. An application process would per
 
 Another commonly employed approach is to use a timer service and queues. Any update is pushed to a queue and then a worker that consumes from it updates a database and possibly pushes more messages in downstream queues. For operations that require scheduling, an external timer service can be used. This approach usually scales much better because a database is not constantly polled for changes. But it makes the programming model more complex and error prone as usually there is no transactional update between a queuing system and a database.
 
-With Cadence, the entire logic can be encapsulated in a simple durable function that directly implements the business logic. Because the function is stateful, the implementer doesn't need to employ any additional systems to ensure durability and fault tolerance.
+With Temporal, the entire logic can be encapsulated in a simple durable function that directly implements the business logic. Because the function is stateful, the implementer doesn't need to employ any additional systems to ensure durability and fault tolerance.
 
 Here is an example workflow that implements the subscription management use case. It is in Java, but Go is also supported. The Python and .NET libraries are under active development.
 
@@ -54,18 +54,18 @@ public class SubscriptionWorkflowImpl implements SubscriptionWorkflow {
 ```
 Again, note that this code directly implements the business logic. If any of the invoked operations (aka activities) takes a long time, the code is not going to change. It is okay to block on `chargeMonthlyFee` for a day if the downstream processing service is down that long. The same way that blocking sleep for 30 days is a normal operation inside the workflow code.
 
-Cadence has practically no scalability limits on the number of open workflow instances. So even if your site has hundreds of millions of consumers, the above code is not going to change.
+Temporal has practically no scalability limits on the number of open workflow instances. So even if your site has hundreds of millions of consumers, the above code is not going to change.
 
-The commonly asked question by developers that learn Cadence is "How do I handle workflow worker process failure/restart in my workflow"? The answer is that you do not. **The workflow code is completely oblivious to any failures and downtime of workers or even the Cadence service itself**. As soon as they are recovered and the workflow needs to handle some event, like timer or an activity completion, the current state of the workflow is fully restored and the execution is continued. The only reason for a workflow failure is the workflow business code throwing an exception, not underlying infrastructure outages.
+The commonly asked question by developers that learn Temporal is "How do I handle workflow worker process failure/restart in my workflow"? The answer is that you do not. **The workflow code is completely oblivious to any failures and downtime of workers or even the Temporal service itself**. As soon as they are recovered and the workflow needs to handle some event, like timer or an activity completion, the current state of the workflow is fully restored and the execution is continued. The only reason for a workflow failure is the workflow business code throwing an exception, not underlying infrastructure outages.
 
 Another commonly asked question is whether a worker can handle more workflow instances than its cache size or number of threads it can support. The answer is that a workflow, when in a blocked state, can be safely removed from a worker.
 Later it can be resurrected on a different or the same worker when the need (in the form of an external event) arises. So a single worker can handle millions of open workflow executions, assuming it can handle the update rate.
 
 ## State Recovery and Determinism
 
-The workflow state recovery utilizes event sourcing which puts a few restrictions on how the code is written. The main restriction is that the workflow code must be deterministic which means that it must produce exactly the same result if executed multiple times. This rules out any external API calls from the workflow code as external calls can fail intermittently or change its output any time. That is why all communication with the external world should happen through activities. For the same reason, workflow code must use Cadence APIs to get current time, sleep, and create new threads.
+The workflow state recovery utilizes event sourcing which puts a few restrictions on how the code is written. The main restriction is that the workflow code must be deterministic which means that it must produce exactly the same result if executed multiple times. This rules out any external API calls from the workflow code as external calls can fail intermittently or change its output any time. That is why all communication with the external world should happen through activities. For the same reason, workflow code must use Temporal APIs to get current time, sleep, and create new threads.
 
-To understand the Cadence execution model as well as the recovery mechanism, watch the following webcast. The animation covering recovery starts at 15:50.
+To understand the Temporal execution model as well as the recovery mechanism, watch the following webcast. The animation covering recovery starts at 15:50.
 
 {% include youtubePlayer.html id="qce_AqCkFys?t=960" %}
 
@@ -73,7 +73,7 @@ To understand the Cadence execution model as well as the recovery mechanism, wat
 
 Workflow ID is assigned by a client when starting a workflow. It is usually a business level ID like customer ID or order ID.
 
-Cadence guarantees that there could be only one workflow (across all workflow types) with a given ID open per [domain](../04_glossary#domain) at any time. An attempt to start a workflow with the same ID is going to fail with `WorkflowExecutionAlreadyStarted` error.
+Temporal guarantees that there could be only one workflow (across all workflow types) with a given ID open per [domain](../04_glossary#domain) at any time. An attempt to start a workflow with the same ID is going to fail with `WorkflowExecutionAlreadyStarted` error.
 
 An attempt to start a workflow if there is a completed workflow with the same ID depends on a `WorkflowIdReusePolicy` option:
 
@@ -83,7 +83,7 @@ An attempt to start a workflow if there is a completed workflow with the same ID
 
 The default is `AllowDuplicateFailedOnly`.
 
-To distinguish multiple runs of a workflow with the same workflow ID, Cadence identifies a workflow with two IDs: `Workflow ID` and `Run ID`. `Run ID` is a service-assigned UUID. To be precise, any workflow is uniquely identified by a triple: `Domain Name`, `Workflow ID` and `Run ID`.
+To distinguish multiple runs of a workflow with the same workflow ID, Temporal identifies a workflow with two IDs: `Workflow ID` and `Run ID`. `Run ID` is a service-assigned UUID. To be precise, any workflow is uniquely identified by a triple: `Domain Name`, `Workflow ID` and `Run ID`.
 
 ## Child Workflow
 

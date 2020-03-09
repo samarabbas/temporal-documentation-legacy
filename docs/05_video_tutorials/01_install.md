@@ -1,4 +1,4 @@
-# Installing Cadence Service and UI on a Mac
+# Installing Temporal Service and UI on a Mac
 
 {% include youtubePlayer.html id="aLyRyNe5Ls0" %}
 

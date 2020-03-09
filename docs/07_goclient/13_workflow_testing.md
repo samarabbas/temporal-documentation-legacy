@@ -1,6 +1,6 @@
 # Testing
 
-The Cadence Go client library provides a test framework to facilitate testing workflow implementations.
+The Temporal Go client library provides a test framework to facilitate testing workflow implementations.
 The framework is suited for implementing unit tests as well as functional tests of the workflow logic.
 
 The following code implements unit tests for the `SimpleWorkflow` sample:
@@ -76,7 +76,7 @@ func TestUnitTestSuite(t *testing.T) {
 
 To run unit tests, we first define a "test suite" struct that absorbs both the
 basic suite functionality from [testify](https://godoc.org/github.com/stretchr/testify/suite)
-via `suite.Suite` and the suite functionality from the Cadence test framework via
+via `suite.Suite` and the suite functionality from the Temporal test framework via
 `cadence.WorkflowTestSuite`. Because every test in this test suite will test our workflow, we
 add a property to our struct to hold an instance of the test environment. This allows us to initialize
 the test environment in a setup method. For testing workflows, we use a `cadence.TestWorkflowEnvironment`.

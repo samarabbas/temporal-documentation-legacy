@@ -1,5 +1,5 @@
 # Glossary
-This glossary contains terms that are used with the Cadence product.
+This glossary contains terms that are used with the Temporal product.
 
 ### Activity
 A business-level function that implements your application logic such as calling
@@ -28,7 +28,7 @@ to keep the histories after the retention period has passed:
 2. **Debugging:** Old histories can still be accessed for debugging.
 
 ### CLI
-Cadence command-line interface.
+Temporal command-line interface.
 
 ### Client Stub
 A client-side proxy used to make remote invocations to an entity that it
@@ -51,10 +51,10 @@ of operations that the workflow invokes.
 Task list that is used to deliver [decision tasks](#decision-task) to [workflow workers](#workflow-worker)
 
 ### Domain
-Cadence is backed by a multitenant service. The unit of isolation is called a **domain**. Each domain acts as a namespace for task list names as well as workflow IDs. For example, when a workflow is started, it is started in a
-specific domain. Cadence guarantees a unique workflow ID within a domain, and
+Temporal is backed by a multitenant service. The unit of isolation is called a **domain**. Each domain acts as a namespace for task list names as well as workflow IDs. For example, when a workflow is started, it is started in a
+specific domain. Temporal guarantees a unique workflow ID within a domain, and
 supports running workflow executions to use the same workflow ID if they are in
-different domains. Various configuration options like retention period or archival destination are configured per domain as well through a special CRUD API or through the Cadence CLI. In the multi-cluster deployment, domain is a unit of fail-over. Each domain can only be active on a single Cadence cluster at a time. However, different domains can be active in different clusters and can fail-over independently.
+different domains. Various configuration options like retention period or archival destination are configured per domain as well through a special CRUD API or through the Temporal CLI. In the multi-cluster deployment, domain is a unit of fail-over. Each domain can only be active on a single Temporal cluster at a time. However, different domains can be active in different clusters and can fail-over independently.
 
 ### Event
 An indivisible operation performed by your application. For example,
@@ -62,7 +62,7 @@ activity_task_started, task_failed, or timer_canceled. Events are recorded in th
 
 ### Event History
 An append log of events for your application. History is durably persisted
-by the Cadence service, enabling seamless recovery of your application state
+by the Temporal service, enabling seamless recovery of your application state
 from crashes or failures. It also serves as an audit log for debugging.
 
 ### Local Activity
@@ -75,7 +75,7 @@ report a workflow state. Note that a query is inherently read only and cannot
 affect a workflow state.
 
 ### Run ID
-A UUID that a Cadence service assigns to each workflow run. If allowed by
+A UUID that a Temporal service assigns to each workflow run. If allowed by
 a configured policy, you might be able to re-execute a workflow, after it has
 closed or failed, with the same *Workflow ID*. Each such re-execution is called
 a run. *Run ID* is used to uniquely identify a run even if it shares a *Workflow ID*
@@ -95,20 +95,20 @@ while a workflow execution employs multiple decision tasks.
 Common name for [activity task lists](#activity-task-list) and [decision task lists](#decision-task-list)
 
 ### Task Token
-A unique correlation ID for a Cadence activity. Activity completion calls take either task token
+A unique correlation ID for a Temporal activity. Activity completion calls take either task token
 or DomainName, WorkflowID, ActivityID arguments.
 
 ### Worker
 Also known as a *worker service*. A service that hosts the workflow and
-activity implementations. The worker polls the Cadence service for tasks, performs
-those tasks, and communicates task execution results back to the Cadence service.
-Worker services are developed, deployed, and operated by Cadence customers.
+activity implementations. The worker polls the Temporal service for tasks, performs
+those tasks, and communicates task execution results back to the Temporal service.
+Worker services are developed, deployed, and operated by Temporal customers.
 
 ### Workflow
 A fault-oblivious stateful function that orchestrates activities. A *Workflow* has full control over
 which activities are executed, and in which order. A *Workflow* must not affect
 the external world directly, only through activities. What makes workflow code
-a *Workflow* is that its state is preserved by Cadence. Therefore any failure
+a *Workflow* is that its state is preserved by Temporal. Therefore any failure
 of a worker process that hosts the workflow code does not affect the workflow
 execution. The *Workflow* continues as if these failures did not happen. At the
 same time, activities can fail any moment for any reason. Because workflow code
@@ -121,7 +121,7 @@ An instance of a *Workflow*. The instance can be in the process of executing
 or it could have already completed execution.
 
 ### Workflow ID
-A unique identifier for a *Workflow Execution*. Cadence guarantees the
+A unique identifier for a *Workflow Execution*. Temporal guarantees the
 uniqueness of an ID within a domain. An attempt to start a *Workflow* with a
 duplicate ID results in an **already started** error.
 

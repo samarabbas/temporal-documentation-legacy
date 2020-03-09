@@ -33,7 +33,7 @@ values, then the same context instance can be used when calling `workflow.Execut
 
 ## Activity timeouts
 
-There can be various kinds of timeouts associated with an activity. Cadence guarantees that activities
+There can be various kinds of timeouts associated with an activity. Temporal guarantees that activities
 are executed *at most once*, so an activity either succeeds or fails with one of the following timeouts:
 
 Timeout | Description
@@ -41,7 +41,7 @@ Timeout | Description
 `StartToCloseTimeout` | Maximum time that a worker can take to process a task after it has received the task.
 `ScheduleToStartTimeout` | Time a task can wait to be picked up by an activity worker after a workflow schedules it. If there are no workers available to process this task for the specified duration, the task will time out.
 `ScheduleToCloseTimeout` | Time a task can take to complete after it is scheduled by a workflow. This is usually greater than the sum of `StartToClose` and `ScheduleToStart` timeouts.
-`HeartbeatTimeout` | If a task doesn't heartbeat to the Cadence service for this duration, it will be considered to have failed. This is useful for long-running tasks.
+`HeartbeatTimeout` | If a task doesn't heartbeat to the Temporal service for this duration, it will be considered to have failed. This is useful for long-running tasks.
 
 ## ExecuteActivity call
 
@@ -54,7 +54,7 @@ in the actual function object is that the framework can validate activity parame
 
 The remaining parameters are passed to the activity as part of the call. In our example, we have a
 single parameter: `value`. This list of parameters must match the list of parameters declared by
-the activity function. The Cadence client library will validate this.
+the activity function. The Temporal client library will validate this.
 
 The method call returns immediately and returns a `cadence.Future`. This allows you to execute more
 code without having to wait for the scheduled activity to complete.

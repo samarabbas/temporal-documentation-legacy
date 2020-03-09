@@ -22,7 +22,7 @@ Archival is controlled by both domain level config and cluster level config.
 
 ### Cluster Archival Config
 
-A Cadence cluster can be in one of three archival states:
+A Temporal cluster can be in one of three archival states:
   * **Disabled:** No archivals will occur and the archivers will be not initialized on startup.
   * **Paused:** This state is not yet implemented. Currently setting cluster to paused is the same as setting it to disabled.
   * **Enabled:** Archivals will occur.
@@ -57,9 +57,9 @@ Before uploading history a check is done to see if it has already been uploaded,
 No, each domain can only have one URI for history archival and one URI for visibility archival. Different domains, however, can have different URIs (with different schemes).
 
 ### How does archival work with PII?
-No cadence workflow should ever operate on clear text PII. Cadence can be thought
+No cadence workflow should ever operate on clear text PII. Temporal can be thought
 of as a database and just as one would not store PII in a database PII should not be
-stored in Cadence. This is even more important when archival is enabled because
+stored in Temporal. This is even more important when archival is enabled because
 these histories can be kept forever. 
 
 ## Planned Future Work

@@ -1,12 +1,12 @@
 # Command Line Interface
 
-The Cadence CLI is a command-line tool you can use to perform various tasks on a Cadence server. It can perform
+The Temporal CLI is a command-line tool you can use to perform various tasks on a Temporal server. It can perform
 domain operations such as register, update, and describe as well as workflow operations like start
 workflow, show workflow history, and signal workflow.
 
 ## Using the CLI
 
-The Cadence CLI can be used directly from the Docker Hub image *ubercadence/cli* or by building the CLI tool
+The Temporal CLI can be used directly from the Docker Hub image *ubercadence/cli* or by building the CLI tool
 locally.
 
 Example of using the docker image to describe a domain:
@@ -20,7 +20,7 @@ On Docker versions 18.03 and later, you may get a "connection refused" error. Yo
 docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain describe
 ```
 
-To build the CLI tool locally, clone the [Cadence server repo](https://github.com/uber/cadence) and run
+To build the CLI tool locally, clone the [Temporal server repo](https://github.com/uber/cadence) and run
 `make bins`. This produces an executable called `cadence`. With a local build, the same command to
 describe a domain would look like this:
 ```
@@ -33,7 +33,7 @@ The example commands below will use `./cadence` for brevity.
 
 Setting environment variables for repeated parameters can shorten the CLI commands.
 
-- **CADENCE_CLI_ADDRESS** - host:port for Cadence frontend service, the default is for the local server
+- **CADENCE_CLI_ADDRESS** - host:port for Temporal frontend service, the default is for the local server
 - **CADENCE_CLI_DOMAIN** - default workflow domain, so you don't need to specify `--domain`
 
 ## Quick Start
@@ -43,7 +43,7 @@ Run `./cadence workflow` for help on workflow operations
 Run `./cadence tasklist` for help on tasklist operations
 (`./cadence help`, `./cadence help [domain|workflow]` will also print help messages)
 
-**Note:** make sure you have a Cadence server running before using CLI
+**Note:** make sure you have a Temporal server running before using CLI
 
 ### Domain operation examples
 - Register a new domain named "samples-domain":
@@ -166,7 +166,7 @@ This will return all open workflows with workflowType as "main.SampleParentWorkf
 # use custom query type
 ./cadence workflow query -w <wid> -r <rid> --qt <query-type>
 
-# use build-in query type "__stack_trace" which is supported by Cadence client library
+# use build-in query type "__stack_trace" which is supported by Temporal client library
 ./cadence workflow query -w <wid> -r <rid> --qt __stack_trace
 # a shortcut to query using __stack_trace is (without --qt flag)
 ./cadence workflow stack -w <wid> -r <rid>
@@ -232,7 +232,7 @@ You can reset to some predefined event types:
 - LastDecisionCompleted: reset to the end of the history.
 - LastContinuedAsNew: reset to the end of the history for the previous run.
 
-If you are familiar with the Cadence history event, You can also reset to any decision finish event by using:
+If you are familiar with the Temporal history event, You can also reset to any decision finish event by using:
 ```
 ./cadence workflow reset -w <wid> -r <rid> --event_id <decision_finish_event_id> --reason "some_reason"
 ```
@@ -262,9 +262,9 @@ To find out which **binary checksum** of the bad deployment to reset, you should
 ...
 ```
 
-Then use this command to tell Cadence to auto-reset all workflows impacted by the bad deployment. The command will store the bad binary checksum into domain info and trigger a process to reset all your workflows.
+Then use this command to tell Temporal to auto-reset all workflows impacted by the bad deployment. The command will store the bad binary checksum into domain info and trigger a process to reset all your workflows.
 ```
 ./cadence --do <YourDomainName> domain update --add_bad_binary aae748fdc557a3f873adbe1dd066713f  --reason "rollback bad deployment"
 ```
 
-As you add the bad binary checksum to your domain, Cadence will not dispatch any decision tasks to the bad binary. So make sure that you have rolled back to a good deployment(or roll out new bits with bug fixes). Otherwise your workflow can't make any progress after auto-reset.
+As you add the bad binary checksum to your domain, Temporal will not dispatch any decision tasks to the bad binary. So make sure that you have rolled back to a good deployment(or roll out new bits with bug fixes). Otherwise your workflow can't make any progress after auto-reset.

@@ -2,7 +2,7 @@
 
 Many applications listen to multiple event sources, update the state of correspondent business entities,
 and have to execute actions if some state is reached.
-Cadence is a good fit for many of these. It has direct support for asynchronous events (aka signals),
+Temporal is a good fit for many of these. It has direct support for asynchronous events (aka signals),
 has a simple programming model that obscures a lot of complexity
 around state persistence, and ensures external action execution through built-in retries.
 

@@ -9,7 +9,7 @@ name: workerscaffoldgo02
   version = "3.0.1"
 
 [[constraint]]
-  name = "go.uber.org/cadence"
+  name = "go.temporal.io/temporal"
   version = "0.8.0"
 
 [[constraint]]

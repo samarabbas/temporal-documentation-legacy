@@ -27,8 +27,8 @@ context from the initial context and overwriting the desired values. The child c
 into the `workflow.ExecuteChildWorkflow()` call. If multiple activities are sharing the same option
 values, then the same context instance can be used when calling `workflow.ExecuteChildworkflow()`.
 
-The first parameter in the call is the required `cadence.Context` object. This type is a copy of
-`context.Context` with the `Done()` method returning `cadence.Channel` instead of the native Go `chan`.
+The first parameter in the call is the required `workflow.Context` object. This type is a copy of
+`context.Context` with the `Done()` method returning `workflow.Channel` instead of the native Go `chan`.
 
 The second parameter is the function that we registered as a workflow function. This parameter can
 also be a string representing the fully qualified name of the workflow function. The benefit of this
@@ -38,7 +38,7 @@ The remaining parameters are passed to the workflow as part of the call. In our 
 single parameter: `value`. This list of parameters must match the list of parameters declared by
 the workflow function.
 
-The method call returns immediately and returns a `cadence.Future`. This allows you to execute more
+The method call returns immediately and returns a `workflow.Future`. This allows you to execute more
 code without having to wait for the scheduled workflow to complete.
 
 When you are ready to process the results of the workflow, call the `Get()` method on the returned future

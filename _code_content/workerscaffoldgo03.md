@@ -12,7 +12,7 @@ import (
 	"go.uber.org/zap"
 
 	"github.com/uber-go/tally"
-	"go.uber.org/cadence/.gen/go/cadence/workflowserviceclient"
+	"go.temporal.io/temporal/.gen/go/cadence/workflowserviceclient"
 )
 
 type (

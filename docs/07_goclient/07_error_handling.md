@@ -3,14 +3,14 @@
 An activity, or child workflow, might fail and you could handle errors differently based on different
 error cases. If the activity returns an error as `errors.New()` or `fmt.Errorf()`, those errors will
 be converted to `workflow.GenericError`. If the activity returns an error as
-`cadence.NewCustomError(“err-reason”, details)`, that error will be converted to `*cadence.CustomError`.
+`temporal.NewCustomError(“err-reason”, details)`, that error will be converted to `*temporal.CustomError`.
 There are other types of errors such as `workflow.TimeoutError`, `workflow.CanceledError` and
 `workflow.PanicError`. Following is an example of what your error code might look like:
 
 ```go
 err := workflow.ExecuteActivity(ctx, YourActivityFunc).Get(ctx, nil)
 switch err := err.(type) {
-case *cadence.CustomError:
+case *temporal.CustomError:
         switch err.Reason() {
         case "err-reason-a":
                 // Handle error-reason-a.
@@ -43,7 +43,7 @@ case *workflow.TimeoutError:
         }
 case *workflow.PanicError:
          // Handle panic error.
-case *cadence.CanceledError:
+case *temporal.CanceledError:
         // Handle canceled error.
 default:
         // All other cases (ideally, this should not happen).

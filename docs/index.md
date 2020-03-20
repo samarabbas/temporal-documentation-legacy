@@ -12,14 +12,14 @@ This allows you to write code using the full power of a programming language whi
 
 Temporal consists of a programming framework (or client library) and a managed service (or backend).
 The framework enables developers to author and coordinate tasks in familiar languages
-([Go](https://github.com/uber-go/cadence-client/) and [Java](https://github.com/uber/cadence-java-client)
+([Go](https://github.com/temporalio/temporal-go-sdk/) and [Java](https://github.com/temporalio/temporal-java-sdk)
 are supported today with some projects in [Python](https://github.com/firdaus/cadence-python) and
 [C#](https://github.com/nforgeio/neonKUBE/tree/master/Lib/Neon.Cadence)
 via a [proxy](https://github.com/nforgeio/neonKUBE/tree/master/Go/src/github.com/loopieio/cadence-proxy)
 in development).
 
 The framework enables developers to author fault-oblivious code in familiar languages.
-([Go](https://github.com/uber-go/cadence-client/) and [Java](https://github.com/uber/cadence-java-client)
+([Go](https://github.com/temporalio/temporal-go-sdk/) and [Java](https://github.com/temporalio/temporal-java-sdk)
 are in production. [Python](https://github.com/firdaus/cadence-python) and
 [C#](https://github.com/nforgeio/neonKUBE/tree/master/Lib/Neon.Cadence) are under development).
 

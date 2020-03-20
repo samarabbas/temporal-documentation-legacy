@@ -7,7 +7,7 @@ If you still need help, visit [Temporal Slack Workspace](https://join.slack.com/
 If you have a feature request or a bug to report file an issue against one of the Temporal github repositories:
 
 * [Temporal Service and CLI](https://github.com/uber/cadence)
-* [Temporal Go Client](https://github.com/uber-go/cadence-client)
+* [Temporal Go Client](https://github.com/temporalio/temporal-go-sdk)
 * [Temporal Go Client Samples](https://github.com/uber-common/cadence-samples)
 * [Temporal Java Client](https://github.com/uber-java/cadence-client)
 * [Temporal Java Client Samples](https://github.com/uber/cadence-java-samples)

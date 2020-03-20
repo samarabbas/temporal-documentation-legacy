@@ -23,18 +23,15 @@ The following example demonstrates a simple activity that accepts a string param
 to it, and then returns a result.
 
 ```go
-package simple
+package sample
 
 import (
 	"context"
 
-    "go.uber.org/cadence/activity"
-    "go.uber.org/zap"
-)
+	"go.uber.org/zap"
 
-func init() {
-	activity.Register(SimpleActivity)
-}
+	"go.temporal.io/temporal/activity"
+)
 
 // SimpleActivity is a sample Temporal activity function that takes one parameter and
 // returns a string containing the parameter value.
@@ -70,7 +67,7 @@ progress back to the Temporal managed service.
 progress := 0
 for hasWork {
     // Send heartbeat message to the server.
-    cadence.RecordActivityHeartbeat(ctx, progress)
+    activity.RecordHeartbeat(ctx, progress)
     // Do some work.
     ...
     progress++
@@ -83,11 +80,15 @@ with `TimeoutType_HEARTBEAT`.
 You can also heartbeat an activity from an external source:
 
 ```go
-// Instantiate a Temporal service client.
-cadence.Client client = cadence.NewClient(...)
+// The client is a heavyweight object that should be created once per process.
+serviceClient, err := client.NewClient(client.Options{
+    HostPort:     HostPort,
+    DomainName:   Domain,
+    MetricsScope: scope,
+})
 
 // Record heartbeat.
-err := client.RecordActivityHeartbeat(taskToken, details)
+err := serviceClient.RecordActivityHeartbeat(ctx, taskToken, details)
 ```
 The parameters of the `RecordActivityHeartbeat` function are:
 
@@ -108,9 +109,7 @@ To make the activity visible to the worker process hosting it, the activity must
 call to `activity.Register`.
 
 ```go
-func init() {
-	activity.Register(SimpleActivity)
-}
+activity.Register(SimpleActivity)
 ```
 This call creates an in-memory mapping inside the worker process between the fully qualified function
 name and the implementation. If a worker receives a request to start an activity execution for an

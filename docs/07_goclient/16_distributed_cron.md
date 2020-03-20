@@ -3,7 +3,7 @@
 It is relatively straightforward to turn any Temporal workflow into a Cron workflow. All you need
 is to supply a cron schedule when starting the workflow using the CronSchedule
 parameter of
-[StartWorkflowOptions](https://godoc.org/go.uber.org/cadence/internal#StartWorkflowOptions).
+[StartWorkflowOptions](https://godoc.org/go.temporal.io/temporal/internal#StartWorkflowOptions).
 
 You can also start a workflow using the Temporal CLI with an optional cron schedule using the `--cron` argument.
 

@@ -4,8 +4,8 @@
 
 The Go client provides distributed tracing support through [OpenTracing](https://opentracing.io/). Tracing can be
 configured by providing an [opentracing.Tracer](https://godoc.org/github.com/opentracing/opentracing-go#Tracer)
-implementation in [ClientOptions](https://godoc.org/go.uber.org/cadence/internal#ClientOptions)
-and [WorkerOptions](https://godoc.org/go.uber.org/cadence/internal#WorkerOptions) during client and worker instantiation,
+implementation in [ClientOptions](https://godoc.org/go.temporal.io/temporal/internal#ClientOptions)
+and [WorkerOptions](https://godoc.org/go.temporal.io/temporal/internal#WorkerOptions) during client and worker instantiation,
 respectively. Tracing allows
 you to view the call graph of a workflow along with its activities, child workflows etc. For more details on how to
 configure and leverage tracing, see the [OpenTracing documentation](https://opentracing.io/docs/getting-started/).
@@ -16,11 +16,11 @@ propagation support provided by the client.
 ## Context Propagation
 
 We provide a standard way to propagate custom context across a workflow.
-[ClientOptions](https://godoc.org/go.uber.org/cadence/internal#ClientOptions) and [WorkerOptions](https://godoc.org/go.uber.org/cadence/internal#WorkerOptions)
+[ClientOptions](https://godoc.org/go.temporal.io/temporal/internal#ClientOptions) and [WorkerOptions](https://godoc.org/go.temporal.io/temporal/internal#WorkerOptions)
 allow configuring a context propagator. The context propagator extracts and passes on information present in the `context.Context`
 and `workflow.Context` objects across the workflow. Once a context propagator is configured, you should be able to access the required values
 in the context objects as you would normally do in Go.
-For a sample, the Go client implements a [tracing context propagator](https://github.com/uber-go/cadence-client/blob/master/internal/tracer.go).
+For a sample, the Go client implements a [tracing context propagator](https://github.com/temporalio/temporal-go-sdk/blob/master/internal/tracer.go).
 
 ### Server-Side Headers Support
 
@@ -33,9 +33,9 @@ struct Header {
 }
 ```
 
-The client leverages this to pass around selected context information. [HeaderReader](https://godoc.org/go.uber.org/cadence/internal#HeaderReader)
-and [HeaderWriter](https://godoc.org/go.uber.org/cadence/internal#HeaderWriter) are interfaces
-that allow reading and writing to the Temporal server headers. The client already provides [implementations](https://github.com/uber-go/cadence-client/blob/master/internal/headers.go)
+The client leverages this to pass around selected context information. [HeaderReader](https://godoc.org/go.temporal.io/temporal/internal#HeaderReader)
+and [HeaderWriter](https://godoc.org/go.temporal.io/temporal/internal#HeaderWriter) are interfaces
+that allow reading and writing to the Temporal server headers. The client already provides [implementations](https://github.com/temporalio/temporal-go-sdk/blob/master/internal/headers.go)
 for these. `HeaderWriter` sets a field in the header. Headers is a map, so setting a value for the the same key
 multiple times will overwrite the previous values. `HeaderReader` iterates through the headers map and runs the
 provided handler function on each key/value pair, allowing you to deal with the fields you are interested in.
@@ -55,12 +55,12 @@ type HeaderReader interface {
 Context propagators require implementing the following four methods to propagate selected context across a workflow:
 
 - `Inject` is meant to pick out the context keys of interest from a Go [context.Context](https://golang.org/pkg/context/#Context) object and write that into the
-headers using the [HeaderWriter](https://godoc.org/go.uber.org/cadence/internal#HeaderWriter) interface
-- `InjectFromWorkflow` is the same as above, but operates on a [workflow.Context](https://godoc.org/go.uber.org/cadence/internal#Context) object
+headers using the [HeaderWriter](https://godoc.org/go.temporal.io/temporal/internal#HeaderWriter) interface
+- `InjectFromWorkflow` is the same as above, but operates on a [workflow.Context](https://godoc.org/go.temporal.io/temporal/internal#Context) object
 - `Extract` reads the headers and places the information of interest back into the [context.Context](https://golang.org/pkg/context/#Context) object
-- `ExtractToWorkflow` is the same as above, but operates on a [workflow.Context](https://godoc.org/go.uber.org/cadence/internal#Context) object
+- `ExtractToWorkflow` is the same as above, but operates on a [workflow.Context](https://godoc.org/go.temporal.io/temporal/internal#Context) object
 
-The [tracing context propagator](https://github.com/uber-go/cadence-client/blob/master/internal/tracer.go)
+The [tracing context propagator](https://github.com/temporalio/temporal-go-sdk/blob/master/internal/tracer.go)
 shows a sample implementation of context propagation.
 
 ```go

@@ -5,7 +5,7 @@ most straightforward way to do this is via the library method `workflow.ExecuteA
 sample code demonstrates making this call:
 
 ```go
-ao := cadence.ActivityOptions{
+ao := workflow.ActivityOptions{
         TaskList:               "sampleTaskList",
         ScheduleToCloseTimeout: time.Second * 60,
         ScheduleToStartTimeout: time.Second * 60,
@@ -13,11 +13,11 @@ ao := cadence.ActivityOptions{
         HeartbeatTimeout:       time.Second * 10,
         WaitForCancellation:    false,
 }
-ctx = cadence.WithActivityOptions(ctx, ao)
+ctx = workflow.WithActivityOptions(ctx, ao)
 
-future := workflow.ExecuteActivity(ctx, SimpleActivity, value)
 var result string
-if err := future.Get(ctx, &result); err != nil {
+err := workflow.ExecuteActivity(ctx, SimpleActivity, value).Get(ctx, &result)
+if err != nil {
         return err
 }
 ```
@@ -45,8 +45,8 @@ Timeout | Description
 
 ## ExecuteActivity call
 
-The first parameter in the call is the required `cadence.Context` object. This type is a copy of
-`context.Context` with the `Done()` method returning `cadence.Channel` instead of the native Go `chan`.
+The first parameter in the call is the required `workflow.Context` object. This type is a copy of
+`context.Context` with the `Done()` method returning `workflow.Channel` instead of the native Go `chan`.
 
 The second parameter is the function that we registered as an activity function. This parameter can
 also be a string representing the fully qualified name of the activity function. The benefit of passing
@@ -56,7 +56,7 @@ The remaining parameters are passed to the activity as part of the call. In our 
 single parameter: `value`. This list of parameters must match the list of parameters declared by
 the activity function. The Temporal client library will validate this.
 
-The method call returns immediately and returns a `cadence.Future`. This allows you to execute more
+The method call returns immediately and returns a `workflow.Future`. This allows you to execute more
 code without having to wait for the scheduled activity to complete.
 
 When you are ready to process the results of the activity, call the `Get()` method on the future
@@ -72,7 +72,7 @@ you can use the result if it is a string value:
 
 ```go
 var result string
-if err := future.Get(ctx1, &result); err != nil {
+if err := future.Get(ctx, &result); err != nil {
         return err
 }
 
@@ -90,4 +90,4 @@ However, this is not necessary. If you want to execute multiple activities in pa
 repeatedly call `workflow.ExecuteActivity()`, store the returned futures, and then wait for all
 activities to complete by calling the `Get()` methods of the future at a later time.
 
-To implement more complex wait conditions on returned future objects, use the `cadence.Selector` class.
+To implement more complex wait conditions on returned future objects, use the `workflow.Selector` class.

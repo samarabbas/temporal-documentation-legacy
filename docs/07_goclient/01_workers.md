@@ -8,78 +8,73 @@ You can run a Temporal worker in a new or an existing service. Use the framework
 package main
 
 import (
-
-	t "go.uber.org/cadence/.gen/go/cadence"
-	"go.uber.org/cadence/.gen/go/cadence/workflowserviceclient"
-	"go.uber.org/cadence/worker"
+	"os"
+	"os/signal"
 
 	"github.com/uber-go/tally"
 	"go.uber.org/zap"
-	"go.uber.org/zap/zapcore"
-	"go.uber.org/yarpc"
-	"go.uber.org/yarpc/api/transport"
-	"go.uber.org/yarpc/transport/tchannel"
+
+	"go.temporal.io/temporal/client"
+	"go.temporal.io/temporal/worker"
+	"go.temporal.io/temporal/workflow"
 )
 
-var HostPort = "127.0.0.1:7933"
-var Domain = "SimpleDomain"
-var TaskListName = "SimpleWorker"
-var ClientName = "SimpleWorker"
-var CadenceService = "cadence-frontend"
+var (
+	Domain   = "samples"
+	Tasklist = "samples_tl"
+	HostPort = "127.0.0.1:7233"
+)
 
 func main() {
-	startWorker(buildLogger(), buildCadenceClient())
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		panic(err)
+	}
+
+	logger.Info("Zap logger created")
+	scope := tally.NoopScope
+
+	// The client is a heavyweight object that should be created once per process.
+	serviceClient, err := client.NewClient(client.Options{
+		HostPort:     HostPort,
+		DomainName:   Domain,
+		MetricsScope: scope,
+	})
+	if err != nil {
+		logger.Fatal("Unable to create client", zap.Error(err))
+	}
+
+	worker := worker.New(serviceClient, Tasklist, worker.Options{
+		Logger: logger,
+	})
+
+	worker.RegisterWorkflow(MyWorkflow)
+	worker.RegisterActivity(MyActivity)
+
+	err = worker.Start()
+	if err != nil {
+		logger.Fatal("Unable to start worker", zap.Error(err))
+	}
+
+	// The workers are supposed to be long running process that should not exit.
+	waitCtrlC()
+
+	// Stop worker, close connection, clean up resources.
+	worker.Stop()
+	_ = serviceClient.CloseConnection()
 }
 
-func buildLogger() *zap.Logger {
-	config := zap.NewDevelopmentConfig()
-	config.Level.SetLevel(zapcore.InfoLevel)
-
-	var err error
-	logger, err := config.Build()
-	if err != nil {
-		panic("Failed to setup logger")
-	}
-
-	return logger
+func waitCtrlC() {
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, os.Interrupt)
+	<-ch
 }
 
-func buildCadenceClient() workflowserviceclient.Interface {
-	ch, err := tchannel.NewChannelTransport(tchannel.ServiceName(ClientName))
-	if err != nil {
-		panic("Failed to setup tchannel")
-	}
-	dispatcher := yarpc.NewDispatcher(yarpc.Config{
-			Name: ClientName,
-			Outbounds: yarpc.Outbounds{
-				CadenceService: {Unary: ch.NewSingleOutbound(HostPort)},
-			},
-		})
-	if err := dispatcher.Start(); err != nil {
-		panic("Failed to start dispatcher")
-	}
-
-	return workflowserviceclient.New(dispatcher.ClientConfig(CadenceService))
+func MyWorkflow(context workflow.Context) error {
+	return nil
 }
 
-func startWorker(logger *zap.Logger, service workflowserviceclient.Interface) {
-	// TaskListName identifies set of client workflows, activities, and workers.
-	// It could be your group or client or application name.
-	workerOptions := worker.Options{
-		Logger:       logger,
-		MetricsScope: tally.NewTestScope(TaskListName, map[string]string{}),
-	}
-
-	worker := worker.New(
-		service,
-		Domain,
-		TaskListName,
-		workerOptions)
-	err := worker.Start()
-	if err != nil {
-		panic("Failed to start worker")
-	}
-
-	logger.Info("Started Worker.", zap.String("worker", TaskListName))
+func MyActivity() error {
+	return nil
 }
 ```

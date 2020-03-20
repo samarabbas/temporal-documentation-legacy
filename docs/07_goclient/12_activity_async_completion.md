@@ -15,7 +15,7 @@ The following example demonstrates the first part:
 
 ```go
 // Retrieve the activity information needed to asynchronously complete the activity.
-activityInfo := cadence.GetActivityInfo(ctx)
+activityInfo := activity.GetInfo(ctx)
 taskToken := activityInfo.TaskToken
 
 // Send the taskToken to the external service that will complete the activity.
@@ -31,7 +31,12 @@ The following code demonstrates how to complete the activity successfully:
 ```go
 // Instantiate a Temporal service client.
 // The same client can be used to complete or fail any number of activities.
-cadence.Client client = cadence.NewClient(...)
+// The client is a heavyweight object that should be created once per process.
+serviceClient, err := client.NewClient(client.Options{
+    HostPort:     HostPort,
+    DomainName:   Domain,
+    MetricsScope: scope,
+})
 
 // Complete the activity.
 client.CompleteActivity(taskToken, result, nil)

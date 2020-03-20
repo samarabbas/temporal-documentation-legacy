@@ -17,7 +17,7 @@ import (
         "github.com/stretchr/testify/mock"
         "github.com/stretchr/testify/suite"
 
-        "go.uber.org/cadence"
+        "go.temporal.io/temporal"
 )
 
 type UnitTestSuite struct {

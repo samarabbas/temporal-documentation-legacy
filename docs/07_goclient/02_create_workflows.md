@@ -24,33 +24,33 @@ to the activity.
 package sample
 
 import (
-    "time"
+	"time"
 
-    "go.uber.org/cadence/workflow"
+	"go.temporal.io/temporal/workflow"
+	"go.uber.org/zap"
 )
 
-func init() {
-    workflow.Register(SimpleWorkflow)
-}
-
+// SimpleWorkflow is a sample Temporal workflow function that takes one
+// string parameter 'value' and returns an error.
 func SimpleWorkflow(ctx workflow.Context, value string) error {
-    ao := workflow.ActivityOptions{
-        TaskList:               "sampleTaskList",
-        ScheduleToCloseTimeout: time.Second * 60,
-        ScheduleToStartTimeout: time.Second * 60,
-        StartToCloseTimeout:    time.Second * 60,
-        HeartbeatTimeout:       time.Second * 10,
-        WaitForCancellation:    false,
-    }
-    ctx = workflow.WithActivityOptions(ctx, ao)
+	ao := workflow.ActivityOptions{
+		TaskList:               "sampleTaskList",
+		ScheduleToCloseTimeout: time.Second * 60,
+		ScheduleToStartTimeout: time.Second * 60,
+		StartToCloseTimeout:    time.Second * 60,
+		HeartbeatTimeout:       time.Second * 10,
+		WaitForCancellation:    false,
+	}
+	ctx = workflow.WithActivityOptions(ctx, ao)
 
-    future := workflow.ExecuteActivity(ctx, SimpleActivity, value)
-    var result string
-    if err := future.Get(ctx, &result); err != nil {
-        return err
-    }
-    workflow.GetLogger(ctx).Info("Done", zap.String("result", result))
-    return nil
+	var result string
+	err := workflow.ExecuteActivity(ctx, SimpleActivity, value).Get(ctx, &result)
+	if err != nil {
+		return err
+	}
+
+	workflow.GetLogger(ctx).Info("Done", zap.String("result", result))
+	return nil
 }
 ```
 

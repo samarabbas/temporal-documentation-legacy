@@ -16,11 +16,11 @@ Temporal Server configuration is found in `development.yaml` and may contain the
 
 **Note:** Changing any properties in `development.yaml` file requires a process restart for changes to take effect.
 
-**Note:** If youd like to dig deeper and see how we actually parse this file, see our source code [here](https://github.com/temporalio/temporal/blob/master/common/service/config/config.go).
+**Note:** If you'd like to dig deeper and see how we actually parse this file, see our source code [here](https://github.com/temporalio/temporal/blob/master/common/service/config/config.go).
 
 ## server
 
-The `server` section contains process-wide configuration. See below for a minimal server configuration, with optional paramters are commented out.
+The `server` section contains process-wide configuration. See below for a minimal server configuration (optional parameters are commented out.)
 
 ```yaml
 server:
@@ -39,14 +39,15 @@ The `ringpop` section controls the following membership layer parameters:
 
 - `name` - *required* - used to identify other cluster members in a ringpop ring. This must be the same for all nodes.
 - `maxJoinDuration` - The amount of time the service will attempt to join the gossip layer before failing.
-- `broadcastAddress` - Used as the address that is communicated to remote nodes to connect on. This is generally used when BindOnIP would be the same across several nodes (ie: 0.0.0.0) and for nat traversal scenarios. `net.ParseIP` controls the supported syntax. Note: Only IPV4 is supported.
+- `broadcastAddress` - Used as the address that is communicated to remote nodes to connect on. 
+  - This is generally used when BindOnIP would be the same across several nodes (ie: 0.0.0.0) and for nat traversal scenarios. `net.ParseIP` controls the supported syntax. Note: Only IPV4 is supported.
 
 ### pprof
 
 - `port` - If specified, this will initialize pprof upon process start on the listed port.
 
 ## persistence
-`persistence` holds configuration for the data store / persistence layer. Below is an example minimal specification for a password-secured Cassandra cluster.
+The `persistence` section holds configuration for the data store / persistence layer. Below is an example minimal specification for a password-secured Cassandra cluster.
 ```yaml
 persistence:
   defaultStore: default
@@ -67,10 +68,11 @@ persistence:
 
 The following top level configuration items are required:
 
-- `numHistoryShards` - required - The number of history shards to create when initializing the cluster. **Warning**: This value is immutable and will be ignored after the first run. Please ensure you set this value appropriately high enough to scale with the worst case peak load for this cluster.
-- `defaultStore` - required - The name of the DataStore definition that should be used by the Temporal server
-- `visiblityStore` - required - The name of the DataStore definition that should be used by the Temporal visibility server
-- `datastores` - required - contains named DataStore definitions to be referenced.
+- `numHistoryShards` - *required* - the number of history shards to create when initializing the cluster. 
+  - **Warning**: This value is immutable and will be ignored after the first run. Please ensure you set this value appropriately high enough to scale with the worst case peak load for this cluster.
+- `defaultStore` - *required* - the name of the DataStore definition that should be used by the Temporal server
+- `visiblityStore` - *required* - the name of the DataStore definition that should be used by the Temporal visibility server
+- `datastores` - *required* - contains named DataStore definitions to be referenced.
   - Each definition is defined with a heading declaring a name (ie: `default:` and `visibility:` above), which contains a DataStore definition.
   - DataStore definions must be either `cassandra` or `sql`.
 
@@ -103,23 +105,23 @@ A `sql` datastore definition can contain the following values:
 - `numShards` - number of storage shards to use for tables in a sharded sql database. (*Default:* 1)
 - `tls` - See below
 
-`tls` sections can contain:
-- `enabled` - `boolean`
+`tls` sections may contain:
+- `enabled` - *boolean*
 - `serverName` - name of the server hosting the datastore
-- `certFile` - path to cert file
-- `keyFile` - path to key file
+- `certFile` - path to the cert file
+- `keyFile` - path to the key file
 - `caFile` - path to the ca file
-- `enableHostVerification` - `boolean` - If you want to verify the hostname and server cert (like a wildcard for cass cluster) then you should turn this on. This option is basically the inverse of InSecureSkipVerify. See InSecureSkipVerify in http://golang.org/pkg/crypto/tls/ for more info	
+- `enableHostVerification` - *boolean* - True to verify the hostname and server cert (like a wildcard for cass cluster). This option is basically the inverse of InSecureSkipVerify. See InSecureSkipVerify in http://golang.org/pkg/crypto/tls/ for more info	
 
 Note: CertPath and KeyPath are optional depending on server config, but both fields must be omitted to avoid using a client certificate
 
 ## log
 The `log` section is optional and contains the following possible values:
 
-- `stdout` - *bool* - true if the output needs to goto standard out
+- `stdout` - *boolean* - true if the output needs to goto standard out
 - `level` - sets the logging level 
     - *Valid values* - debug, info, warn, error or fatal
-- `outputFile` - Log file to out put to
+- `outputFile` - path to output log file
 
 ## clusterMetadata
 

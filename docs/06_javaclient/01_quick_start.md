@@ -12,89 +12,110 @@ Follow the Docker installation instructions found here: https://docs.docker.com/
 
 Download the Temporal docker-compose file:
 ```bash
-> curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose.yml
+> curl -O https://raw.githubusercontent.com/temporalio/temporal/master/docker/docker-compose.yml
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   675  100   675    0     0    958      0 --:--:-- --:--:-- --:--:--   958
+100   538  100   538    0     0   2468      0 --:--:-- --:--:-- --:--:--  2467
 > ls
 docker-compose.yml
 ```
+
 Start Temporal Service:
 ```bash
 > docker-compose up
 Creating network "quick_start_default" with the default driver
-Pulling cadence (ubercadence/server:0.5.8)...
-0.5.8: Pulling from ubercadence/server
-db0035920883: Pull complete
-82eed7f2d38e: Pull complete
-f81e11a89e41: Pull complete
-ae3538b1ae1c: Pull complete
-23ddfb58e314: Pull complete
-52a6bbeb81b5: Pull complete
-a72c7949d8ac: Pull complete
-1c3b1d477195: Pull complete
-3312d4123248: Pull complete
-5bbc95a38c5f: Pull complete
-29176d1ce1ca: Pull complete
-27ec3755f89c: Pull complete
-0a5d2a29a5e5: Pull complete
+Pulling temporal (temporalio/temporal-auto-setup:latest)...
+latest: Pulling from temporalio/temporal-auto-setup
+c9b1b535fdd9: Already exists
+ab03e7ff4561: Pull complete
+14fd2545310c: Pull complete
+533daed3d2b9: Pull complete
+b95a8eac833d: Pull complete
+e1de77a2d35d: Pull complete
+eaf3dbe1b068: Pull complete
+bd5bc43b3fb4: Pull complete
+eabe35b76c3c: Pull complete
+ea376eb81229: Pull complete
+703d31237512: Pull complete
+dab4a595094e: Pull complete
+9310c0f9d984: Pull complete
+cc0bc9bd74b8: Pull complete
+778edd6d0a46: Pull complete
+af1b0ec58eda: Pull complete
+4a5b2a88e880: Pull complete
+Digest: sha256:3b71ffda90cd3016a764899cf2f43c9b3e3154643607f76382d5536658f2a885
+Status: Downloaded newer image for temporalio/temporal-auto-setup:latest
 Creating quick_start_statsd_1    ... done
 Creating quick_start_cassandra_1 ... done
-Creating quick_start_cadence_1   ... done
-Creating quick_start_cadence-web_1 ... done
-Attaching to quick_start_cassandra_1, quick_start_statsd_1, quick_start_cadence_1, quick_start_cadence-web_1
-statsd_1       | *** Running /etc/my_init.d/00_regen_ssh_host_keys.sh...
-statsd_1       | *** Running /etc/my_init.d/01_conf_init.sh...
-cadence_1      | + CADENCE_HOME=/cadence
-cadence_1      | + DB=cassandra
+Creating quick_start_temporal_1  ... done
+Attaching to quick_start_cassandra_1, quick_start_statsd_1, quick_start_temporal_1
+statsd_1     | Started runsvdir, PID is 39
+statsd_1     | wait for processes to start....
+cassandra_1  | CompilerOracle: inline org/apache/cassandra/io/util/Memory.checkBounds (JJ)V
+cassandra_1  | CompilerOracle: inline org/apache/cassandra/io/util/SafeMemory.checkBounds (JJ)V
+cassandra_1  | CompilerOracle: inline org/apache/cassandra/utils/AsymmetricOrdering.selectBoundary (Lorg/apache/cassandra/utils/AsymmetricOrdering/Op;II)I
+cassandra_1  | CompilerOracle: inline org/apache/cassandra/utils/AsymmetricOrdering.strictnessOfLessThan (Lorg/apache/cassandra/utils/AsymmetricOrdering/Op;)I
+cassandra_1  | CompilerOracle: inline org/apache/cassandra/utils/BloomFilter.indexes (Lorg/apache/cassandra/utils/IFilter/FilterKey;)[J
+cassandra_1  | CompilerOracle: inline org/apache/cassandra/utils/BloomFilter.setIndexes (JJIJ[J)V
+temporal_1   | + DB=cassandra
+temporal_1   | + ENABLE_ES=false
+temporal_1   | + ES_PORT=9200
+temporal_1   | + RF=1
+temporal_1   | + DEFAULT_DOMAIN_NAME=default
+temporal_1   | + DEFAULT_DOMAIN_RETENTION=1
 ...
 ...
 ...
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.199Z","msg":"Get dynamic config","name":"matching.longPollExpirationInterval","value":"1m0s","default-value":"1m0s","logging-call-at":"config.go:57"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.199Z","msg":"Get dynamic config","name":"matching.updateAckInterval","value":"1m0s","default-value":"1m0s","logging-call-at":"config.go:57"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.199Z","msg":"Get dynamic config","name":"matching.idleTasklistCheckInterval","value":"5m0s","default-value":"5m0s","logging-call-at":"config.go:57"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.765Z","msg":"message is empty","service":"cadence-matching","component":"matching-engine","lifecycle":"Starting","wf-task-list-name":"cadence-archival-tl","wf-task-list-type":0,"logging-call-at":"matchingEngine.go:185"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.775Z","msg":"message is empty","service":"cadence-matching","component":"matching-engine","lifecycle":"Started","wf-task-list-name":"cadence-archival-tl","wf-task-list-type":0,"logging-call-at":"matchingEngine.go:199"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.891Z","msg":"message is empty","service":"cadence-matching","component":"matching-engine","lifecycle":"Starting","wf-task-list-name":"51f3b9fdfa7d:7feebe1f-95b2-44b8-8633-5ba7f4113508","wf-task-list-type":0,"logging-call-at":"matchingEngine.go:185"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:38.900Z","msg":"message is empty","service":"cadence-matching","component":"matching-engine","lifecycle":"Started","wf-task-list-name":"51f3b9fdfa7d:7feebe1f-95b2-44b8-8633-5ba7f4113508","wf-task-list-type":0,"logging-call-at":"matchingEngine.go:199"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:52.282Z","msg":"Get dynamic config","name":"history.shardUpdateMinInterval","value":"5m0s","default-value":"5m0s","logging-call-at":"config.go:57"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:26:52.282Z","msg":"Get dynamic config","name":"history.emitShardDiffLog","value":"false","default-value":"false","logging-call-at":"config.go:57"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:27:24.903Z","msg":"Get dynamic config","name":"history.transferProcessorCompleteTransferFailureRetryCount","value":"10","default-value":"10","logging-call-at":"config.go:57"}
-cadence_1      | {"level":"info","ts":"2019-06-06T15:27:24.905Z","msg":"Get dynamic config","name":"history.timerProcessorCompleteTimerFailureRetryCount","value":"10","default-value":"10","logging-call-at":"config.go:57"}
+temporal_1   | + tctl --do default domain register --rd 1 --desc 'Default domain for Temporal Server'
+temporal_1   | Domain default successfully registered.
+temporal_1   | + tctl --do default domain describe
+temporal_1   | Name: default
+temporal_1   | UUID: 0d432509-d5ec-46e7-9fa2-f395b9ec6b26
+temporal_1   | Description: Default domain for Temporal Server
+temporal_1   | OwnerEmail:
+temporal_1   | DomainData: map[string]string(nil)
+temporal_1   | Status: DomainStatusRegistered
+temporal_1   | RetentionInDays: 1
+temporal_1   | EmitMetrics: false
+temporal_1   | ActiveClusterName: active
+temporal_1   | Clusters: active
+temporal_1   | HistoryArchivalStatus: ArchivalStatusEnabled
+temporal_1   | HistoryArchivalURI: file:///tmp/temporal_archival/development
+temporal_1   | VisibilityArchivalStatus: ArchivalStatusDisabled
+temporal_1   | Bad binaries to reset:
+temporal_1   | +-----------------+----------+------------+--------+
+temporal_1   | | BINARY CHECKSUM | OPERATOR | START TIME | REASON |
+temporal_1   | +-----------------+----------+------------+--------+
+temporal_1   | +-----------------+----------+------------+--------+
+temporal_1   | + echo 'Default domain registration complete.'
+temporal_1   | Default domain registration complete.
 ```
 ### Register a Domain Using the CLI
-From a different console window:
+When Temporal server comes up it automatically registers a default domain.  From a different console window, 
+run the following command to make sure domain exist.
 ```bash
-> docker run --network=host --rm ubercadence/cli:master --do test-domain domain register -rd 1
-Unable to find image 'ubercadence/cli:master' locally
-master: Pulling from ubercadence/cli
-22dc81ace0ea: Pull complete
-1a8b3c87dba3: Pull complete
-91390a1c435a: Pull complete
-07844b14977e: Pull complete
-b78396653dae: Pull complete
-5259e0c8568e: Pull complete
-be8b5313e7cd: Pull complete
-da2cfe74be81: Pull complete
-5320bde81c0c: Pull complete
-Digest: sha256:f5e5e708347909c8d3f74c47878b201d91606994394e94eaede9a80e3b9f077b
-Status: Downloaded newer image for ubercadence/cli:master
-Domain test-domain successfully registered.
->
-```
-Check that the domain is indeed registered:
-```bash
-> docker run --network=host --rm ubercadence/cli:master --do test-domain domain describe
-Name: test-domain
-Description:
+> docker run --network=host --rm temporalio/tctl:master --do default d desc
+Unable to find image 'temporalio/tctl:master' locally
+master: Pulling from temporalio/tctl
+c9b1b535fdd9: Already exists
+7894839ec608: Pull complete
+ab40e07e6b29: Pull complete
+e9608650cfa7: Pull complete
+Digest: sha256:872530a7c3fa3bbf0c03b5243a7fb9c06b450af4a1848db311d95b04731d02cc
+Status: Downloaded newer image for temporalio/tctl:master
+Name: default
+UUID: 0d432509-d5ec-46e7-9fa2-f395b9ec6b26
+Description: Default domain for Temporal Server
 OwnerEmail:
-DomainData: map[]
-Status: REGISTERED
+DomainData: map[string]string(nil)
+Status: DomainStatusRegistered
 RetentionInDays: 1
 EmitMetrics: false
 ActiveClusterName: active
 Clusters: active
-ArchivalStatus: DISABLED
+HistoryArchivalStatus: ArchivalStatusEnabled
+HistoryArchivalURI: file:///tmp/temporal_archival/development
+VisibilityArchivalStatus: ArchivalStatusDisabled
 Bad binaries to reset:
 +-----------------+----------+------------+--------+
 | BINARY CHECKSUM | OPERATOR | START TIME | REASON |
@@ -102,6 +123,7 @@ Bad binaries to reset:
 +-----------------+----------+------------+--------+
 >
 ```
+
 ## Implement Hello World Java Workflow
 
 ### Include Temporal Java Client Dependency

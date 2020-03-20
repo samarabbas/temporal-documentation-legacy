@@ -3,6 +3,6 @@ name: workerscaffoldgo01
 ---
 
 ```bash
-mkdir -p $GOPATH/src/myorg/cadence-scaffold
-cd $GOPATH/src/myorg/cadence-scaffold
+mkdir -p $GOPATH/src/myorg/temporal-scaffold
+cd $GOPATH/src/myorg/temporal-scaffold
 ```

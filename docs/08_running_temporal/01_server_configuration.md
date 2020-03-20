@@ -1,25 +1,27 @@
-# Configuring Temporal Server
+# Configuring Temporal
 
-Temporal Server configuration is found in `development.yaml` 
-
+Temporal Server configuration is found in `development.yaml` and may contain the following possible sections:
 
 - [**server**](#server) 
 - [**persistence**](#persistence) 
 - [**log**](#log) 
 - [**clusterMetadata**](#clusterMetadata)
-- [**dcRedirectionPolicy**](#dcRedirectionPolicy)
 - [**services**](#service) 
 - [**kafka**](#kafkaConfig) 
-- [**archival**](#archival) 
 - [**publicClient**](#publicClient) 
-- [**dynamicConfigClient**](#fileBasedClientConfig)
-- [**DomainDefaults**](#domainDefaults)
+- archival
+- dcRedirectionPolicy
+- dynamicConfigClient
+- domainDefaults
 
-**Note:** Any changing any properties in `development.yaml` file, you must restart the services for changes to take effect.
+**Note:** Changing any properties in `development.yaml` file requires a process restart for changes to take effect.
+
+**Note:** If youd like to dig deeper and see how we actually parse this file, see our source code [here](https://github.com/temporalio/temporal/blob/master/common/service/config/config.go).
 
 ## server
 
-`server` holds process-wide service-related configuration. See below for a minimal server configuration, with optional paramters are commented out.
+The `server` section contains process-wide configuration. See below for a minimal server configuration, with optional paramters are commented out.
+
 ```yaml
 server:
   ringpop: 
@@ -33,7 +35,7 @@ server:
 
 ### ringpop - *required*
 
-The ringpop section controls the following membership layer parameters:
+The `ringpop` section controls the following membership layer parameters:
 
 - `name` - *required* - used to identify other cluster members in a ringpop ring. This must be the same for all nodes.
 - `maxJoinDuration` - The amount of time the service will attempt to join the gossip layer before failing.
@@ -63,6 +65,9 @@ persistence:
         keyspace: "temporal_visibility"
 ```
 
+The following top level configuration items are required:
+
+- `numHistoryShards` - required - The number of history shards to create when initializing the cluster. **Warning**: This value is immutable and will be ignored after the first run. Please ensure you set this value appropriately high enough to scale with the worst case peak load for this cluster.
 - `defaultStore` - required - The name of the DataStore definition that should be used by the Temporal server
 - `visiblityStore` - required - The name of the DataStore definition that should be used by the Temporal visibility server
 - `datastores` - required - contains named DataStore definitions to be referenced.
@@ -108,8 +113,14 @@ A `sql` datastore definition can contain the following values:
 
 Note: CertPath and KeyPath are optional depending on server config, but both fields must be omitted to avoid using a client certificate
 
-
 ## log
+The `log` section is optional and contains the following possible values:
+
+- `stdout` - *bool* - true if the output needs to goto standard out
+- `level` - sets the logging level 
+    - *Valid values* - debug, info, warn, error or fatal
+- `outputFile` - Log file to out put to
+
 ## clusterMetadata
 
 `clusterMetadata` contains all cluster definitions, including those which participate in cross DC.
@@ -129,7 +140,7 @@ clusterMetadata:
     //replicationConsumer:
       //type: kafka
 ```
-- `currentClusterName` - *required* - the name of the current cluster. **Warning**: This value is immutable and will be ignored after 
+- `currentClusterName` - *required* - the name of the current cluster. **Warning**: This value is immutable and will be ignored after the first run.
 - `enableGlobalDomain` - *Default:* false
 - `replicationConsumerConfig` - determines which method to use to consume replication tasks. The type may be either `kafka` or `rpc`.
 - `failoverVersionIncrement` - the increment of each cluster version when failover happens
@@ -138,10 +149,9 @@ clusterMetadata:
   - `enabled` - *boolean*
   - `InitialFailoverVersion`
   - `rpcAddress` indicate the remote service address(Host:Port). Host can be DNS name.
-	
-## dcRedirectionPolicy
+
 ## services
-`services` contains configuration keyed by service role type. There are four supported service roles:
+The `services` section contains configuration keyed by service role type. There are four supported service roles:
 
 - `frontend`
 - `matching`
@@ -197,7 +207,57 @@ Additionally, metrics supports the following non-provider specific settings:
 - `prefix` - sets the prefix to all outgoing metrics
 
 ## kafka
-## archival
+The `kafka` section describes the configuration needed to connect to all kafka clusters and supports the following values:
+
+- `tls` - Uses the TLS structure as under the `persistence` section.
+- `clusters` - Map of Named ClusterConfig definitions, which describe the configuration for each Kafka cluster. A `ClusterConfig` definition contains a list of brokers using the configuration value `brokers`.
+- `topics` - Map of topics to kafka clusters.
+- `cadence-cluster-topics`- Map of named TopicList definitions
+- `applications` - Map of Named TopicList definitions
+
+A `TopicList` definition describes the topic names for each cluster and contains the following required values:
+- `topic`
+- `retryTopic`
+- `dlqTopic`
+
+Below is a sample `kafka` section:
+
+```yaml
+kafka:
+  tls:
+    enabled: false
+    certFile: ""
+    keyFile: ""
+    caFile: ""
+  clusters:
+    test:
+      brokers:
+        - 127.0.0.1:9092
+  topics:
+    active:
+      cluster: test
+    active-dlq:
+      cluster: test
+    standby:
+      cluster: test
+    standby-dlq:
+      cluster: test
+    other:
+      cluster: test
+    other-dlq:
+      cluster: test
+  cadence-cluster-topics:
+    active:
+      topic: active
+      dlq-topic: active-dlq
+    standby:
+      topic: standby
+      dlq-topic: standby-dlq
+    other:
+      topic: other
+      dlq-topic: other-dlq
+```
+
 ## publicClient 
 `publicClient` is a required section that contains a single value `hostPort` that is used to specify IPv4 address or dns name and port to reach a frontend client.
 
@@ -206,6 +266,3 @@ Example:
 publicClient:
   hostPort: "localhost:8933"
 ```
-
-## dynamicConfigClient
-## DomainDefaults

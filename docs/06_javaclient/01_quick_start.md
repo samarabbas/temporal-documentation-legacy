@@ -135,7 +135,7 @@ public class GettingStarted {
 }
 ```
 If you are having problems setting up the build files use the
-[Temporal Java Samples](https://github.com/uber/cadence-java-samples) GitHub repository as a reference.
+[Temporal Java Samples](https://github.com/temporalio/temporal-java-samples) GitHub repository as a reference.
 
 Also add the following logback config file somewhere in your classpath:
 ```xml

@@ -17,7 +17,7 @@ with `docker-compose down`, that will wipe out the data and you'll need to creat
 ## Using the CLI
 
 The Temporal CLI can be used directly from the Docker image *ubercadence/cli* or by 
-[building the CLI tool](https://github.com/uber/cadence/tree/master/tools/cli#how) locally (which requires 
+[building the CLI tool](https://github.com/temporalio/temporal/tree/master/tools/cli#how) locally (which requires 
 cloning the server code). The samples in this tour will use the Docker image. If using a locally built 
 version, replace `docker run --rm ubercadence/cli:master` with `cadence`.
 

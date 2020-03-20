@@ -50,7 +50,7 @@ provides the guarantee that workflows won’t get stuck and will continue to mak
 
 ## Visibility API
 All Visibility APIs are allowed on both active and standby clusters. This enables
-[Temporal Web](https://github.com/uber/cadence-web) to work seamlessly for Global Domains as all visibility records for
+[Temporal Web](https://github.com/temporalio/temporal-web) to work seamlessly for Global Domains as all visibility records for
 workflow executions can be queried from any cluster the domain is replicated to. Applications making API calls directly
 to the Temporal Visibility API will continue to work even if a Global Domain is in standby mode. However, they might see
 a lag due to replication delay when querying the workflow execution state from a standby cluster.

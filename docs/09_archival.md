@@ -13,7 +13,7 @@ Work is being prioritized on archival to eliminate these limitations.
 
 ## Concepts
 
-- **Archiver:** Archiver is the component responsible for archiving and retrieving workflow histories.  Its interface is quite generic and supports different kinds of archival locations: local file system, S3, Kafka, etc. Check [this README](https://github.com/uber/cadence/blob/master/common/archiver/README.md) for how to add a new archiver implementation.
+- **Archiver:** Archiver is the component responsible for archiving and retrieving workflow histories.  Its interface is quite generic and supports different kinds of archival locations: local file system, S3, Kafka, etc. Check [this README](https://github.com/temporalio/temporal/blob/master/common/archiver/README.md) for how to add a new archiver implementation.
 - **URI:** An URI is used to specify the archival location. Based on the scheme part of an URI, the corresponding archiver will be selected by the system to perform archival.
 
 ## Configuring Archival

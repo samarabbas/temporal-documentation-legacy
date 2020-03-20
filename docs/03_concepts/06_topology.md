@@ -11,7 +11,7 @@ Note that both types of workers as well as external clients are roles and can be
 
 ![Temporal Service](../../assets/overview.png)
 
-At the core of Temporal is a highly scalable multitentant service. The service exposes all its functionality through a strongly typed [Thrift API](https://github.com/uber/cadence/blob/11448bb7729857022b9f382b356b61e8a9aa77f1/idl/github.com/uber/cadence/cadence.thrift#L33).
+At the core of Temporal is a highly scalable multitentant service. The service exposes all its functionality through a strongly typed [Proto API](https://github.com/temporalio/temporal-proto/blob/master/workflowservice/service.proto).
 
 Internally it depends on a persistent store. Currently, Apache Cassandra and MySQL stores are supported out of the box. For listing workflows using complex predicates, Elasticsearch cluster can be used.
 

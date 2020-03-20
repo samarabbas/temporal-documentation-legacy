@@ -274,7 +274,7 @@ cadence --do samples-domain wf list -q 'WorkflowType = "main.Workflow" StartTime
 
 ### Web UI Support
 
-Queries are supported in [Temporal Web](https://github.com/uber/cadence-web) as of release 3.4.0. Use the "Basic/Advanced" button to switch to "Advanced" mode and type the query in the search box.
+Queries are supported in [Temporal Web](https://github.com/temporalio/temporal-web) as of release 3.4.0. Use the "Basic/Advanced" button to switch to "Advanced" mode and type the query in the search box.
 
 ## Local Testing
 

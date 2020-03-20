@@ -20,7 +20,7 @@ On Docker versions 18.03 and later, you may get a "connection refused" error. Yo
 docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain describe
 ```
 
-To build the CLI tool locally, clone the [Temporal server repo](https://github.com/uber/cadence) and run
+To build the CLI tool locally, clone the [Temporal server repo](https://github.com/temporalio/temporal) and run
 `make bins`. This produces an executable called `cadence`. With a local build, the same command to
 describe a domain would look like this:
 ```

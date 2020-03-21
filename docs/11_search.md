@@ -242,7 +242,7 @@ If you use retry or the cron feature to query workflows that will start executio
 
 ### CLI
 
-Support for search attributes is available as of version 0.6.0 of the Temporal server. You can also use the CLI from the latest [CLI Docker image](https://hub.docker.com/r/ubercadence/cli) (supported on 0.6.4 or later).
+Support for search attributes is available as of version 0.6.0 of the Temporal server. You can also use the CLI from the latest [CLI Docker image](https://hub.docker.com/r/temporalio/tctl) (supported on 0.6.4 or later).
 
 #### Start Workflow with Search Attributes
 

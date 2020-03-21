@@ -15,10 +15,10 @@ set TEMPORAL_CLI_DOMAIN=samples-domain
 
 Check if samples-domain exists:
 ```bash
-docker run --rm temporalio/tctl:master d desc
+docker run --rm temporalio/tctl:latest d desc
 ```
 
 Create samples-domain:
 ```bash
-docker run --rm temporalio/tctl:master d register --rd 7
+docker run --rm temporalio/tctl:latest d register --rd 7
 ```

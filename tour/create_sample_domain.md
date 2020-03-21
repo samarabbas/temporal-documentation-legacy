@@ -16,15 +16,15 @@ with `docker-compose down`, that will wipe out the data and you'll need to creat
 
 ## Using the CLI
 
-The Temporal CLI can be used directly from the Docker image *ubercadence/cli* or by 
+The Temporal CLI can be used directly from the Docker image *temporalio/tctl* or by 
 [building the CLI tool](https://github.com/temporalio/temporal/tree/master/tools/cli#how) locally (which requires 
 cloning the server code). The samples in this tour will use the Docker image. If using a locally built 
-version, replace `docker run --rm ubercadence/cli:master` with `cadence`.
+version, replace `docker run --rm temporalio/tctl:latest` with `tctl`.
 
 ## Environment variables
 
 To keep the CLI commands short, we'll use some environment variables. These include the following:
 
-- **CADENCE_CLI_ADDRESS** - host:port for Temporal frontend service, the default is for the local server
-- **CADENCE_CLI_DOMAIN** - default workflow domain, so you don't need to specify `--domain`
+- **TEMPORAL_CLI_ADDRESS** - host:port for Temporal frontend service, the default is for the local server
+- **TEMPORAL_CLI_DOMAIN** - default workflow domain, so you don't need to specify `--domain`
 - **USER** - this is assigned by default in Linux/Mac but not on Windows

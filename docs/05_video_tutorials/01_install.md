@@ -7,26 +7,26 @@ Commands executed during the tutorial:
 ```bash
 docker-compose up
 
-docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain register
+docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --domain samples-domain domain register
 
-docker run --rm ubercadence/cli:master --address host.docker.internal:7933 --domain samples-domain domain describe
+docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --domain samples-domain domain describe
 
-alias cadence="docker run --rm ubercadence/cli:master --address host.docker.internal:7933"
+alias tctl="docker run --rm temporalio/tctl:latest --address host.docker.internal:7233"
 
-cadence --domain samples-domain domain desc
+tctl --domain samples-domain domain desc
 
-cadence help
+tctl help
 
-cadence workflow help
+tctl workflow help
 
-cadence --domain samples-domain workflow list
+tctl --domain samples-domain workflow list
 
-cadence --domain samples-domain workflow help start
+tctl --domain samples-domain workflow help start
 
-cadence --domain samples-domain workflow start -wt test -tl test -et 300
+tctl --domain samples-domain workflow start -wt test -tl test -et 300
 
-cadence --domain samples-domain workflow list -op
+tctl --domain samples-domain workflow list -op
 
-cadence --domain samples-domain workflow terminate -wid <workflowID>
+tctl --domain samples-domain workflow terminate -wid <workflowID>
 
 ```

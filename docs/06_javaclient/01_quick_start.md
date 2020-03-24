@@ -388,7 +388,7 @@ So far our workflow is not very interesting. Let's change it to listen on an ext
   }
 ```
 The workflow interface now has a new method annotated with @SignalMethod. It is a callback method that is invoked
-every time a new signal of "HelloWorld::updateGreeting" is delivered to a workflow. The workflow interface can have only
+every time a new signal of "HelloWorld_updateGreeting" is delivered to a workflow. The workflow interface can have only
 one @WorkflowMethod which is a _main_ function of the workflow and as many signal methods as needed.
 
 The updated workflow implementation demonstrates a few important Temporal concepts. The first is that workflow is stateful and can
@@ -403,7 +403,7 @@ Program output:
 ```
 Let's send a signal using CLI:
 ```bash
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloSignal" --name "HelloWorld::updateGreeting" --input \"Hi\"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloSignal" --name "HelloWorld_updateGreeting" --input \"Hi\"
 Signal workflow succeeded.
 ```
 Program output:
@@ -414,7 +414,7 @@ Program output:
 Try sending the same signal with the same input again. Note that the output doesn't change. This happens because the await condition
 doesn't unblock when it sees the same value. But a new greeting unblocks it:
 ```bash
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloSignal" --name "HelloWorld::updateGreeting" --input \"Welcome\"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloSignal" --name "HelloWorld_updateGreeting" --input \"Welcome\"
 Signal workflow succeeded.
 ```
 Program output:
@@ -425,7 +425,7 @@ Program output:
 ```
 Now shut down the worker and send the same signal again:
 ```bash
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloSignal" --name "HelloWorld::updateGreeting" --input \"Welcome\"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloSignal" --name "HelloWorld_updateGreeting" --input \"Welcome\"
 Signal workflow succeeded.
 ```
 Note that sending signals as well as starting workflows does not need a worker running. The requests are queued inside the Temporal service.
@@ -440,10 +440,10 @@ Let's look at the line where the workflow is blocked:
 > docker run --network=host --rm temporalio/tctl:latest --do default workflow stack --workflow_id "Hello2"
 Query result:
 "workflow-root: (BLOCKED on await)
-com.uber.cadence.internal.sync.SyncDecisionContext.await(SyncDecisionContext.java:546)
-com.uber.cadence.internal.sync.WorkflowInternal.await(WorkflowInternal.java:243)
-com.uber.cadence.workflow.Workflow.await(Workflow.java:611)
-com.uber.cadence.samples.hello.GettingStarted$HelloWorldImpl.sayHello(GettingStarted.java:32)
+io.temporal.internal.sync.SyncDecisionContext.await(SyncDecisionContext.java:546)
+io.temporal.internal.sync.WorkflowInternal.await(WorkflowInternal.java:243)
+io.temporal.workflow.Workflow.await(Workflow.java:611)
+io.temporal.samples.hello.GettingStarted$HelloWorldImpl.sayHello(GettingStarted.java:32)
 sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)"
 ```
@@ -512,9 +512,9 @@ Let's run the updated worker and send a couple signals to it:
 ```bash
 temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow start  --workflow_id "HelloQuery" --tasklist HelloWorldTaskList --workflow_type HelloWorld_sayHello --execution_timeout 3600 --input \"World\"
 Started Workflow Id: HelloQuery, run Id: 1925f668-45b5-4405-8cba-74f7c68c3135
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloQuery" --name "HelloWorld::updateGreeting" --input \"Hi\"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloQuery" --name "HelloWorld_updateGreeting" --input \"Hi\"
 Signal workflow succeeded.
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloQuery" --name "HelloWorld::updateGreeting" --input \"Welcome\"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloQuery" --name "HelloWorld_updateGreeting" --input \"Welcome\"
 Signal workflow succeeded.
 ```
 The worker output:
@@ -525,16 +525,16 @@ The worker output:
 ```
 Now let's query the workflow using the CLI:
 ```bash
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow query --workflow_id "HelloQuery" --query_type "HelloWorld::getCount"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow query --workflow_id "HelloQuery" --query_type "HelloWorld_getCount"
 Query result as JSON:
 3
 ```
 One limitation of the query is that it requires a worker process running because it is executing callback code.
 An interesting feature of the query is that it works for completed workflows as well. Let's complete the workflow by sending "Bye" and query it.
 ```bash
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloQuery" --name "HelloWorld::updateGreeting" --input \"Bye\"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow signal --workflow_id "HelloQuery" --name "HelloWorld_updateGreeting" --input \"Bye\"
 Signal workflow succeeded.
-temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow query --workflow_id "HelloQuery" --query_type "HelloWorld::getCount"
+temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow query --workflow_id "HelloQuery" --query_type "HelloWorld_getCount"
 Query result as JSON:
 4
 ```
@@ -634,13 +634,13 @@ The first option is look at the stack trace:
 ```text
 temporal: docker run --network=host --rm temporalio/tctl:latest --do default workflow stack  --workflow_id "HelloActivityWorker"
 Query result as JSON:
-"workflow-root: (BLOCKED on Feature.get)com.uber.cadence.internal.sync.CompletablePromiseImpl.get(CompletablePromiseImpl.java:71)
-com.uber.cadence.internal.sync.ActivityStubImpl.execute(ActivityStubImpl.java:58)
-com.uber.cadence.internal.sync.ActivityInvocationHandler.lambda$invoke$0(ActivityInvocationHandler.java:87)
-com.uber.cadence.internal.sync.ActivityInvocationHandler$$Lambda$25/1816732716.apply(Unknown Source)
-com.uber.cadence.internal.sync.ActivityInvocationHandler.invoke(ActivityInvocationHandler.java:94)
+"workflow-root: (BLOCKED on Feature.get)io.temporal.internal.sync.CompletablePromiseImpl.get(CompletablePromiseImpl.java:71)
+io.temporal.internal.sync.ActivityStubImpl.execute(ActivityStubImpl.java:58)
+io.temporal.internal.sync.ActivityInvocationHandler.lambda$invoke$0(ActivityInvocationHandler.java:87)
+io.temporal.internal.sync.ActivityInvocationHandler$$Lambda$25/1816732716.apply(Unknown Source)
+io.temporal.internal.sync.ActivityInvocationHandler.invoke(ActivityInvocationHandler.java:94)
 com.sun.proxy.$Proxy6.say(Unknown Source)
-com.uber.cadence.samples.hello.GettingStarted$HelloWorldImpl.sayHello(GettingStarted.java:55)
+io.temporal.samples.hello.GettingStarted$HelloWorldImpl.sayHello(GettingStarted.java:55)
 sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
 sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)
 "
@@ -673,7 +673,7 @@ temporal: docker run --network=host --rm temporalio/tctl:latest --do default wor
                                 StartedEventId:3,
                                 Identity:36234@maxim-C02XD0AAJGH6}
   5  ActivityTaskScheduled     {ActivityId:0,
-                                ActivityType:{Name:HelloWorldActivities::say},
+                                ActivityType:{Name:HelloWorldActivities_say},
                                 TaskList:{Name:HelloWorldTaskList},
                                 Input:["1: Hello World!"],
                                 ScheduleToCloseTimeoutSeconds:100,
@@ -716,7 +716,7 @@ temporal: docker run --network=host --rm temporalio/tctl:latest --do default wor
     {
       "ActivityID": "0",
       "ActivityType": {
-        "name": "HelloWorldActivities::say"
+        "name": "HelloWorldActivities_say"
       },
       "State": "SCHEDULED",
       "ScheduledTimestamp": "2019-06-08T23:57:00Z"
@@ -752,7 +752,7 @@ temporal: docker run --network=host --rm temporalio/tctl:latest --do default wor
                                 StartedEventId:3,
                                 Identity:37694@maxim-C02XD0AAJGH6}
    5  ActivityTaskScheduled     {ActivityId:0,
-                                ActivityType:{Name:HelloWorldActivities::say},
+                                ActivityType:{Name:HelloWorldActivities_say},
                                 TaskList:{Name:HelloWorldTaskList},
                                 Input:["1: Hello World!"],
                                 ScheduleToCloseTimeoutSeconds:300,

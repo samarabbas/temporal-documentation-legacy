@@ -13,7 +13,7 @@ public interface HelloWorkflow {
 ```java
 package com.tutorial;
 
-import com.uber.cadence.workflow.Workflow;
+import io.temporal.workflow.Workflow;
 
 import java.time.Duration;
 
@@ -28,7 +28,7 @@ public class HelloWorkflowImpl implements HelloWorkflow {
 ```java
 package com.tutorial;
 
-import com.uber.cadence.worker.Worker;
+import io.temporal.worker.Worker;
 
 public class Main {
 
@@ -42,6 +42,6 @@ public class Main {
 ```
 Commands:
 ```bash
-cadence -do samples-domain workflow start --et 300 --tl hello --wt HelloWorkflow::getGreeting --input \"World\"
+cadence -do samples-domain workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
 ```
 

@@ -1,6 +1,6 @@
-# Java Client
+# Java SDK
 
-The following are important links for the Temporal Java client:
+The following are important links for the Temporal Java SDK:
 
 - GitHub project: [https://github.com/temporalio/temporal-java-sdk](https://github.com/temporalio/temporal-java-sdk)
 - Samples: [https://github.com/temporalio/temporal-java-samples](https://github.com/temporalio/temporal-java-samples)

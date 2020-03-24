@@ -90,39 +90,8 @@ temporal_1   | +-----------------+----------+------------+--------+
 temporal_1   | + echo 'Default domain registration complete.'
 temporal_1   | Default domain registration complete.
 ```
-### Register a Domain Using the CLI
-When Temporal server comes up it automatically registers a default domain.  From a different console window, 
-run the following command to make sure domain exist.
-```bash
-> docker run --network=host --rm temporalio/tctl:latest --do default d desc
-Unable to find image 'temporalio/tctl:latest' locally
-master: Pulling from temporalio/tctl
-c9b1b535fdd9: Already exists
-7894839ec608: Pull complete
-ab40e07e6b29: Pull complete
-e9608650cfa7: Pull complete
-Digest: sha256:872530a7c3fa3bbf0c03b5243a7fb9c06b450af4a1848db311d95b04731d02cc
-Status: Downloaded newer image for temporalio/tctl:latest
-Name: default
-UUID: 0d432509-d5ec-46e7-9fa2-f395b9ec6b26
-Description: Default domain for Temporal Server
-OwnerEmail:
-DomainData: map[string]string(nil)
-Status: DomainStatusRegistered
-RetentionInDays: 1
-EmitMetrics: false
-ActiveClusterName: active
-Clusters: active
-HistoryArchivalStatus: ArchivalStatusEnabled
-HistoryArchivalURI: file:///tmp/temporal_archival/development
-VisibilityArchivalStatus: ArchivalStatusDisabled
-Bad binaries to reset:
-+-----------------+----------+------------+--------+
-| BINARY CHECKSUM | OPERATOR | START TIME | REASON |
-+-----------------+----------+------------+--------+
-+-----------------+----------+------------+--------+
->
-```
+
+Note that a default domain is created upon first cluster start.
 
 ## Implement Hello World Java Workflow
 
@@ -308,8 +277,8 @@ Error Details: Workflow execution already finished successfully. WorkflowId: Hel
 
 Oops, Temporal doesn't let us create a workflow with the same ID. But there are use cases when it is desired. For example if there is a need to re-execute the workflow for a particular reason. This is achieved by specifying a special flag _Workflow ID Reuse Policy_. The value of 1 means `AllowDuplicate`:
 ```bash
-> docker run --network=host --rm temporalio/tctl:latest --do default workflow start  --workflowidreusepolicy 1 --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld_sayHello --execution_timeout 3600 --input \"Temporal\"
-Started Workflow Id: HelloTemporal1, run Id: 37a740e5-838c-4020-aed6-1111b0689c38
+> docker run --network=host --rm temporalio/tctl:latest --do default workflow start  --workflowidreusepolicy 0 --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld_sayHello --execution_timeout 3600 --input \"Temporal\"
+Started Workflow Id: HelloTemporal1, run Id: 9b5e36a3-9868-4de5-bbdf-eda9cedcd865
 ```
 After the second start the workflow list is:
 ```bash

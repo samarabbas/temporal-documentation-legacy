@@ -59,7 +59,7 @@ callout_description: Temporal Workflow as Code Platform preserves complete multi
       </div>
     </a>
     <a href="{{ '/docs/06_javaclient' | relative_url }}">
-      <span class="description">Java Client</span>
+      <span class="description">Java SDK</span>
     </a>
     <p>Code your business logic in Java</p>
   </div>
@@ -73,7 +73,7 @@ callout_description: Temporal Workflow as Code Platform preserves complete multi
       </div>
     </a>
     <a href="{{ '/docs/07_goclient' | relative_url }}">
-      <span class="description">Go Client</span>
+      <span class="description">Go SDK</span>
     </a>
     <p>Code your business logic in Go</p>
   </div>

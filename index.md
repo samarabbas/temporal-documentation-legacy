@@ -2,7 +2,7 @@
 title: Welcome
 layout: marketing
 callout: Workflow as Code Platform
-callout_description: Temporal Workflow as Code Platform preserves complete multithreaded application state including thread stacks with local variables across hardware and software failures. It greatly simplifies coding of complex stateful distributed applications. At the same time it is scalable and robust enough to power hundreds of critical use cases at Uber and outside.
+callout_description: Temporal Workflow as Code Platform preserves complete multithreaded application state including thread stacks with local variables across hardware and software failures. It greatly simplifies coding of complex stateful distributed applications. At the same time it is scalable and robust enough to power hundreds of critical use cases.
 ---
 
 <section class="features">

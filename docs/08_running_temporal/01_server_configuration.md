@@ -26,10 +26,10 @@ The `server` section contains process-wide configuration. See below for a minima
 server:
   ringpop: 
     name: temporal
-    //maxJoinDuration: 30s
-    //broadcastAddress: "127.0.0.1"
-  //pprof:
-    //port: 7936
+    #maxJoinDuration: 30s
+    #broadcastAddress: "127.0.0.1"
+  #pprof:
+    #port: 7936
 
 ```
 
@@ -70,64 +70,63 @@ The following top level configuration items are required:
 
 - `numHistoryShards` - *required* - the number of history shards to create when initializing the cluster. 
   - **Warning**: This value is immutable and will be ignored after the first run. Please ensure you set this value appropriately high enough to scale with the worst case peak load for this cluster.
-- `defaultStore` - *required* - the name of the DataStore definition that should be used by the Temporal server
-- `visiblityStore` - *required* - the name of the DataStore definition that should be used by the Temporal visibility server
-- `datastores` - *required* - contains named DataStore definitions to be referenced.
-  - Each definition is defined with a heading declaring a name (ie: `default:` and `visibility:` above), which contains a DataStore definition.
-  - DataStore definions must be either `cassandra` or `sql`.
+- `defaultStore` - *required* - the name of the data store definition that should be used by the Temporal server.
+- `visiblityStore` - *required* - the name of the data store definition that should be used by the Temporal visibility server.
+- `datastores` - *required* - contains named data store definitions to be referenced.
+  - Each definition is defined with a heading declaring a name (ie: `default:` and `visibility:` above), which contains a data store definition.
+  - data store definions must be either `cassandra` or `sql`.
 
-A `cassandra` datastore definition can contain the following values:
+A `cassandra` data store definition can contain the following values:
 
-- `hosts` - *required* - a csv of cassandra endpoints
-- `port` - default: 9042 - cassandra port used for connection by gocql client
-- `user` - cassandra user used for authentication by gocql client
-- `password` - cassandra password used for authentication by gocql client
-- `keyspace` - *required* -  the cassandra keyspace
-- `datacenter` - the data center filter arg for cassandra
-- `maxConns` - the max number of connections to this datastore for a single TLS configuration
--  `tls` - See TLS below
+- `hosts` - *required* - a csv of Cassandra endpoints.
+- `port` - default: 9042 - Cassandra port used for connection by `gocql` client.
+- `user` - Cassandra user used for authentication by `gocql` client.
+- `password` - Cassandra password used for authentication by `gocql` client.
+- `keyspace` - *required* -  the Cassandra keyspace.
+- `datacenter` - the data center filter arg for Cassandra.
+- `maxConns` - the max number of connections to this data store for a single TLS configuration.
+- `tls` - See TLS below.
 
-A `sql` datastore definition can contain the following values:
+A `sql` data store definition can contain the following values:
 
-- `user` - user used for authentication
-- `password` - password used for authentication
-- `pluginName` - *required* - SQL database type
-  - *Valid values*: `mysql` or `postgres`
-- `databaseName` - *required* - the name of SQL database to connect to
-- `connectAddr` - *required* - the remote addr of the database
+- `user` - user used for authentication.
+- `password` - password used for authentication.
+- `pluginName` - *required* - SQL database type.
+  - *Valid values*: `mysql` or `postgres`.
+- `databaseName` - *required* - the name of SQL database to connect to.
+- `connectAddr` - *required* - the remote addr of the database.
 - `connectProtocol` - *required* - the protocol that goes with the `connectAddr`
   - *Valid values*: `tcp` or `unix`
-- `connectAttributes` - a map of key-value attributes to be sent as part of connect data_source_name url
-- `maxConns` - the max number of connections to this datastore
-- `maxIdleConns` - the max number of idle connections to this datastore
-- `maxConnLifetime` - is the maximum time a connection can be alive
-- `maxConnLifetime time.Duration `yaml:"maxConnLifetime"`
-- `numShards` - number of storage shards to use for tables in a sharded sql database. (*Default:* 1)
-- `tls` - See below
+- `connectAttributes` - a map of key-value attributes to be sent as part of connect `data_source_name` url.
+- `maxConns` - the max number of connections to this data store.
+- `maxIdleConns` - the max number of idle connections to this data store
+- `maxConnLifetime` - is the maximum time a connection can be alive.
+- `numShards` - number of storage shards to use for tables in a sharded sql database (*Default:* 1).
+- `tls` - See below.
 
 `tls` sections may contain:
-- `enabled` - *boolean*
-- `serverName` - name of the server hosting the datastore
-- `certFile` - path to the cert file
-- `keyFile` - path to the key file
-- `caFile` - path to the ca file
-- `enableHostVerification` - *boolean* - True to verify the hostname and server cert (like a wildcard for cass cluster). This option is basically the inverse of InSecureSkipVerify. See InSecureSkipVerify in http://golang.org/pkg/crypto/tls/ for more info	
+- `enabled` - *boolean*.
+- `serverName` - name of the server hosting the data store.
+- `certFile` - path to the cert file.
+- `keyFile` - path to the key file.
+- `caFile` - path to the ca file.
+- `enableHostVerification` - *boolean* - `true` to verify the hostname and server cert (like a wildcard for Cassandra cluster). This option is basically the inverse of `InSecureSkipVerify`. See `InSecureSkipVerify` in http://golang.org/pkg/crypto/tls/ for more info.
 
-Note: CertPath and KeyPath are optional depending on server config, but both fields must be omitted to avoid using a client certificate
+Note: `certFile` and `keyFile` are optional depending on server config, but both fields must be omitted to avoid using a client certificate.
 
 ## log
 The `log` section is optional and contains the following possible values:
 
-- `stdout` - *boolean* - true if the output needs to goto standard out
-- `level` - sets the logging level 
-    - *Valid values* - debug, info, warn, error or fatal
-- `outputFile` - path to output log file
+- `stdout` - *boolean* - `true` if the output needs to go to standard out.
+- `level` - sets the logging level.
+    - *Valid values* - debug, info, warn, error or fatal.
+- `outputFile` - path to output log file.
 
 ## clusterMetadata
 
 `clusterMetadata` contains all cluster definitions, including those which participate in cross DC.
 
-An example clusterMetadata section:
+An example `clusterMetadata` section:
 ```yaml
 clusterMetadata:
     enableGlobalDomain: false
@@ -139,18 +138,18 @@ clusterMetadata:
             enabled: true
             initialFailoverVersion: 0
             rpcAddress: "127.0.0.1:7233"
-    //replicationConsumer:
-      //type: kafka
+    #replicationConsumer:
+      #type: kafka
 ```
 - `currentClusterName` - *required* - the name of the current cluster. **Warning**: This value is immutable and will be ignored after the first run.
-- `enableGlobalDomain` - *Default:* false
+- `enableGlobalDomain` - *Default:* `false`.
 - `replicationConsumerConfig` - determines which method to use to consume replication tasks. The type may be either `kafka` or `rpc`.
-- `failoverVersionIncrement` - the increment of each cluster version when failover happens
-- `masterClusterName` - the master cluster name, only the master cluster can register / update domain. All clusters can do domain failover.
-- `clusterInformation` - contains a map of cluster names to ClusterInformation definitions. ClusterInformation sections consist of:
+- `failoverVersionIncrement` - the increment of each cluster version when failover happens.
+- `masterClusterName` - the master cluster name, only the master cluster can register/update domain. All clusters can do domain failover.
+- `clusterInformation` - contains a map of cluster names to `ClusterInformation` definitions. `ClusterInformation` sections consist of:
   - `enabled` - *boolean*
-  - `InitialFailoverVersion`
-  - `rpcAddress` indicate the remote service address(Host:Port). Host can be DNS name.
+  - `initialFailoverVersion`
+  - `rpcAddress` - indicate the remote service address (host:port). Host can be DNS name. Use `dns:///` prefix to enable round-robin between IP address for DNS name.
 
 ## services
 The `services` section contains configuration keyed by service role type. There are four supported service roles:
@@ -160,7 +159,7 @@ The `services` section contains configuration keyed by service role type. There 
 - `worker`
 - `history`
 
-Below is a minimal example of a `frontend` service definition under `services` 
+Below is a minimal example of a `frontend` service definition under `services`:
 ```yaml
 services:
   frontend:
@@ -180,12 +179,12 @@ There are two sections defined under each service heading:
 ### rpc - *required*
 `rpc` contains settings related to the way a service interacts with other services. The following values are supported:
 
-- `grpcPort` is the port  on which gRPC will listen
-- `membershipPort` - used by the membership listener (ringpop)
-- `bindOnLocalHost` - uses localhost as the listener address
-- `bindOnIP` - used to bind service on specific ip (eg. `0.0.0.0`) - check net.ParseIP for supported syntax, only IPv4 is supported, mutually exclusive with `BindOnLocalHost` option.
-- `DisableLogging` - disables all logging for rpc
-- `logLevel` - the desired log level
+- `grpcPort` is the port  on which gRPC will listen.
+- `membershipPort` - used by the membership listener (ringpop).
+- `bindOnLocalHost` - uses `localhost` as the listener address.
+- `bindOnIP` - used to bind service on specific ip (eg. `0.0.0.0`) - check `net.ParseIP` for supported syntax, only IPv4 is supported, mutually exclusive with `BindOnLocalHost` option.
+- `disableLogging` - disables all logging for rpc.
+- `logLevel` - the desired log level.
 
 **Note**: Port values are currently expected to be consistent among role types across all hosts. 
 
@@ -198,24 +197,24 @@ There are two sections defined under each service heading:
 
 The `statsd` sections supports the following settings:
 
-- `hostPort` - the statsd server host:port
-- `prefix` - specific prefix in reporting to statsd
-- `flushInterval` - maximum interval for sending packets. (*Default* 1 second)
-- `flushBytes` - specifies the maximum udp packet size you wish to send. (*Default* 1432 bytes)
+- `hostPort` - the statsd server host:port.
+- `prefix` - specific prefix in reporting to `statsd`.
+- `flushInterval` - maximum interval for sending packets. (*Default* 1 second).
+- `flushBytes` - specifies the maximum UDP packet size you wish to send. (*Default* 1432 bytes).
 
 Additionally, metrics supports the following non-provider specific settings:
 
-- `tags` - the set of key-value pairs to be reported
-- `prefix` - sets the prefix to all outgoing metrics
+- `tags` - the set of key-value pairs to be reported.
+- `prefix` - sets the prefix to all outgoing metrics.
 
 ## kafka
-The `kafka` section describes the configuration needed to connect to all kafka clusters and supports the following values:
+The `kafka` section describes the configuration needed to connect to all Kafka clusters and supports the following values:
 
-- `tls` - Uses the TLS structure as under the `persistence` section.
-- `clusters` - Map of Named ClusterConfig definitions, which describe the configuration for each Kafka cluster. A `ClusterConfig` definition contains a list of brokers using the configuration value `brokers`.
-- `topics` - Map of topics to kafka clusters.
-- `cadence-cluster-topics`- Map of named TopicList definitions
-- `applications` - Map of Named TopicList definitions
+- `tls` - uses the TLS structure as under the `persistence` section.
+- `clusters` - map of named `ClusterConfig` definitions, which describe the configuration for each Kafka cluster. A `ClusterConfig` definition contains a list of brokers using the configuration value `brokers`.
+- `topics` - map of topics to Kafka clusters.
+- `cadence-cluster-topics`- map of named `TopicList` definitions.
+- `applications` - map of named `TopicList` definitions.
 
 A `TopicList` definition describes the topic names for each cluster and contains the following required values:
 - `topic`
@@ -261,10 +260,12 @@ kafka:
 ```
 
 ## publicClient 
-`publicClient` is a required section that contains a single value `hostPort` that is used to specify IPv4 address or dns name and port to reach a frontend client.
+`publicClient` is a required section that contains a single value `hostPort` that is used to specify IPv4 address or DNS name and port to reach a frontend client.
 
 Example:
 ```yaml
 publicClient:
   hostPort: "localhost:8933"
 ```
+
+Use `dns:///` prefix to enable round-robin between IP address for DNS name.

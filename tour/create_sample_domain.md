@@ -1,18 +1,18 @@
 ---
-codecontent: createsampledomain
+codecontent: createsamplenamespace
 weight: 15
 categories: [tour]
 ---
 
-# Create the Sample Domain
+# Create the Sample Namespace
 
-All workflows and activities in Temporal run within a domain. They need to be registered with the domain before 
-they can be used. Let's create the domain that will be used for all the samples in this tour.
+All workflows and activities in Temporal run within a namespace. They need to be registered with the namespace before 
+they can be used. Let's create the namespace that will be used for all the samples in this tour.
 
-Note that you don't need to create the domain every time you start the Temporal server. If you used *Ctrl+C* to 
+Note that you don't need to create the namespace every time you start the Temporal server. If you used *Ctrl+C* to 
 shut down the server, the contents of the database remain intact. This means that when you start the server 
-again with `docker-compose up`, the domain will still be there. However, if you shut down the Temporal server 
-with `docker-compose down`, that will wipe out the data and you'll need to create the domain again.
+again with `docker-compose up`, the namespace will still be there. However, if you shut down the Temporal server 
+with `docker-compose down`, that will wipe out the data and you'll need to create the namespace again.
 
 ## Using the CLI
 
@@ -26,5 +26,5 @@ version, replace `docker run --rm temporalio/tctl:latest` with `tctl`.
 To keep the CLI commands short, we'll use some environment variables. These include the following:
 
 - **TEMPORAL_CLI_ADDRESS** - host:port for Temporal frontend service, the default is for the local server
-- **TEMPORAL_CLI_DOMAIN** - default workflow domain, so you don't need to specify `--domain`
+- **TEMPORAL_CLI_NAMESPACE** - default workflow namespace, so you don't need to specify `--namespace`
 - **USER** - this is assigned by default in Linux/Mac but not on Windows

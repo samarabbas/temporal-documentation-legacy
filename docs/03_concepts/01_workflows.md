@@ -73,7 +73,7 @@ To understand the Temporal execution model as well as the recovery mechanism, wa
 
 Workflow ID is assigned by a client when starting a workflow. It is usually a business level ID like customer ID or order ID.
 
-Temporal guarantees that there could be only one workflow (across all workflow types) with a given ID open per [domain](../04_glossary#domain) at any time. An attempt to start a workflow with the same ID is going to fail with `WorkflowExecutionAlreadyStarted` error.
+Temporal guarantees that there could be only one workflow (across all workflow types) with a given ID open per [namespace](../04_glossary#namespace) at any time. An attempt to start a workflow with the same ID is going to fail with `WorkflowExecutionAlreadyStarted` error.
 
 An attempt to start a workflow if there is a completed workflow with the same ID depends on a `WorkflowIdReusePolicy` option:
 
@@ -83,7 +83,7 @@ An attempt to start a workflow if there is a completed workflow with the same ID
 
 The default is `AllowDuplicateFailedOnly`.
 
-To distinguish multiple runs of a workflow with the same workflow ID, Temporal identifies a workflow with two IDs: `Workflow ID` and `Run ID`. `Run ID` is a service-assigned UUID. To be precise, any workflow is uniquely identified by a triple: `Domain Name`, `Workflow ID` and `Run ID`.
+To distinguish multiple runs of a workflow with the same workflow ID, Temporal identifies a workflow with two IDs: `Workflow ID` and `Run ID`. `Run ID` is a service-assigned UUID. To be precise, any workflow is uniquely identified by a triple: `Namespace`, `Workflow ID` and `Run ID`.
 
 ## Child Workflow
 

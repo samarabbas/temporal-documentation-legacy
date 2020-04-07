@@ -4,7 +4,7 @@ If a workflow execution has been stuck at a state for longer than an expected pe
 might want to query the current call stack. You can use the Temporal CLI to perform this query. For
 example:
 
-`tctl --domain samples-domain workflow query -w my_workflow_id -r my_run_id -qt __stack_trace`
+`tctl --namespace samples-namespace workflow query -w my_workflow_id -r my_run_id -qt __stack_trace`
 
 This command uses `__stack_trace`, which is a built-in query type supported by the Temporal client
 library. You can add custom query types to handle queries such as querying the current state of a
@@ -49,7 +49,7 @@ func MyWorkflow(ctx workflow.Context, input string) error {
 ```
 You can now query `current_state` by using the CLI:
 
-`tctl --domain samples-domain workflow query -w my_workflow_id -r my_run_id -qt current_state`
+`tctl --namespace samples-namespace workflow query -w my_workflow_id -r my_run_id -qt current_state`
 
 You can also issue a query from code using the `QueryWorkflow()` API on a Temporal client object.
 
@@ -58,9 +58,9 @@ You can also issue a query from code using the `QueryWorkflow()` API on a Tempor
 Query has two consistency levels, eventual and strong. Consider if you were to signal a workflow and then
 immediately query the workflow:
 
-`tctl --domain samples-domain workflow signal -w my_workflow_id -r my_run_id -n signal_name -if ./input.json`
+`tctl --namespace samples-namespace workflow signal -w my_workflow_id -r my_run_id -n signal_name -if ./input.json`
 
-`tctl --domain samples-domain workflow query -w my_workflow_id -r my_run_id -qt current_state`
+`tctl --namespace samples-namespace workflow query -w my_workflow_id -r my_run_id -qt current_state`
 
 In this example if signal were to change workflow state, query may or may not see that state update reflected
 in the query result. This is what it means for query to be eventually consistent.
@@ -73,7 +73,7 @@ be reflected in the workflow state the query result is based on.
 
 In order to run consistent query through the cli do the following:
 
-`tctl --domain samples-domain workflow query -w my_workflow_id -r my_run_id -qt current_state --qcl strong`
+`tctl --namespace samples-namespace workflow query -w my_workflow_id -r my_run_id -qt current_state --qcl strong`
 
 In order to run a query using the go client do the following:
 

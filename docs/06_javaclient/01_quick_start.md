@@ -61,20 +61,20 @@ temporal_1   | + DB=cassandra
 temporal_1   | + ENABLE_ES=false
 temporal_1   | + ES_PORT=9200
 temporal_1   | + RF=1
-temporal_1   | + DEFAULT_DOMAIN_NAME=default
-temporal_1   | + DEFAULT_DOMAIN_RETENTION=1
+temporal_1   | + DEFAULT_NAMESPACE=default
+temporal_1   | + DEFAULT_NAMESPACE_RETENTION=1
 ...
 ...
 ...
-temporal_1   | + tctl --do default domain register --rd 1 --desc 'Default domain for Temporal Server'
-temporal_1   | Domain default successfully registered.
-temporal_1   | + tctl --do default domain describe
+temporal_1   | + tctl --ns default namespace register --rd 1 --desc 'Default namespace for Temporal Server'
+temporal_1   | Namespace default successfully registered.
+temporal_1   | + tctl --ns default namespace describe
 temporal_1   | Name: default
 temporal_1   | UUID: 0d432509-d5ec-46e7-9fa2-f395b9ec6b26
-temporal_1   | Description: Default domain for Temporal Server
+temporal_1   | Description: Default namespace for Temporal Server
 temporal_1   | OwnerEmail:
-temporal_1   | DomainData: map[string]string(nil)
-temporal_1   | Status: DomainStatusRegistered
+temporal_1   | NamespaceData: map[string]string(nil)
+temporal_1   | Status: NamespaceStatusRegistered
 temporal_1   | RetentionInDays: 1
 temporal_1   | EmitMetrics: false
 temporal_1   | ActiveClusterName: active
@@ -87,11 +87,11 @@ temporal_1   | +-----------------+----------+------------+--------+
 temporal_1   | | BINARY CHECKSUM | OPERATOR | START TIME | REASON |
 temporal_1   | +-----------------+----------+------------+--------+
 temporal_1   | +-----------------+----------+------------+--------+
-temporal_1   | + echo 'Default domain registration complete.'
-temporal_1   | Default domain registration complete.
+temporal_1   | + echo 'Default namespace registration complete.'
+temporal_1   | Default namespace registration complete.
 ```
 
-Note that a default domain is created upon first cluster start.
+Note that a default namespace is created upon first cluster start.
 
 ## Implement Hello World Java Workflow
 
@@ -192,7 +192,7 @@ a Temporal Service. By default the worker connects to the locally running Tempor
 Now run the worker program. Following is an example log:
 ```text
 18:39:45.522 [main] INFO  i.t.i.WorkflowServiceStubsImpl - Created GRPC client for channel: ManagedChannelOrphanWrapper{delegate=ManagedChannelImpl{logId=1, target=127.0.0.1:7233}}
-18:39:45.674 [main] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=1, pollThreadNamePrefix='Workflow Poller taskList="HelloWorldTaskList", domain="default"'}, identity=unknown-mac}
+18:39:45.674 [main] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=1, pollThreadNamePrefix='Workflow Poller taskList="HelloWorldTaskList", namespace="default"'}, identity=unknown-mac}
 18:39:45.676 [main] INFO  io.temporal.internal.worker.Poller - start(): Poller{options=PollerOptions{maximumPollRateIntervalMilliseconds=1000, maximumPollRatePerSecond=0.0, pollBackoffCoefficient=2.0, pollBackoffInitialInterval=PT0.1S, pollBackoffMaximumInterval=PT1M, pollThreadCount=1, pollThreadNamePrefix='null'}, identity=95963a78-641d-434b-841e-a2efe7f8a19f}
 ```
 No Hello printed. This is expected because a worker is just a workflow code host. The workflow has to be started to execute. Let's use Temporal CLI to start the workflow:
@@ -668,7 +668,7 @@ temporal: docker run --network=host --rm temporalio/tctl:latest workflow describ
     "CloseTime": "1970-01-01T00:00:00Z",
     "CloseStatus": null,
     "HistoryLength": 5,
-    "ParentDomainID": null,
+    "ParentNamespaceID": null,
     "ParentExecution": null,
     "AutoResetPoints": {}
   },

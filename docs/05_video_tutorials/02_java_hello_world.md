@@ -33,7 +33,7 @@ import io.temporal.worker.Worker;
 public class Main {
 
     public static void main(String[] args) {
-        Worker.Factory f = new Worker.Factory("samples-domain");
+        Worker.Factory f = new Worker.Factory("samples-namespace");
         Worker w = f.newWorker("hello");
         w.registerWorkflowImplementationTypes(HelloWorkflowImpl.class);
         f.start();
@@ -42,6 +42,6 @@ public class Main {
 ```
 Commands:
 ```bash
-cadence -do samples-domain workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
+cadence -do samples-namespace workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
 ```
 

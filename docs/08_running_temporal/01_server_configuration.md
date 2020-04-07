@@ -12,7 +12,7 @@ Temporal Server configuration is found in `development.yaml` and may contain the
 - archival
 - dcRedirectionPolicy
 - dynamicConfigClient
-- domainDefaults
+- namespaceDefaults
 
 **Note:** Changing any properties in `development.yaml` file requires a process restart for changes to take effect.
 
@@ -129,7 +129,7 @@ The `log` section is optional and contains the following possible values:
 An example `clusterMetadata` section:
 ```yaml
 clusterMetadata:
-    enableGlobalDomain: false
+    enableGlobalNamespace: false
     failoverVersionIncrement: 10
     masterClusterName: "active"
     currentClusterName: "active"
@@ -142,10 +142,10 @@ clusterMetadata:
       #type: kafka
 ```
 - `currentClusterName` - *required* - the name of the current cluster. **Warning**: This value is immutable and will be ignored after the first run.
-- `enableGlobalDomain` - *Default:* `false`.
+- `enableGlobalNamespace` - *Default:* `false`.
 - `replicationConsumerConfig` - determines which method to use to consume replication tasks. The type may be either `kafka` or `rpc`.
 - `failoverVersionIncrement` - the increment of each cluster version when failover happens.
-- `masterClusterName` - the master cluster name, only the master cluster can register/update domain. All clusters can do domain failover.
+- `masterClusterName` - the master cluster name, only the master cluster can register/update namespace. All clusters can do namespace failover.
 - `clusterInformation` - contains a map of cluster names to `ClusterInformation` definitions. `ClusterInformation` sections consist of:
   - `enabled` - *boolean*
   - `initialFailoverVersion`

@@ -49,7 +49,7 @@ SearchAttributes is `map[string]interface{}` where the keys need to be allowlist
 Start by querying the list of search attributes using the CLI:
 
 ```bash
-$ cadence --domain samples-domain cl get-search-attr
+$ cadence --namespace samples-namespace cl get-search-attr
 +---------------------+------------+
 |         KEY         | VALUE TYPE |
 +---------------------+------------+
@@ -57,12 +57,12 @@ $ cadence --domain samples-domain cl get-search-attr
 | CloseTime           | INT        |
 | CustomBoolField     | DOUBLE     |
 | CustomDatetimeField | DATETIME   |
-| CustomDomain        | KEYWORD    |
+| CustomNamespace        | KEYWORD    |
 | CustomDoubleField   | BOOL       |
 | CustomIntField      | INT        |
 | CustomKeywordField  | KEYWORD    |
 | CustomStringField   | STRING     |
-| DomainID            | KEYWORD    |
+| NamespaceID            | KEYWORD    |
 | ExecutionTime       | INT        |
 | HistoryLength       | INT        |
 | RunID               | KEYWORD    |
@@ -75,7 +75,7 @@ $ cadence --domain samples-domain cl get-search-attr
 Use the admin CLI to add a new search attribute:
 
 ```bash
-cadence --domain samples-domain adm cl asa --search_attr_key NewKey --search_attr_type 1
+cadence --namespace samples-namespace adm cl asa --search_attr_key NewKey --search_attr_type 1
 ```
 
 The numbers for the attribute types map as follows:
@@ -128,7 +128,7 @@ We recommend limiting the number of Elasticsearch indexes by enforcing limits on
 - Size of value: 2kb per value
 - Total size of key and values: 40kb per workflow
 
-Temporal reserves keys like DomainID, WorkflowID, and RunID. These can only be used in list queries. The values are not updatable.
+Temporal reserves keys like NamespaceID, WorkflowID, and RunID. These can only be used in list queries. The values are not updatable.
 
 ### Upsert Search Attributes in Workflow
 
@@ -177,7 +177,7 @@ When performing a [ContinueAsNew](07_goclient/09_continueasnew) or using [Cron](
 
 Query workflows by using a SQL-like where clause when [listing workflows from the CLI](08_cli#list-closed-or-open-workflow-executions) or using the list APIs ([Go](https://godoc.org/go.temporal.io/temporal/client#Client), [Java](https://static.javadoc.io/com.uber.cadence/cadence-client/2.6.0/com/uber/cadence/WorkflowService.Iface.html#ListWorkflowExecutions-com.uber.cadence.ListWorkflowExecutionsRequest-)).
 
-Note that you will only see workflows from one domain when querying.
+Note that you will only see workflows from one namespace when querying.
 
 ### Supported Operators
 
@@ -197,12 +197,12 @@ These can be found by using the CLI get-search-attr command or the GetSearchAttr
 | CloseTime           | INT        |
 | CustomBoolField     | DOUBLE     |
 | CustomDatetimeField | DATETIME   |
-| CustomDomain        | KEYWORD    |
+| CustomNamespace     | KEYWORD    |
 | CustomDoubleField   | BOOL       |
 | CustomIntField      | INT        |
 | CustomKeywordField  | KEYWORD    |
 | CustomStringField   | STRING     |
-| DomainID            | KEYWORD    |
+| NamespaceID         | KEYWORD    |
 | ExecutionTime       | INT        |
 | HistoryLength       | INT        |
 | RunID               | KEYWORD    |
@@ -212,7 +212,7 @@ These can be found by using the CLI get-search-attr command or the GetSearchAttr
 
 There are some special considerations for these attributes:
 
-- CloseStatus, CloseTime, DomainID, ExecutionTime, HistoryLength, RunID, StartTime, WorkflowID, WorkflowType are reserved by Temporal and are read-only
+- CloseStatus, CloseTime, NamespaceID, ExecutionTime, HistoryLength, RunID, StartTime, WorkflowID, WorkflowType are reserved by Temporal and are read-only
 - CloseStatus is a mapping of int to state:
   - 0 = completed
   - 1 = failed
@@ -247,17 +247,17 @@ Support for search attributes is available as of version 0.6.0 of the Temporal s
 #### Start Workflow with Search Attributes
 
 ```bash
-cadence --do samples-domain workflow start --tl helloWorldGroup --wt main.Workflow --et 60 --dt 10 -i '"vancexu"' -search_attr_key 'CustomIntField | CustomKeywordField | CustomStringField |  CustomBoolField | CustomDatetimeField' -search_attr_value '5 | keyword1 | vancexu test | true | 2019-06-07T16:16:36-08:00'
+cadence --ns samples-namespace workflow start --tl helloWorldGroup --wt main.Workflow --et 60 --dt 10 -i '"vancexu"' -search_attr_key 'CustomIntField | CustomKeywordField | CustomStringField |  CustomBoolField | CustomDatetimeField' -search_attr_value '5 | keyword1 | vancexu test | true | 2019-06-07T16:16:36-08:00'
 ```
 
 #### Search Workflows with List API
 
 ```bash
-cadence --do samples-domain wf list -q '(CustomKeywordField = "keyword1" and CustomIntField >= 5) or CustomKeywordField = "keyword2"' -psa
+cadence --ns samples-namespace wf list -q '(CustomKeywordField = "keyword1" and CustomIntField >= 5) or CustomKeywordField = "keyword2"' -psa
 ```
 
 ```bash
-cadence --do samples-domain wf list -q 'CustomKeywordField in ("keyword2", "keyword1") and CustomIntField >= 5 and CloseTime between "2018-06-07T16:16:36-08:00" and "2019-06-07T16:46:34-08:00" order by CustomDatetimeField desc' -psa
+cadence --ns samples-namespace wf list -q 'CustomKeywordField in ("keyword2", "keyword1") and CustomIntField >= 5 and CloseTime between "2018-06-07T16:16:36-08:00" and "2019-06-07T16:46:34-08:00" order by CustomDatetimeField desc' -psa
 ```
 
 To list only open workflows, add `CloseTime = missing` to the end of the query.
@@ -265,11 +265,11 @@ To list only open workflows, add `CloseTime = missing` to the end of the query.
 Note that queries can support more than one type of filter:
 
 ```bash
-cadence --do samples-domain wf list -q 'WorkflowType = "main.Workflow" and (WorkflowID = "1645a588-4772-4dab-b276-5f9db108b3a8" or RunID = "be66519b-5f09-40cd-b2e8-20e4106244dc")'
+cadence --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" and (WorkflowID = "1645a588-4772-4dab-b276-5f9db108b3a8" or RunID = "be66519b-5f09-40cd-b2e8-20e4106244dc")'
 ```
 
 ```bash
-cadence --do samples-domain wf list -q 'WorkflowType = "main.Workflow" StartTime > "2019-06-07T16:46:34-08:00" and CloseTime = missing'
+cadence --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" StartTime > "2019-06-07T16:46:34-08:00" and CloseTime = missing'
 ```
 
 ### Web UI Support
@@ -282,7 +282,7 @@ Queries are supported in [Temporal Web](https://github.com/temporalio/temporal-w
 2. Get the Temporal Docker compose file. Run `curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose-es.yml`
 3. Start Temporal Docker (which contains Apache Kafka, Apache Zookeeper, and Elasticsearch) using `docker-compose -f docker-compose-es.yml up`
 4. From the Docker output log, make sure Elasticsearch and Temporal started correctly. If you encounter an insufficient disk space error, try `docker system prune -a --volumes`
-5. Register a local domain and start using it. `cadence --do samples-domain d re`
-6. Allowlist search attributes. `cadence --do domain adm cl asa --search_attr_key NewKey --search_attr_type 1`
+5. Register a local namespace and start using it. `cadence --ns samples-namespace n re`
+6. Allowlist search attributes. `cadence --ns namespace adm cl asa --search_attr_key NewKey --search_attr_type 1`
 
 Note: starting a workflow with search attributes but without Elasticsearch will succeed as normal, but will not be searchable and will not be shown in list results.

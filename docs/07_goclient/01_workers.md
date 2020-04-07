@@ -16,11 +16,11 @@ import (
 
 	"go.temporal.io/temporal/client"
 	"go.temporal.io/temporal/worker"
-	"go.temporal.io/temporal/workflow"
+	"go.temporal.io/temporal/workflow"R
 )
 
 var (
-	Domain   = "samples"
+	Namespace   = "samples"
 	Tasklist = "samples_tl"
 	HostPort = "127.0.0.1:7233"
 )
@@ -37,7 +37,7 @@ func main() {
 	// The client is a heavyweight object that should be created once per process.
 	serviceClient, err := client.NewClient(client.Options{
 		HostPort:     HostPort,
-		DomainName:   Domain,
+		Namespace:   Namespace,
 		MetricsScope: scope,
 	})
 	if err != nil {

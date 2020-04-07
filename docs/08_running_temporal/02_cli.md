@@ -1,7 +1,7 @@
 # Command Line Interface
 
 The Temporal CLI is a command-line tool you can use to perform various tasks on a Temporal server. It can perform
-domain operations such as register, update, and describe as well as workflow operations like start
+namespace operations such as register, update, and describe as well as workflow operations like start
 workflow, show workflow history, and signal workflow.
 
 ## Using the CLI
@@ -9,22 +9,22 @@ workflow, show workflow history, and signal workflow.
 The Temporal CLI can be used directly from the Docker Hub image *temporalio/tctl* or by building the CLI tool
 locally.
 
-Example of using the docker image to describe a domain:
+Example of using the docker image to describe a namespace:
 ```
-docker run --rm temporalio/tctl:latest --domain samples-domain domain describe
+docker run --rm temporalio/tctl:latest --namespace samples-namespace namespace describe
 ```
 
 On Docker versions 18.03 and later, you may get a "connection refused" error. You can work around this by setting the host to "host.docker.internal" (see [here](https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds) for more info).
 
 ```
-docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --domain samples-domain domain describe
+docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --namespace samples-namespace namespace describe
 ```
 
 To build the CLI tool locally, clone the [Temporal server repo](https://github.com/temporalio/temporal) and run
 `make bins`. This produces an executable called `tctl`. With a local build, the same command to
-describe a domain would look like this:
+describe a namespace would look like this:
 ```
-./tctl --domain samples-domain domain describe
+./tctl --namespace samples-namespace namespace describe
 ```
 
 The example commands below will use `./tctl` for brevity.
@@ -34,31 +34,31 @@ The example commands below will use `./tctl` for brevity.
 Setting environment variables for repeated parameters can shorten the CLI commands.
 
 - **TEMPORAL_CLI_ADDRESS** - host:port for Temporal frontend service, the default is for the local server
-- **TEMPORAL_CLI_DOMAIN** - default workflow domain, so you don't need to specify `--domain`
+- **TEMPORAL_CLI_NAMESPACE** - default workflow namespace, so you don't need to specify `--namespace`
 
 ## Quick Start
 Run `./tctl` for help on top level commands and global options
-Run `./tctl domain` for help on domain operations
+Run `./tctl namespace` for help on namespace operations
 Run `./tctl workflow` for help on workflow operations
 Run `./tctl tasklist` for help on tasklist operations
-(`./tctl help`, `./tctl help [domain|workflow]` will also print help messages)
+(`./tctl help`, `./tctl help [namespace|workflow]` will also print help messages)
 
 **Note:** make sure you have a Temporal server running before using CLI
 
-### Domain operation examples
-- Register a new domain named "samples-domain":
+### Namespace operation examples
+- Register a new namespace named "samples-namespace":
 ```
-./tctl --domain samples-domain domain register --global_domain false
+./tctl --namespace samples-namespace namespace register --global_namespace false
 # OR using short alias
-./tctl --do samples-domain d re --gd false
+./tctl --ns samples-namespace n re --gd false
 ```
-- View "samples-domain" details:
+- View "samples-namespace" details:
 ```
-./tctl --domain samples-domain domain describe
+./tctl --namespace samples-namespace namespace describe
 ```
 
 ### Workflow operation examples
-The following examples assume the TEMPORAL_CLI_DOMAIN environment variable is set.
+The following examples assume the TEMPORAL_CLI_NAMESPACE environment variable is set.
 
 #### Run workflow
 Start a workflow and see its progress. This command doesn't finish until workflow completes.
@@ -192,7 +192,7 @@ For terminating workflows as batch job, it will terminte the children recursivel
 
 Start a batch job(using signal as batch type):
 ```
-tctl --do samples-domain wf batch start --query "WorkflowType='main.SampleParentWorkflow' AND CloseTime=missing" --reason "test" --bt signal --sig testname
+tctl --ns samples-namespace wf batch start --query "WorkflowType='main.SampleParentWorkflow' AND CloseTime=missing" --reason "test" --bt signal --sig testname
 This batch job will be operating on 5 workflows.
 Please confirm[Yes/No]:yes
 {
@@ -203,16 +203,16 @@ Please confirm[Yes/No]:yes
 ```
 You need to remember the JobID or use List command to get all your batch jobs:
 ```
-tctl --do samples-domain wf batch list
+tctl --ns samples-namespace wf batch list
 ```
 
 Describe the progress of a batch job:
 ```
-tctl --do samples-domain wf batch desc -jid <batch-job-id>
+tctl --ns samples-namespace wf batch desc -jid <batch-job-id>
 ```
 Terminate a batch job:
 ```
-tctl --do samples-domain wf batch terminate -jid <batch-job-id>
+tctl --ns samples-namespace wf batch terminate -jid <batch-job-id>
 ```
 Note that the operation performed by a batch will not be rolled back by terminating the batch. However, you can use reset to rollback your workflows.
 
@@ -262,9 +262,9 @@ To find out which **binary checksum** of the bad deployment to reset, you should
 ...
 ```
 
-Then use this command to tell Temporal to auto-reset all workflows impacted by the bad deployment. The command will store the bad binary checksum into domain info and trigger a process to reset all your workflows.
+Then use this command to tell Temporal to auto-reset all workflows impacted by the bad deployment. The command will store the bad binary checksum into namespace info and trigger a process to reset all your workflows.
 ```
-./tctl --do <YourDomainName> domain update --add_bad_binary aae748fdc557a3f873adbe1dd066713f  --reason "rollback bad deployment"
+./tctl --ns <YourNamespace> namespace update --add_bad_binary aae748fdc557a3f873adbe1dd066713f  --reason "rollback bad deployment"
 ```
 
-As you add the bad binary checksum to your domain, Temporal will not dispatch any decision tasks to the bad binary. So make sure that you have rolled back to a good deployment(or roll out new bits with bug fixes). Otherwise your workflow can't make any progress after auto-reset.
+As you add the bad binary checksum to your namespace, Temporal will not dispatch any decision tasks to the bad binary. So make sure that you have rolled back to a good deployment(or roll out new bits with bug fixes). Otherwise your workflow can't make any progress after auto-reset.

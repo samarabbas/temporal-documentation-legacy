@@ -1,24 +1,24 @@
 ---
-name: createsampledomain
+name: createsamplenamespace
 ---
 
 Setup environment variables on Mac:
 ```bash
-export TEMPORAL_CLI_DOMAIN=samples-domain
+export TEMPORAL_CLI_NAMESPACE=samples-namespace
 ```
 
 Setup environment variables on Windows:
 ```bat
 set USER=someusername
-set TEMPORAL_CLI_DOMAIN=samples-domain
+set TEMPORAL_CLI_NAMESPACE=samples-namespace
 ```
 
-Check if samples-domain exists:
+Check if samples-namespace exists:
 ```bash
-docker run --rm temporalio/tctl:latest d desc
+docker run --rm temporalio/tctl:latest n desc
 ```
 
-Create samples-domain:
+Create samples-namespace:
 ```bash
-docker run --rm temporalio/tctl:latest d register --rd 7
+docker run --rm temporalio/tctl:latest n register --rd 7
 ```

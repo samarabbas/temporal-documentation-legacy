@@ -23,7 +23,7 @@ Temporal service is multitentant. Therefore it is expected that multiple pools o
 
 ## Workflow Worker
 
-Temporal reuses terminology from _workflow automation_ domain. So fault-oblivious stateful code is called workflow.
+Temporal reuses terminology from _workflow automation_ namespace. So fault-oblivious stateful code is called workflow.
 
 The Temporal service does not execute workflow code directly. The workflow code is hosted by an external (from the service point of view) _workflow worker_ process. These processes receive _decision tasks_ that contain events that the workflow is expected to handle from the Temporal service, delivers them to the workflow code, and communicates workflow _decisions_ back to the service.
 

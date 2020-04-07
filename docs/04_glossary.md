@@ -50,12 +50,6 @@ of operations that the workflow invokes.
 ### Decision Task List
 Task list that is used to deliver [decision tasks](#decision-task) to [workflow workers](#workflow-worker)
 
-### Domain
-Temporal is backed by a multitenant service. The unit of isolation is called a **domain**. Each domain acts as a namespace for task list names as well as workflow IDs. For example, when a workflow is started, it is started in a
-specific domain. Temporal guarantees a unique workflow ID within a domain, and
-supports running workflow executions to use the same workflow ID if they are in
-different domains. Various configuration options like retention period or archival destination are configured per domain as well through a special CRUD API or through the Temporal CLI. In the multi-cluster deployment, domain is a unit of fail-over. Each domain can only be active on a single Temporal cluster at a time. However, different domains can be active in different clusters and can fail-over independently.
-
 ### Event
 An indivisible operation performed by your application. For example,
 activity_task_started, task_failed, or timer_canceled. Events are recorded in the event history.
@@ -68,6 +62,12 @@ from crashes or failures. It also serves as an audit log for debugging.
 ### Local Activity
 
 A [local activity](03_concepts/02_activities#local-activities) is an activity that is invoked directly in the same process by a workflow code. It consumes much less resources than a normal activity, but imposes a lot of limitations like low duration and lack of rate limiting.
+
+### Namespace
+Temporal is backed by a multi tenant service. The unit of isolation is called a **namespace**. Each namespace acts as a namespace for task list names as well as workflow IDs. For example, when a workflow is started, it is started in a
+specific namespace. Temporal guarantees a unique workflow ID within a namespace, and
+supports running workflow executions to use the same workflow ID if they are in
+different namespaces. Various configuration options like retention period or archival destination are configured per namespace as well through a special CRUD API or through the Temporal CLI. In the multi-cluster deployment, namespace is a unit of fail-over. Each namespace can only be active on a single Temporal cluster at a time. However, different namespaces can be active in different clusters and can fail-over independently.
 
 ### Query
 A synchronous (from the caller's point of view) operation that is used to
@@ -96,7 +96,7 @@ Common name for [activity task lists](#activity-task-list) and [decision task li
 
 ### Task Token
 A unique correlation ID for a Temporal activity. Activity completion calls take either task token
-or DomainName, WorkflowID, ActivityID arguments.
+or Namespace, WorkflowID, ActivityID arguments.
 
 ### Worker
 Also known as a *worker service*. A service that hosts the workflow and
@@ -122,7 +122,7 @@ or it could have already completed execution.
 
 ### Workflow ID
 A unique identifier for a *Workflow Execution*. Temporal guarantees the
-uniqueness of an ID within a domain. An attempt to start a *Workflow* with a
+uniqueness of an ID within a namespace. An attempt to start a *Workflow* with a
 duplicate ID results in an **already started** error.
 
 ### Workflow Task

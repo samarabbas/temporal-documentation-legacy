@@ -83,7 +83,7 @@ You can also heartbeat an activity from an external source:
 // The client is a heavyweight object that should be created once per process.
 serviceClient, err := client.NewClient(client.Options{
     HostPort:     HostPort,
-    DomainName:   Domain,
+    Namespace:   Namespace,
     MetricsScope: scope,
 })
 

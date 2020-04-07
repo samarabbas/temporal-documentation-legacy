@@ -46,7 +46,7 @@ public class FileProcessingActivitiesImpl implements FileProcessingActivities {
 
      @Override
      public String download(String bucketName, String remoteName, String localName) {
-        log.info("domain=" +  Activity.getDomain());
+        log.info("namespace=" +  Activity.getNamespace());
         WorkflowExecution execution = Activity.getWorkflowExecution();
         log.info("workflowId=" + execution.getWorkflowId());
         log.info("runId=" + execution.getRunId());

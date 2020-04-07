@@ -102,7 +102,7 @@ func main() {
 	// The client is a heavyweight object that should be created once
 	serviceClient, err := client.NewClient(client.Options{
 		HostPort:     client.DefaultHostPort,
-		DomainName:   client.DefaultDomainName,
+		Namespace:   client.DefaultNamespace,
 		MetricsScope: scope,
 	})
 	if err != nil {
@@ -127,6 +127,6 @@ func main() {
 ```
 Commands:
 ```bash
-docker run --network=host --rm temporalio/tctl:latest --do default wf start --tl tutorial_tl -w Greet_Temporal_1 --wt Greetings --et 3600 --dt 10 --wrp 0
+docker run --network=host --rm temporalio/tctl:latest --ns default wf start --tl tutorial_tl -w Greet_Temporal_1 --wt Greetings --et 3600 --dt 10 --wrp 0
 ```
 

@@ -1,7 +1,7 @@
 # DSL Workflows
 
 Temporal supports implementing business logic directly in programming languages like Java and Go. But there are cases when
-using a domain-specific language is more appropriate. Or there might be a legacy system that uses some form of DSL for process definition but it is not operationally stable and scalable. This also applies to more recent systems like Apache Airflow, various BPMN engines and AWS Step Functions.
+using a namespace-specific language is more appropriate. Or there might be a legacy system that uses some form of DSL for process definition but it is not operationally stable and scalable. This also applies to more recent systems like Apache Airflow, various BPMN engines and AWS Step Functions.
 
 An application that interprets the DSL definition can be written using the Temporal SDK. It automatically becomes highly fault tolerant, scalable, and durable when running on Temporal. Temporal has been used to deprecate several Uber internal DSL engines. The customers continue to use existing process definitions, but Temporal is used as an execution engine.
 

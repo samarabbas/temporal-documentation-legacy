@@ -34,7 +34,7 @@ The following code demonstrates how to complete the activity successfully:
 // The client is a heavyweight object that should be created once per process.
 serviceClient, err := client.NewClient(client.Options{
     HostPort:     HostPort,
-    DomainName:   Domain,
+    Namespace:   Namespace,
     MetricsScope: scope,
 })
 

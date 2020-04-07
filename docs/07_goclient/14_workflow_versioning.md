@@ -52,7 +52,7 @@ err = workflow.ExecuteActivity(ctx, ActivityB, result1).Get(ctx, &result2)
 return result2, err
 ```
 When `workflow.GetVersion()` is run for the new workflow execution, it records a marker in the workflow
-history so that all future calls to `GetVersion` for this change ID--`Step 1` in the example--on this
+history so that all future calls to `GetVersion` for this change Id--`Step 1` in the example--on this
 workflow execution will always return the given version number, which is `1` in the example.
 
 If you make an additional change, such as replacing ActivityC with ActivityD, you need to
@@ -100,12 +100,12 @@ fail here and not proceed.
 only need to update `maxVersion` from 2 to 3 and branch from there.
 
 You only need to preserve the first call to `GetVersion()` for each `changeID`. All subsequent calls to
-`GetVersion()` with the same change ID are safe to remove. If necessary, you can remove the first
+`GetVersion()` with the same change Id are safe to remove. If necessary, you can remove the first
 `GetVersion()` call, but you need to ensure the following:
 
 * All executions with an older version are completed.
-* You can no longer use `Step1` for the changeID. If you need to make changes to that same part in
-the future, such as change from ActivityD to ActivityE, you would need to use a different changeID
+* You can no longer use `Step1` for the changeId. If you need to make changes to that same part in
+the future, such as change from ActivityD to ActivityE, you would need to use a different changeId
 like `Step1-fix2`, and start minVersion from DefaultVersion again. The code would look like the
 following:
 

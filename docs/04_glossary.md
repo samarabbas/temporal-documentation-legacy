@@ -64,9 +64,9 @@ from crashes or failures. It also serves as an audit log for debugging.
 A [local activity](03_concepts/02_activities#local-activities) is an activity that is invoked directly in the same process by a workflow code. It consumes much less resources than a normal activity, but imposes a lot of limitations like low duration and lack of rate limiting.
 
 ### Namespace
-Temporal is backed by a multi tenant service. The unit of isolation is called a **namespace**. Each namespace acts as a namespace for task list names as well as workflow IDs. For example, when a workflow is started, it is started in a
-specific namespace. Temporal guarantees a unique workflow ID within a namespace, and
-supports running workflow executions to use the same workflow ID if they are in
+Temporal is backed by a multi tenant service. The unit of isolation is called a **namespace**. Each namespace acts as a namespace for task list names as well as workflow Ids. For example, when a workflow is started, it is started in a
+specific namespace. Temporal guarantees a unique workflow Id within a namespace, and
+supports running workflow executions to use the same workflow Id if they are in
 different namespaces. Various configuration options like retention period or archival destination are configured per namespace as well through a special CRUD API or through the Temporal CLI. In the multi-cluster deployment, namespace is a unit of fail-over. Each namespace can only be active on a single Temporal cluster at a time. However, different namespaces can be active in different clusters and can fail-over independently.
 
 ### Query
@@ -74,11 +74,11 @@ A synchronous (from the caller's point of view) operation that is used to
 report a workflow state. Note that a query is inherently read only and cannot
 affect a workflow state.
 
-### Run ID
+### Run Id
 A UUID that a Temporal service assigns to each workflow run. If allowed by
 a configured policy, you might be able to re-execute a workflow, after it has
-closed or failed, with the same *Workflow ID*. Each such re-execution is called
-a run. *Run ID* is used to uniquely identify a run even if it shares a *Workflow ID*
+closed or failed, with the same *Workflow Id*. Each such re-execution is called
+a run. *Run Id* is used to uniquely identify a run even if it shares a *Workflow Id*
 with others.
 
 ### Signal
@@ -95,8 +95,8 @@ while a workflow execution employs multiple decision tasks.
 Common name for [activity task lists](#activity-task-list) and [decision task lists](#decision-task-list)
 
 ### Task Token
-A unique correlation ID for a Temporal activity. Activity completion calls take either task token
-or Namespace, WorkflowID, ActivityID arguments.
+A unique correlation Id for a Temporal activity. Activity completion calls take either task token
+or Namespace, WorkflowId, ActivityId arguments.
 
 ### Worker
 Also known as a *worker service*. A service that hosts the workflow and
@@ -120,10 +120,10 @@ duration.
 An instance of a *Workflow*. The instance can be in the process of executing
 or it could have already completed execution.
 
-### Workflow ID
+### Workflow Id
 A unique identifier for a *Workflow Execution*. Temporal guarantees the
-uniqueness of an ID within a namespace. An attempt to start a *Workflow* with a
-duplicate ID results in an **already started** error.
+uniqueness of an Id within a namespace. An attempt to start a *Workflow* with a
+duplicate Id results in an **already started** error.
 
 ### Workflow Task
 Synonym of the [Decision Task](#decision-task).

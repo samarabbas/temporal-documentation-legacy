@@ -6,7 +6,7 @@ Archival is a feature that automatically moves workflow histories from persisten
 
 Archival is still in beta and there are three limits to its feature set:
 1. **Only Histories:** Only histories are archived, visibility records are simply deleted after the retention period.
-2. **RunID Required:** In order to access an archived history, both workflowID and runID are required.
+2. **RunId Required:** In order to access an archived history, both workflowId and runId are required.
 3. **Best Effort:** There are cases in which a history can be deleted from persistence without being archived first. These cases are rare but are possible with the current state of archival.
 
 Work is being prioritized on archival to eliminate these limitations.
@@ -42,8 +42,8 @@ In order to run locally do the following:
 1. `./cadence-server start`
 2. `./cadence --ns samples-namespace namespace register --gd false --history_archival_status enabled --retention 0`
 3. Run the [helloworld cadence-sample](https://github.com/uber-common/cadence-samples) by following the README
-4. Copy the workflowID and runID of the completed workflow from log output
-5. `./cadence --ns samples-namespace wf show --wid <workflowID> --rid <runID>`
+4. Copy the workflowId and runId of the completed workflow from log output
+5. `./cadence --ns samples-namespace wf show --wid <workflowId> --rid <runId>`
 
 In step 2, we registered a new namespace and enabled history archival feature for that namespace. Since we didn't provide an archival URI when registering the new namespace, the default URI specified in `config/development.yaml` is used. The default URI is `file:///tmp/cadence_archival/development`, so you can find the archived workflow history under the `/tmp/cadence_archival/development` directory. 
 
@@ -64,7 +64,7 @@ these histories can be kept forever.
 
 ## Planned Future Work
 * Support archival of visibility.
-* Support accessing histories without providing runID.
+* Support accessing histories without providing runId.
 * Provide hard guarantee that no history is deleted from persistence before being archived if archival is enabled.
 * Implement paused state. In this state no archivals will occur but histories also will not be deleted from persistence.
 Once enabled again from paused state, all skipped archivals will occur. 

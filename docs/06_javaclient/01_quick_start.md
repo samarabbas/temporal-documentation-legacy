@@ -253,21 +253,21 @@ Now let's look at the workflow execution history:
 ```
 Even for such a trivial workflow, the history gives a lot of useful information. For complex workflows this is a really useful tool for production and development troubleshooting. History can be automatically archived to a long-term blob store (for example Amazon S3) upon workflow completion for compliance, analytical, and troubleshooting purposes.
 
-### Workflow ID Uniqueness
+### Workflow Id Uniqueness
 
-Before proceeding to a more complex workflow implementation, let's take a look at the workflow ID semantic.
-When starting a workflow without providing an ID, the client generates one in the form of a UUID. In most real-life scenarios this is not a desired behavior. The business ID should be used instead. Here, we'll specify the ID when starting a workflow:
+Before proceeding to a more complex workflow implementation, let's take a look at the workflow Id semantic.
+When starting a workflow without providing an Id, the client generates one in the form of a UUID. In most real-life scenarios this is not a desired behavior. The business Id should be used instead. Here, we'll specify the Id when starting a workflow:
 ```bash
 > docker run --network=host --rm temporalio/tctl:latest workflow start  --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld_sayHello --execution_timeout 3600 --input \"Temporal\"
 Started Workflow Id: HelloTemporal1, run Id: 78ca0a3f-8cd2-46a2-8d23-076c3f0f187c
 ```
-Now the list operation is more meaningful as the WORKFLOW ID is our business ID:
+Now the list operation is more meaningful as the WORKFLOW ID is our business Id:
 ```bash
 > docker run --network=host --rm temporalio/tctl:latest workflow list
      WORKFLOW TYPE    |      WORKFLOW ID      |                RUN ID                | START TIME | EXECUTION TIME | END TIME
   HelloWorld_sayHello | HelloTemporal1        | 78ca0a3f-8cd2-46a2-8d23-076c3f0f187c | 01:47:24   | 01:47:24       | 01:47:25
 ```
-After the previous one completes, let's try to start another workflow with the same ID:
+After the previous one completes, let's try to start another workflow with the same Id:
 ```bash
 > docker run --network=host --rm temporalio/tctl:latest workflow start  --workflow_id "HelloTemporal1" --tasklist HelloWorldTaskList --workflow_type HelloWorld_sayHello --execution_timeout 3600 --input \"Temporal\"
 Started Workflow Id: HelloTemporal1, run Id: 9b5e36a3-9868-4de5-bbdf-eda9cedcd865
@@ -278,9 +278,9 @@ After the second start the workflow list is:
   HelloWorld_sayHello | HelloTemporal1        | 37a740e5-838c-4020-aed6-1111b0689c38 | 21:11:47   | 21:11:47       | 21:11:47
   HelloWorld_sayHello | HelloTemporal1        | 75170c60-6d72-48c6-b509-7c9d9f25a8a8 | 21:04:46   | 21:04:46       | 21:04:46
 ```
-It might be clear why every workflow has two IDs: Workflow ID and Run ID. Because the Workflow ID can be reused, the Run ID uniquely identifies a particular run of a workflow. Run ID is system generated and cannot be controlled by client code.
+It might be clear why every workflow has two Ids: Workflow Id and Run Id. Because the Workflow Id can be reused, the Run Id uniquely identifies a particular run of a workflow. Run Id is system generated and cannot be controlled by client code.
 
-Note - Under no circumstances does Temporal allow more than one instance of an open workflow with the same ID. Multiple workflow IDs are required in the case that paralell invocations wish to be supported (such as an Actor patern)
+Note - Under no circumstances does Temporal allow more than one instance of an open workflow with the same Id. Multiple workflow Ids are required in the case that paralell invocations wish to be supported (such as an Actor patern)
 
 ### CLI Help
 
@@ -295,7 +295,7 @@ USAGE:
 
 OPTIONS:
    --tasklist value, --tl value                TaskList
-   --workflow_id value, --wid value, -w value  WorkflowID
+   --workflow_id value, --wid value, -w value  WorkflowId
    --workflow_type value, --wt value           WorkflowTypeName
    --execution_timeout value, --et value       Execution start to close timeout in seconds (default: 0)
    --decision_timeout value, --dt value        Decision task start to close timeout in seconds (default: 10)
@@ -307,7 +307,7 @@ OPTIONS:
                                                │ │ │ │ ┌───────────── day of the week (0 - 6) (Sunday to Saturday)
                                                │ │ │ │ │
                                                * * * * *
-   --workflowidreusepolicy value, --wrp value  Optional input to configure if the same workflow ID is allowed to be used for a new workflow execution. Available options: 0: AllowDuplicate, 1: AllowDuplicateFailedOnly, 2: RejectDuplicate (default: 0)
+   --workflowidreusepolicy value, --wrp value  Optional input to configure if the same workflow Id is allowed to be used for a new workflow execution. Available options: 0: AllowDuplicate, 1: AllowDuplicateFailedOnly, 2: RejectDuplicate (default: 0)
    --input value, -i value                     Optional input for the workflow, in JSON format. If there are multiple parameters, concatenate them and separate by a space.
    --input_file value, --if value              Optional input for the workflow from a JSON file. If there are multiple JSON, concatenate them and separate by a space or newline. Input from the file will be overwritten by input from the command line.
    --memo_key value                            Optional key of memo. If there are multiple keys, concatenate them and separate by space.
@@ -668,13 +668,13 @@ temporal: docker run --network=host --rm temporalio/tctl:latest workflow describ
     "CloseTime": "1970-01-01T00:00:00Z",
     "CloseStatus": null,
     "HistoryLength": 5,
-    "ParentNamespaceID": null,
+    "ParentNamespaceId": null,
     "ParentExecution": null,
     "AutoResetPoints": {}
   },
   "PendingActivities": [
     {
-      "ActivityID": "0",
+      "ActivityId": "0",
       "ActivityType": {
         "name": "HelloWorldActivities_say"
       },
@@ -738,7 +738,7 @@ temporal: docker run --network=host --rm temporalio/tctl:latest workflow show  -
                                 Identity:37694@maxim-C02XD0AAJGH6}
 ```
 _ActivityTaskStarted_ event is recorded when the activity task is picked up by an activity worker. The Identity field
-contains the ID of the worker (you can set it to any value on worker startup).
+contains the Id of the worker (you can set it to any value on worker startup).
 
 _ActivityTaskCompleted_ event is recorded when activity completes. It contains the result of the activity execution.
 

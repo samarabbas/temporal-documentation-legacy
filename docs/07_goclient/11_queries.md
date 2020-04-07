@@ -79,8 +79,8 @@ In order to run a query using the go client do the following:
 
 ```go
 resp, err := client.QueryWorkflowWithOptions(ctx, &client.QueryWorkflowWithOptionsRequest{
-        WorkflowID:            workflowID,
-        RunID:                 runID,
+        WorkflowId:            workflowId,
+        RunId:                 runId,
         QueryType:             queryType,
         QueryConsistencyLevel: shared.QueryConsistencyLevelStrong.Ptr(),
 })

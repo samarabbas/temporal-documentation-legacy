@@ -100,6 +100,6 @@ For an activity with `RetryPolicy`:
 For a workflow with `RetryPolicy`:
 
 * If a workflow failed and needs to retry, the workflow execution will be closed with a `ContinueAsNew` event. The event
-  will have the `ContinueAsNewInitiator` set to `RetryPolicy` and the new `RunID` for the next retry attempt.
+  will have the `ContinueAsNewInitiator` set to `RetryPolicy` and the new `RunId` for the next retry attempt.
 * The new attempt will be created immediately. But the first decision task won't be scheduled until the backoff duration
   which is also recorded in the new run's `WorkflowExecutionStartedEventAttributes` event as `firstDecisionTaskBackoffSeconds`.

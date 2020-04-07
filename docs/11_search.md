@@ -57,17 +57,17 @@ $ cadence --namespace samples-namespace cl get-search-attr
 | CloseTime           | INT        |
 | CustomBoolField     | DOUBLE     |
 | CustomDatetimeField | DATETIME   |
-| CustomNamespace        | KEYWORD    |
+| CustomNamespace     | KEYWORD    |
 | CustomDoubleField   | BOOL       |
 | CustomIntField      | INT        |
 | CustomKeywordField  | KEYWORD    |
 | CustomStringField   | STRING     |
-| NamespaceID            | KEYWORD    |
+| NamespaceId         | KEYWORD    |
 | ExecutionTime       | INT        |
 | HistoryLength       | INT        |
-| RunID               | KEYWORD    |
+| RunId               | KEYWORD    |
 | StartTime           | INT        |
-| WorkflowID          | KEYWORD    |
+| WorkflowId          | KEYWORD    |
 | WorkflowType        | KEYWORD    |
 +---------------------+------------+
 ```
@@ -91,10 +91,10 @@ The numbers for the attribute types map as follows:
 
 Note that **Keyword** and **String** are concepts taken from Elasticsearch. Each word in a **String** is considered a searchable keyword. For a UUID, that can be problematic as Elasticsearch will index each portion of the UUID separately. To have the whole string considered as a searchable keyword, use the **Keyword** type.
 
-For example, key RunID with value "2dd29ab7-2dd8-4668-83e0-89cae261cfb1"
+For example, key RunId with value "2dd29ab7-2dd8-4668-83e0-89cae261cfb1"
 
-- as a **Keyword** will only be matched by RunID = "2dd29ab7-2dd8-4668-83e0-89cae261cfb1" (or in the future with [regular expressions](https://github.com/uber/cadence/issues/1137))
-- as a **String** will be matched by RunID =  "2dd8", which may cause unwanted matches
+- as a **Keyword** will only be matched by RunId = "2dd29ab7-2dd8-4668-83e0-89cae261cfb1" (or in the future with [regular expressions](https://github.com/uber/cadence/issues/1137))
+- as a **String** will be matched by RunId =  "2dd8", which may cause unwanted matches
 
 **Note:** String type can not be used in Order By query.
 
@@ -128,7 +128,7 @@ We recommend limiting the number of Elasticsearch indexes by enforcing limits on
 - Size of value: 2kb per value
 - Total size of key and values: 40kb per workflow
 
-Temporal reserves keys like NamespaceID, WorkflowID, and RunID. These can only be used in list queries. The values are not updatable.
+Temporal reserves keys like NamespaceId, WorkflowId, and RunId. These can only be used in list queries. The values are not updatable.
 
 ### Upsert Search Attributes in Workflow
 
@@ -202,17 +202,17 @@ These can be found by using the CLI get-search-attr command or the GetSearchAttr
 | CustomIntField      | INT        |
 | CustomKeywordField  | KEYWORD    |
 | CustomStringField   | STRING     |
-| NamespaceID         | KEYWORD    |
+| NamespaceId         | KEYWORD    |
 | ExecutionTime       | INT        |
 | HistoryLength       | INT        |
-| RunID               | KEYWORD    |
+| RunId               | KEYWORD    |
 | StartTime           | INT        |
-| WorkflowID          | KEYWORD    |
+| WorkflowId          | KEYWORD    |
 | WorkflowType        | KEYWORD    |
 
 There are some special considerations for these attributes:
 
-- CloseStatus, CloseTime, NamespaceID, ExecutionTime, HistoryLength, RunID, StartTime, WorkflowID, WorkflowType are reserved by Temporal and are read-only
+- CloseStatus, CloseTime, NamespaceId, ExecutionTime, HistoryLength, RunId, StartTime, WorkflowId, WorkflowType are reserved by Temporal and are read-only
 - CloseStatus is a mapping of int to state:
   - 0 = completed
   - 1 = failed
@@ -265,7 +265,7 @@ To list only open workflows, add `CloseTime = missing` to the end of the query.
 Note that queries can support more than one type of filter:
 
 ```bash
-cadence --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" and (WorkflowID = "1645a588-4772-4dab-b276-5f9db108b3a8" or RunID = "be66519b-5f09-40cd-b2e8-20e4106244dc")'
+cadence --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" and (WorkflowId = "1645a588-4772-4dab-b276-5f9db108b3a8" or RunId = "be66519b-5f09-40cd-b2e8-20e4106244dc")'
 ```
 
 ```bash

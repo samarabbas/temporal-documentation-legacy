@@ -69,21 +69,21 @@ To understand the Temporal execution model as well as the recovery mechanism, wa
 
 {% include youtubePlayer.html id="qce_AqCkFys?t=960" %}
 
-## ID Uniqueness
+## Id Uniqueness
 
-Workflow ID is assigned by a client when starting a workflow. It is usually a business level ID like customer ID or order ID.
+Workflow Id is assigned by a client when starting a workflow. It is usually a business level Id like customer Id or order Id.
 
-Temporal guarantees that there could be only one workflow (across all workflow types) with a given ID open per [namespace](../04_glossary#namespace) at any time. An attempt to start a workflow with the same ID is going to fail with `WorkflowExecutionAlreadyStarted` error.
+Temporal guarantees that there could be only one workflow (across all workflow types) with a given Id open per [namespace](../04_glossary#namespace) at any time. An attempt to start a workflow with the same Id is going to fail with `WorkflowExecutionAlreadyStarted` error.
 
-An attempt to start a workflow if there is a completed workflow with the same ID depends on a `WorkflowIdReusePolicy` option:
+An attempt to start a workflow if there is a completed workflow with the same Id depends on a `WorkflowIdReusePolicy` option:
 
-- `AllowDuplicateFailedOnly` means that it is allowed to start a workflow only if a previously executed workflow with the same ID failed.
+- `AllowDuplicateFailedOnly` means that it is allowed to start a workflow only if a previously executed workflow with the same Id failed.
 - `AllowDuplicate` means that it is allowed to start independently of the previous workflow completion status.
-- `RejectDuplicate` means that it is not allowed to start a workflow execution using the same workflow ID at all.
+- `RejectDuplicate` means that it is not allowed to start a workflow execution using the same workflow Id at all.
 
 The default is `AllowDuplicateFailedOnly`.
 
-To distinguish multiple runs of a workflow with the same workflow ID, Temporal identifies a workflow with two IDs: `Workflow ID` and `Run ID`. `Run ID` is a service-assigned UUID. To be precise, any workflow is uniquely identified by a triple: `Namespace`, `Workflow ID` and `Run ID`.
+To distinguish multiple runs of a workflow with the same workflow Id, Temporal identifies a workflow with two Ids: `Workflow Id` and `Run Id`. `Run Id` is a service-assigned UUID. To be precise, any workflow is uniquely identified by a triple: `Namespace`, `Workflow Id` and `Run Id`.
 
 ## Child Workflow
 
@@ -93,7 +93,7 @@ Some reasons to use child workflows are:
 
 - A child workflow can be hosted by a separate set of workers which don't contain the parent workflow code. So it would act as a separate service that can be invoked from multiple other workflows.
 - A single workflow has a limited size. For example, it cannot execute 100k activities. Child workflows can be used to partition the problem into smaller chunks. One parent with 1000 children each executing 1000 activities is 1 million executed activities.
-- A child workflow can be used to manage some resource using its ID to guarantee uniqueness. For example, a workflow that manages host upgrades can have a child workflow per host (host name being a workflow ID) and use them to ensure that all operations on the host are serialized.
+- A child workflow can be used to manage some resource using its Id to guarantee uniqueness. For example, a workflow that manages host upgrades can have a child workflow per host (host name being a workflow Id) and use them to ensure that all operations on the host are serialized.
 - A child workflow can be used to execute some periodic logic without blowing up the parent history size. When a parent starts a child, it executes periodic logic calling that continues as many times as needed, then completes. From the parent point if view, it is just a single child workflow invocation.
 
 The main limitation of a child workflow versus collocating all the application logic in a single workflow is lack of the shared state. Parent and child can communicate only through asynchronous signals. But if there is a tight coupling between them, it might be simpler to use a single workflow and just rely on a shared object state.

@@ -46,5 +46,5 @@ You may not know if a workflow is running and can accept a signal. The
 [client.SignalWithStartWorkflow](https://godoc.org/go.temporal.io/temporal/client#Client) API
 [client.SignalWithStartWorkflow](https://godoc.org/go.temporal.io/temporal/client#Client) API
 allows you to send a signal to the current workflow instance if one exists or to create a new
-run and then send the signal. `SignalWithStartWorkflow` therefore doesn't take a run ID as a 
+run and then send the signal. `SignalWithStartWorkflow` therefore doesn't take a run Id as a 
 parameter.

@@ -67,7 +67,7 @@ as a single Temporal activity.
 
 To indicate that an activity should not be completed upon its method return, call `Activity.doNotCompleteOnReturn()` from the
 original activity thread. Then later, when replies come, complete the activity using [ActivityCompletionClient](https://static.javadoc.io/com.uber.cadence/cadence-client/2.4.1/index.html?com/uber/cadence/client/ActivityCompletionClient.html).
-To correlate activity invocation with completion, use either `TaskToken` or workflow and activity IDs.
+To correlate activity invocation with completion, use either `TaskToken` or workflow and activity Ids.
 
 ```java
 public class FileProcessingActivitiesImpl implements FileProcessingActivities {

@@ -81,7 +81,7 @@ func FileProcessingWorkflow(ctx workflow.Context, fileID string) (err error) {
 
 ```go
 type SessionInfo struct {
-  // A unique ID for the session
+  // A unique Id for the session
   SessionID         string
 
   // The hostname of the worker that is executing the session

@@ -7,7 +7,7 @@ reaches the maximum size enforced by the service.
 
 **ContinueAsNew** is the low level construct that enables implementing such workflows without the
 risk of failures down the road. The operation atomically completes the current execution and starts
-a new execution of the workflow with the same **workflow ID**. The new execution will not carry
+a new execution of the workflow with the same **workflow Id**. The new execution will not carry
 over any history from the old execution. To trigger this behavior, the workflow function should
 terminate by returning the special **ContinueAsNewError** error:
 

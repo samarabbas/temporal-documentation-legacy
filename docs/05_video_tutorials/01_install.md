@@ -27,6 +27,6 @@ tctl --namespace samples-namespace workflow start -wt test -tl test -et 300
 
 tctl --namespace samples-namespace workflow list -op
 
-tctl --namespace samples-namespace workflow terminate -wid <workflowID>
+tctl --namespace samples-namespace workflow terminate -wid <workflowId>
 
 ```

@@ -6,7 +6,7 @@ There are multiple scenarios for which signals are useful.
 
 ## Event Aggregation and Correlation
 
-Temporal is not a replacement for generic stream processing engines like Apache Flink or Apache Spark. But in certain scenarios it is a better fit. For example, when all events that should be aggregated and correlated are always applied to to some business entity with a clear ID. And then when a certain condition is met, actions should be executed.
+Temporal is not a replacement for generic stream processing engines like Apache Flink or Apache Spark. But in certain scenarios it is a better fit. For example, when all events that should be aggregated and correlated are always applied to to some business entity with a clear Id. And then when a certain condition is met, actions should be executed.
 
 The main limitation is that a single Temporal workflow has a pretty limited throughput, while the number of workflows is practically unlimited. So if you need to aggregate events per customer, and your application has 100 million customers and each customer doesn't generate more than 20 events per second, then Temporal would work fine. But if you want to aggregate all events for US customers then the rate of these events would be beyond the single workflow capacity.
 

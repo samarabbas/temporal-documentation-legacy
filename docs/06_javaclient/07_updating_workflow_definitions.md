@@ -84,6 +84,6 @@ public void processFile(Arguments args) {
 }
 ```
 
-The ID that is passed to the `getVersion` call identifies the change. Each change is expected to have its own ID. But if
+The Id that is passed to the `getVersion` call identifies the change. Each change is expected to have its own Id. But if
 a change spawns multiple places in the workflow code and the new code should be either executed in all of them or
-in none of them, then they have to share the ID.
+in none of them, then they have to share the Id.

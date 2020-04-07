@@ -666,7 +666,7 @@ temporal: docker run --network=host --rm temporalio/tctl:latest workflow describ
     },
     "StartTime": "2019-06-08T23:56:41Z",
     "CloseTime": "1970-01-01T00:00:00Z",
-    "CloseStatus": null,
+    "Status": null,
     "HistoryLength": 5,
     "ParentNamespaceId": null,
     "ParentExecution": null,

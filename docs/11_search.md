@@ -7,7 +7,7 @@ Temporal supports creating workflows with customized key-value pairs, updating t
 Also note that normal workflow properties like start time and workflow type can be queried as well. For example, the following query could be specified when [listing workflows from the CLI](08_cli#list-closed-or-open-workflow-executions) or using the list APIs ([Go](https://godoc.org/go.temporal.io/temporal/client#Client), [Java](https://static.javadoc.io/com.uber.cadence/cadence-client/2.6.0/com/uber/cadence/WorkflowService.Iface.html#ListWorkflowExecutions-com.uber.cadence.ListWorkflowExecutionsRequest-)):
 
 ```sql
-WorkflowType = "main.Workflow" and CloseStatus != 0 and (StartTime > "2019-06-07T16:46:34-08:00" or CloseTime > "2019-06-07T16:46:34-08:00" order by StartTime desc)
+WorkflowType = "main.Workflow" and Status != 0 and (StartTime > "2019-06-07T16:46:34-08:00" or CloseTime > "2019-06-07T16:46:34-08:00" order by StartTime desc)
 ```
 
 ## Memo vs Search Attributes
@@ -53,7 +53,7 @@ $ cadence --namespace samples-namespace cl get-search-attr
 +---------------------+------------+
 |         KEY         | VALUE TYPE |
 +---------------------+------------+
-| CloseStatus         | INT        |
+| Status              | INT        |
 | CloseTime           | INT        |
 | CustomBoolField     | DOUBLE     |
 | CustomDatetimeField | DATETIME   |
@@ -193,7 +193,7 @@ These can be found by using the CLI get-search-attr command or the GetSearchAttr
 
 | KEY                 | VALUE TYPE |
 | ------------------- | ---------- |
-| CloseStatus         | INT        |
+| Status              | INT        |
 | CloseTime           | INT        |
 | CustomBoolField     | DOUBLE     |
 | CustomDatetimeField | DATETIME   |
@@ -212,16 +212,18 @@ These can be found by using the CLI get-search-attr command or the GetSearchAttr
 
 There are some special considerations for these attributes:
 
-- CloseStatus, CloseTime, NamespaceId, ExecutionTime, HistoryLength, RunId, StartTime, WorkflowId, WorkflowType are reserved by Temporal and are read-only
-- CloseStatus is a mapping of int to state:
-  - 0 = completed
-  - 1 = failed
-  - 2 = canceled
-  - 3 = terminated
-  - 4 = continuedasnew
-  - 5 = timedout
+- Status, CloseTime, NamespaceId, ExecutionTime, HistoryLength, RunId, StartTime, WorkflowId, WorkflowType are reserved by Temporal and are read-only
+- Status is a mapping of int to state:
+  - 0 = unknown
+  - 1 = running
+  - 2 = completed
+  - 3 = failed
+  - 4 = canceled
+  - 5 = terminated
+  - 6 = continuedasnew
+  - 7 = timedout
 - StartTime, CloseTime and ExecutionTime are stored as INT, but support queries using both EpochTime in nanoseconds, and string in RFC3339 format (ex. "2006-01-02T15:04:05+07:00")
-- CloseTime, CloseStatus, HistoryLength are only present in closed workflow
+- CloseTime, HistoryLength are only present in closed workflow
 - ExecutionTime is for Retry/Cron user to query a workflow that will run in the future
 
 To list only open workflows, add `CloseTime = missing` to the end of the query.

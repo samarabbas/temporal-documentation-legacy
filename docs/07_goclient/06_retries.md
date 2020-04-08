@@ -30,10 +30,10 @@ RetryPolicy struct {
     MaximumAttempts int32
 
     // Non-Retriable errors. This is optional. Temporal server will stop retry if error reason matches this list.
-    // Error reason for custom error is specified when your activity/workflow returns cadence.NewCustomError(reason).
-    // Error reason for panic error is "cadenceInternal:Panic".
-    // Error reason for any other error is "cadenceInternal:Generic".
-    // Error reason for timeouts is: "cadenceInternal:Timeout TIMEOUT_TYPE". TIMEOUT_TYPE could be START_TO_CLOSE or HEARTBEAT.
+    // Error reason for custom error is specified when your activity/workflow returns workflow.NewCustomError(reason).
+    // Error reason for panic error is "temporalInternal:Panic".
+    // Error reason for any other error is "temporalInternal:Generic".
+    // Error reason for timeouts is: "temporalInternal:Timeout TIMEOUT_TYPE". TIMEOUT_TYPE could be StartToClose or Heartbeat.
     // Note that cancellation is not a failure, so it won't be retried.
     NonRetriableErrorReasons []string
 }

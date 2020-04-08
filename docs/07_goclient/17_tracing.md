@@ -79,7 +79,7 @@ type ContextPropagator interface {
 
 ### Is there a complete example?
 
-The [context propagation sample](https://github.com/uber-common/cadence-samples/blob/master/cmd/samples/recipes/ctxpropagation/workflow.go)
+The [context propagation sample](https://github.com/temporalio/temporal-go-samples/blob/master/ctxpropagation/workflow.go)
 configures a custom context propagator and shows context propagation of custom keys across a workflow and an activity.
 
 ### Can I configure multiple context propagators?

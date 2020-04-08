@@ -4,7 +4,7 @@ A workflow interface that executes a workflow requires initializing a `WorkflowC
 a client side stub to the workflow, and then calling a method annotated with @WorkflowMethod.
 
 ```java
-WorkflowClient workflowClient = WorkflowClient.newClient(cadenceServiceHost, cadenceServicePort, namespace);
+WorkflowClient workflowClient = WorkflowClient.newClient(serviceHost, servicePort, namespace);
 // Create a workflow stub.
 FileProcessingWorkflow workflow = workflowClient.newWorkflowStub(FileProcessingWorkflow.class);
 ```

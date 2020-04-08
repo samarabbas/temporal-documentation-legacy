@@ -77,9 +77,9 @@ func TestUnitTestSuite(t *testing.T) {
 To run unit tests, we first define a "test suite" struct that absorbs both the
 basic suite functionality from [testify](https://godoc.org/github.com/stretchr/testify/suite)
 via `suite.Suite` and the suite functionality from the Temporal test framework via
-`cadence.WorkflowTestSuite`. Because every test in this test suite will test our workflow, we
+`workflow.WorkflowTestSuite`. Because every test in this test suite will test our workflow, we
 add a property to our struct to hold an instance of the test environment. This allows us to initialize
-the test environment in a setup method. For testing workflows, we use a `cadence.TestWorkflowEnvironment`.
+the test environment in a setup method. For testing workflows, we use a `testsuite.TestWorkflowEnvironment`.
 
 Next, we implement a `SetupTest` method to setup a new test environment before each test. Doing so
 ensures that each test runs in its own isolated sandbox. We also implement an `AfterTest` function

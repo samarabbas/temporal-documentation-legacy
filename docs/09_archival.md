@@ -39,13 +39,13 @@ A namespace includes two pieces of archival related config:
 ## Running Locally
 
 In order to run locally do the following:
-1. `./cadence-server start`
-2. `./cadence --ns samples-namespace namespace register --gd false --history_archival_status enabled --retention 0`
-3. Run the [helloworld cadence-sample](https://github.com/uber-common/cadence-samples) by following the README
+1. `./temporal-server start`
+2. `./tctl --ns samples-namespace namespace register --gd false --history_archival_status enabled --retention 0`
+3. Run the [helloworld temporal sample](https://github.com/temporalio/temporal-go-samples/tree/master/helloworld) by following the README
 4. Copy the workflowId and runId of the completed workflow from log output
-5. `./cadence --ns samples-namespace wf show --wid <workflowId> --rid <runId>`
+5. `./temporal --ns samples-namespace wf show --wid <workflowId> --rid <runId>`
 
-In step 2, we registered a new namespace and enabled history archival feature for that namespace. Since we didn't provide an archival URI when registering the new namespace, the default URI specified in `config/development.yaml` is used. The default URI is `file:///tmp/cadence_archival/development`, so you can find the archived workflow history under the `/tmp/cadence_archival/development` directory. 
+In step 2, we registered a new namespace and enabled history archival feature for that namespace. Since we didn't provide an archival URI when registering the new namespace, the default URI specified in `config/development.yaml` is used. The default URI is `file:///tmp/temporal_archival/development`, so you can find the archived workflow history under the `/tmp/temporal_archival/development` directory. 
 
 ## FAQ
 
@@ -57,7 +57,7 @@ Before uploading history a check is done to see if it has already been uploaded,
 No, each namespace can only have one URI for history archival and one URI for visibility archival. Different namespaces, however, can have different URIs (with different schemes).
 
 ### How does archival work with PII?
-No cadence workflow should ever operate on clear text PII. Temporal can be thought
+No temporal workflow should ever operate on clear text PII. Temporal can be thought
 of as a database and just as one would not store PII in a database PII should not be
 stored in Temporal. This is even more important when archival is enabled because
 these histories can be kept forever. 

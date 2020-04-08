@@ -74,7 +74,7 @@ for hasWork {
 }
 ```
 When an activity times out due to a missed heartbeat, the last value of the details (`progress` in the
-above sample) is returned from the `cadence.ExecuteActivity` function as the details field of `TimeoutError`
+above sample) is returned from the `workflow.ExecuteActivity` function as the details field of `TimeoutError`
 with `TimeoutType_HEARTBEAT`.
 
 You can also heartbeat an activity from an external source:

@@ -42,6 +42,6 @@ public class Main {
 ```
 Commands:
 ```bash
-cadence -do samples-namespace workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
+tctl -do samples-namespace workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
 ```
 

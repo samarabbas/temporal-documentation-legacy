@@ -213,7 +213,7 @@ The `kafka` section describes the configuration needed to connect to all Kafka c
 - `tls` - uses the TLS structure as under the `persistence` section.
 - `clusters` - map of named `ClusterConfig` definitions, which describe the configuration for each Kafka cluster. A `ClusterConfig` definition contains a list of brokers using the configuration value `brokers`.
 - `topics` - map of topics to Kafka clusters.
-- `cadence-cluster-topics`- map of named `TopicList` definitions.
+- `temporal-cluster-topics`- map of named `TopicList` definitions.
 - `applications` - map of named `TopicList` definitions.
 
 A `TopicList` definition describes the topic names for each cluster and contains the following required values:
@@ -247,7 +247,7 @@ kafka:
       cluster: test
     other-dlq:
       cluster: test
-  cadence-cluster-topics:
+  temporal-cluster-topics:
     active:
       topic: active
       dlq-topic: active-dlq

@@ -49,7 +49,7 @@ SearchAttributes is `map[string]interface{}` where the keys need to be allowlist
 Start by querying the list of search attributes using the CLI:
 
 ```bash
-$ cadence --namespace samples-namespace cl get-search-attr
+$ tctl --namespace samples-namespace cl get-search-attr
 +---------------------+------------+
 |         KEY         | VALUE TYPE |
 +---------------------+------------+
@@ -75,7 +75,7 @@ $ cadence --namespace samples-namespace cl get-search-attr
 Use the admin CLI to add a new search attribute:
 
 ```bash
-cadence --namespace samples-namespace adm cl asa --search_attr_key NewKey --search_attr_type 1
+tctl --namespace samples-namespace adm cl asa --search_attr_key NewKey --search_attr_type 1
 ```
 
 The numbers for the attribute types map as follows:
@@ -134,7 +134,7 @@ Temporal reserves keys like NamespaceId, WorkflowId, and RunId. These can only b
 
 [UpsertSearchAttributes](https://godoc.org/go.temporal.io/temporal/workflow#UpsertSearchAttributes) is used to add or update search attributes from within the workflow code.
 
-Go samples for search attributes can be found at [github.com/uber-common/cadence-samples](https://github.com/uber-common/cadence-samples/tree/master/cmd/samples/recipes/searchattributes).
+Go samples for search attributes can be found at [github.com/temporalio/temporal-go-samples](https://github.com/temporalio/temporal-go-samples/tree/master/searchattributes).
 
 UpsertSearchAttributes will merge attributes to the existing map in the workflow. Consider this example workflow code:
 
@@ -249,17 +249,17 @@ Support for search attributes is available as of version 0.6.0 of the Temporal s
 #### Start Workflow with Search Attributes
 
 ```bash
-cadence --ns samples-namespace workflow start --tl helloWorldGroup --wt main.Workflow --et 60 --dt 10 -i '"vancexu"' -search_attr_key 'CustomIntField | CustomKeywordField | CustomStringField |  CustomBoolField | CustomDatetimeField' -search_attr_value '5 | keyword1 | vancexu test | true | 2019-06-07T16:16:36-08:00'
+tctl --ns samples-namespace workflow start --tl helloWorldGroup --wt main.Workflow --et 60 --dt 10 -i '"vancexu"' -search_attr_key 'CustomIntField | CustomKeywordField | CustomStringField |  CustomBoolField | CustomDatetimeField' -search_attr_value '5 | keyword1 | vancexu test | true | 2019-06-07T16:16:36-08:00'
 ```
 
 #### Search Workflows with List API
 
 ```bash
-cadence --ns samples-namespace wf list -q '(CustomKeywordField = "keyword1" and CustomIntField >= 5) or CustomKeywordField = "keyword2"' -psa
+tctl --ns samples-namespace wf list -q '(CustomKeywordField = "keyword1" and CustomIntField >= 5) or CustomKeywordField = "keyword2"' -psa
 ```
 
 ```bash
-cadence --ns samples-namespace wf list -q 'CustomKeywordField in ("keyword2", "keyword1") and CustomIntField >= 5 and CloseTime between "2018-06-07T16:16:36-08:00" and "2019-06-07T16:46:34-08:00" order by CustomDatetimeField desc' -psa
+tctl --ns samples-namespace wf list -q 'CustomKeywordField in ("keyword2", "keyword1") and CustomIntField >= 5 and CloseTime between "2018-06-07T16:16:36-08:00" and "2019-06-07T16:46:34-08:00" order by CustomDatetimeField desc' -psa
 ```
 
 To list only open workflows, add `CloseTime = missing` to the end of the query.
@@ -267,24 +267,24 @@ To list only open workflows, add `CloseTime = missing` to the end of the query.
 Note that queries can support more than one type of filter:
 
 ```bash
-cadence --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" and (WorkflowId = "1645a588-4772-4dab-b276-5f9db108b3a8" or RunId = "be66519b-5f09-40cd-b2e8-20e4106244dc")'
+tctl --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" and (WorkflowId = "1645a588-4772-4dab-b276-5f9db108b3a8" or RunId = "be66519b-5f09-40cd-b2e8-20e4106244dc")'
 ```
 
 ```bash
-cadence --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" StartTime > "2019-06-07T16:46:34-08:00" and CloseTime = missing'
+tctl --ns samples-namespace wf list -q 'WorkflowType = "main.Workflow" StartTime > "2019-06-07T16:46:34-08:00" and CloseTime = missing'
 ```
 
 ### Web UI Support
 
-Queries are supported in [Temporal Web](https://github.com/temporalio/temporal-web) as of release 3.4.0. Use the "Basic/Advanced" button to switch to "Advanced" mode and type the query in the search box.
+Queries are supported in [Temporal Web](https://github.com/temporalio/temporal-web) as of release 0.20.0. Use the "Basic/Advanced" button to switch to "Advanced" mode and type the query in the search box.
 
 ## Local Testing
 
 1. Increase Docker memory to higher than 6GB. Navigate to Docker -> Preferences -> Advanced -> Memory
-2. Get the Temporal Docker compose file. Run `curl -O https://raw.githubusercontent.com/uber/cadence/master/docker/docker-compose-es.yml`
+2. Get the Temporal Docker compose file. Run `curl -O https://raw.githubusercontent.com/temporalio/temporal/master/docker/docker-compose-es.yml`
 3. Start Temporal Docker (which contains Apache Kafka, Apache Zookeeper, and Elasticsearch) using `docker-compose -f docker-compose-es.yml up`
 4. From the Docker output log, make sure Elasticsearch and Temporal started correctly. If you encounter an insufficient disk space error, try `docker system prune -a --volumes`
-5. Register a local namespace and start using it. `cadence --ns samples-namespace n re`
-6. Allowlist search attributes. `cadence --ns namespace adm cl asa --search_attr_key NewKey --search_attr_type 1`
+5. Register a local namespace and start using it. `tctl --ns samples-namespace n re`
+6. Allow list search attributes. `tctl --ns namespace adm cl asa --search_attr_key NewKey --search_attr_type 1`
 
 Note: starting a workflow with search attributes but without Elasticsearch will succeed as normal, but will not be searchable and will not be shown in list results.

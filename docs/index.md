@@ -32,6 +32,6 @@ Watch Maxim's talk from the Uber Open Summit for an introduction to the Temporal
 
 {% include youtubePlayer.html id="llmsBGKOuWI" %}
 
-The GitHub repo for the Temporal server is [uber/cadence](https://github.com/temporalio/temporal). The docker
+The GitHub repo for the Temporal server is [temporalio/temporal](https://github.com/temporalio/temporal). The docker
 image for the Temporal server is available on Docker Hub at
-[ubercadence/server](https://hub.docker.com/r/ubercadence/server).
+[temporalio/server](https://hub.docker.com/r/temporalio/server).

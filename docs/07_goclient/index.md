@@ -8,6 +8,8 @@ Temporal requires determinism of the workflow code. It supports deterministic ex
 
 For example, instead of native Go channels, workflow code must use the `workflow.Channel` interface. Instead of `select`, the `workflow.Selector` interface must be used.
 
+Start with [quick start guide](001_quick_start#]).
+
 For more information, see [Creating Workflows](02_create_workflows#]).
 
 ## Links

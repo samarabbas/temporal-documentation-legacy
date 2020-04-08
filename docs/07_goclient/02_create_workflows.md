@@ -107,7 +107,7 @@ A straightforward way to think about these requirements is that the workflow cod
 Now that we have laid the ground rules, we can take a look at some of the special functions and types
 used for writing Temporal workflows and how to implement some common patterns.
 
-### Special Temporal client library functions and types
+### Special Temporal SDK functions and types
 
 The Temporal client library provides a number of functions and types as alternatives to some native
 Go functions and types. Usage of these replacement functions/types is necessary in order to ensure

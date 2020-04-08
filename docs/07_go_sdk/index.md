@@ -16,4 +16,4 @@ For more information, see [Creating Workflows](02_create_workflows#]).
 
 - GitHub project: [https://github.com/temporalio/temporal-go-sdk](https://github.com/temporalio/temporal-go-sdk)
 - Samples: [https://github.com/temporalio/temporal-go-samples](https://github.com/temporalio/temporal-go-samples)
-- GoDoc documentation: [https://godoc.org/go.temporal.io/temporal](https://godoc.org/go.temporal.io/temporal)
+- GoDoc documentation: [https://pkg.go.dev/go.temporal.io/temporal](https://pkg.go.dev/go.temporal.io/temporal)

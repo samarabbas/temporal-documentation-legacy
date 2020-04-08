@@ -7,7 +7,7 @@ Mac:
 ```bash
 mkdir temporal-docker
 cd temporal-docker
-curl -O https://raw.githubusercontent.com/temporalio/temporal/master/docker/docker-compose.yml
+curl -L https://github.com/temporalio/temporal/releases/download/v0.21.1/docker.tar.gz | tar -xz --strip-components 1 docker/docker-compose.yml
 docker-compose up
 ```
 

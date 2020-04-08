@@ -14,10 +14,11 @@ Follow the docker-compose installation instructions found here: [https://docs.do
 
 Download the Temporal docker-compose file to preferred location (i.e. `quick_start` directory):
 ```bash
-> curl -O https://raw.githubusercontent.com/temporalio/temporal/v0.21.1/docker/docker-compose.yml
+> curl -L https://github.com/temporalio/temporal/releases/download/v0.21.1/docker.tar.gz | tar -xz --strip-components 1 docker/docker-compose.yml
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
-100   538  100   538    0     0   2468      0 --:--:-- --:--:-- --:--:--  2467
+100   604  100   604    0     0   6357      0 --:--:-- --:--:-- --:--:--  6291
+100  7294  100  7294    0     0  12909      0 --:--:-- --:--:-- --:--:-- 12909
 > ls
 docker-compose.yml
 ```

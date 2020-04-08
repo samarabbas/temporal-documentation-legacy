@@ -27,9 +27,9 @@ For a sample, the Go client implements a [tracing context propagator](https://gi
 On the server side, Temporal provides a mechanism to propagate what it calls headers across different workflow
 transitions.
 
-```go
-struct Header {
-  10: optional map<string, binary> fields
+```proto
+message Header {
+    map<string, bytes> fields = 1;
 }
 ```
 

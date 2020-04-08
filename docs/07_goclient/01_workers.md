@@ -16,13 +16,11 @@ import (
 
 	"go.temporal.io/temporal/client"
 	"go.temporal.io/temporal/worker"
-	"go.temporal.io/temporal/workflow"R
+	"go.temporal.io/temporal/workflow"
 )
 
 var (
-	Namespace   = "samples"
-	Tasklist = "samples_tl"
-	HostPort = "127.0.0.1:7233"
+	Tasklist  = "samples_tl"
 )
 
 func main() {
@@ -31,18 +29,14 @@ func main() {
 		panic(err)
 	}
 
-	logger.Info("Zap logger created")
-	scope := tally.NoopScope
-
-	// The client is a heavyweight object that should be created once per process.
+	// The client and worker are heavyweight objects that should be created once per process.
 	serviceClient, err := client.NewClient(client.Options{
-		HostPort:     HostPort,
-		Namespace:   Namespace,
-		MetricsScope: scope,
+		HostPort: client.DefaultHostPort,
 	})
 	if err != nil {
 		logger.Fatal("Unable to create client", zap.Error(err))
 	}
+	defer func() { _ = serviceClient.CloseConnection() }()
 
 	worker := worker.New(serviceClient, Tasklist, worker.Options{
 		Logger: logger,
@@ -55,13 +49,10 @@ func main() {
 	if err != nil {
 		logger.Fatal("Unable to start worker", zap.Error(err))
 	}
+	defer worker.Stop()
 
 	// The workers are supposed to be long running process that should not exit.
 	waitCtrlC()
-
-	// Stop worker, close connection, clean up resources.
-	worker.Stop()
-	_ = serviceClient.CloseConnection()
 }
 
 func waitCtrlC() {

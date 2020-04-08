@@ -32,11 +32,7 @@ The following code demonstrates how to complete the activity successfully:
 // Instantiate a Temporal service client.
 // The same client can be used to complete or fail any number of activities.
 // The client is a heavyweight object that should be created once per process.
-serviceClient, err := client.NewClient(client.Options{
-    HostPort:     HostPort,
-    Namespace:   Namespace,
-    MetricsScope: scope,
-})
+serviceClient, err := client.NewClient(client.Options{})
 
 // Complete the activity.
 client.CompleteActivity(taskToken, result, nil)

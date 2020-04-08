@@ -26,11 +26,11 @@ import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowMethod;
 import org.slf4j.Logger;
 
-@WorkflowInterface
 public class GettingStarted {
 
     private static Logger logger = Workflow.getLogger(GettingStarted.class);
-
+    
+    @WorkflowInterface
     interface HelloWorld {
         @WorkflowMethod
         void sayHello(String name);

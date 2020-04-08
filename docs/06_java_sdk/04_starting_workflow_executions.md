@@ -4,9 +4,11 @@ A workflow interface that executes a workflow requires initializing a `WorkflowC
 a client side stub to the workflow, and then calling a method annotated with @WorkflowMethod.
 
 ```java
-WorkflowClient workflowClient = WorkflowClient.newClient(serviceHost, servicePort, namespace);
-// Create a workflow stub.
-FileProcessingWorkflow workflow = workflowClient.newWorkflowStub(FileProcessingWorkflow.class);
+    // service and client are heavyweight objects that should be created once per process lifetime. 
+    WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
+    WorkflowClient client = WorkflowClient.newInstance(service);
+    // Create a new workflow stub per each workflow start
+    FileProcessingWorkflow workflow = workflowClient.newWorkflowStub(FileProcessingWorkflow.class);
 ```
 
 There are two ways to start workflow execution: asynchronously and synchronously. Asynchronous start initiates a workflow execution and immediately returns to the caller. This is the most common way to start workflows in production code. Synchronous invocation starts a workflow
@@ -41,3 +43,4 @@ FileProcessingWorkflow workflow = workflowClient.newWorkflowStub(execution);
 // Returns result potentially waiting for workflow to complete.
 String result = workflow.processFile(workflowArgs);
 ```
+

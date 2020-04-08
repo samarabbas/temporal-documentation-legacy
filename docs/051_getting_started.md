@@ -98,6 +98,6 @@ Note that a default namespace is created upon first cluster start.
 
 ## Write Workflows and Activities using Client SDK
 
-Try out [Java SDK](06_javaclient/01_quick_start#). 
-
-Try out [Go SDK](07_goclient/001_quick_start#). 
+Try out [Java SDK](06_java_sdk/01_quick_start#).
+ 
+Try out [Go SDK](07_go_sdk/001_quick_start#). 

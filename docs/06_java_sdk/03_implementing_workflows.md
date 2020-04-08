@@ -7,6 +7,44 @@ returns, the workflow execution is closed. While workflow execution is open, it 
 No additional calls to workflow methods are allowed. The workflow object is stateful, so query and signal methods
 can communicate with the other parts of the workflow through workflow object fields.
 
+## Workflow Implementation Constraints
+
+Temporal uses the [Microsoft Azure Event Sourcing pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) to recover
+the state of a workflow object including its threads and local variable values.
+In essence, every time a workflow state has to be restored, its code is re-executed from the beginning. When replaying, side
+effects (such as activity invocations) are ignored because they are already recorded in the workflow event history.
+When writing workflow logic, the replay is not visible, so the code should be written since it executes only once.
+This design puts the following constraints on the workflow implementation:
+
+- Do not use any mutable global variables because multiple instances of workflows are executed in parallel.
+- Do not call any non-deterministic functions like non seeded random or UUID.randomUUID() directly from the workflow code.
+
+Always do the following in the workflow implementation code:
+- Don’t perform any IO or service calls as they are not usually deterministic. Use activities for this.
+- Only use `Workflow.currentTimeMillis()` to get the current time inside a workflow.
+- Do not use native Java `Thread` or any other multi-threaded classes like `ThreadPoolExecutor`. Use `Async.function` or `Async.procedure`
+to execute code asynchronously.
+- Don't use any synchronization, locks, and other standard Java blocking concurrency-related classes besides those provided
+by the Workflow class. There is no need in explicit synchronization because multi-threaded code inside a workflow is
+executed one thread at a time and under a global lock.
+  - Call `WorkflowThread.sleep` instead of `Thread.sleep`.
+  - Use `Promise` and `CompletablePromise` instead of `Future` and `CompletableFuture`.
+  - Use `WorkflowQueue` instead of `BlockingQueue`.
+- Use `Workflow.getVersion` when making any changes to the workflow code. Without this, any deployment of updated workflow code
+might break already open workflows.  
+- Don’t access configuration APIs directly from a workflow because changes in the configuration might affect a workflow execution path.
+Pass it as an argument to a workflow function or use an activity to load it.
+
+Workflow method arguments and return values are serializable to a byte array using the provided
+[DataConverter](https://static.javadoc.io/com.uber.cadence/cadence-client/2.4.1/index.html?com/uber/cadence/converter/DataConverter.html)
+interface. The default implementation uses JSON serializer, but you can use any alternative serialization mechanism.
+
+The values passed to workflows through invocation parameters or returned through a result value are recorded in the execution history.
+The entire execution history is transferred from the Temporal service to workflow workers with every event that the workflow logic needs to process.
+A large execution history can thus adversely impact the performance of your workflow.
+Therefore, be mindful of the amount of data that you transfer via activity invocation parameters or return values.
+Otherwise, no additional limitations exist on activity implementations.
+
 ## Calling Activities
 
 `Workflow.newActivityStub` returns a client-side stub that implements an activity interface.
@@ -24,7 +62,11 @@ public class FileProcessingWorkflowImpl implements FileProcessingWorkflow {
     private final FileProcessingActivities activities;
 
     public FileProcessingWorkflowImpl() {
-        this.activities = Workflow.newActivityStub(FileProcessingActivities.class);
+        this.activities = Workflow.newActivityStub(
+                FileProcessingActivities.class,
+                ActivityOptions.newBuilder()
+                        .setStartToCloseTimeout(Duration.ofHours(1))
+                        .build());
     }
 
     @Override
@@ -52,13 +94,15 @@ with different options.
 
 ```java
 public FileProcessingWorkflowImpl() {
-    ActivityOptions options1 = new ActivityOptions.Builder()
+    ActivityOptions options1 = ActivityOptions.newBuilder()
              .setTaskList("taskList1")
+             .setStartToCloseTimeout(Duration.ofMinutes(10))
              .build();
     this.store1 = Workflow.newActivityStub(FileProcessingActivities.class, options1);
 
-    ActivityOptions options2 = new ActivityOptions.Builder()
+    ActivityOptions options2 = ActivityOptions.newBuilder()
              .setTaskList("taskList2")
+             .setStartToCloseTimeout(Duration.ofMinutes(5))
              .build();
     this.store2 = Workflow.newActivityStub(FileProcessingActivities.class, options2);
 }
@@ -145,6 +189,7 @@ Besides activities, a workflow can also orchestrate other workflows.
  from within workflow code is not supported. However, queries can be done from activities
  using the provided `WorkflowClient` stub.
  ```java
+@WorkflowInterface
 public interface GreetingChild {
     @WorkflowMethod
     String composeGreeting(String greeting, String name);
@@ -184,6 +229,7 @@ public static class GreetingWorkflowImpl implements GreetingWorkflow {
 ```
 To send a signal to a child, call a method annotated with `@SignalMethod`:
 ```java
+@WorkflowInterface
 public interface GreetingChild {
     @WorkflowMethod
     String composeGreeting(String greeting, String name);
@@ -203,42 +249,4 @@ public static class GreetingWorkflowImpl implements GreetingWorkflow {
     }
 }
 ```
-Calling methods annotated with `@QueryMethod` is not allowed from within workflow code.
-
-## Workflow Implementation Constraints
-
-Temporal uses the [Microsoft Azure Event Sourcing pattern](https://docs.microsoft.com/en-us/azure/architecture/patterns/event-sourcing) to recover
-the state of a workflow object including its threads and local variable values.
-In essence, every time a workflow state has to be restored, its code is re-executed from the beginning. When replaying, side
-effects (such as activity invocations) are ignored because they are already recorded in the workflow event history.
-When writing workflow logic, the replay is not visible, so the code should be written since it executes only once.
-This design puts the following constraints on the workflow implementation:
-
-- Do not use any mutable global variables because multiple instances of workflows are executed in parallel.
-- Do not call any non-deterministic functions like non seeded random or UUID.randomUUID() directly from the workflow code.
-
-Always do the following in the workflow implementation code:
-- Don’t perform any IO or service calls as they are not usually deterministic. Use activities for this.
-- Only use `Workflow.currentTimeMillis()` to get the current time inside a workflow.
-- Do not use native Java `Thread` or any other multi-threaded classes like `ThreadPoolExecutor`. Use `Async.function` or `Async.procedure`
-to execute code asynchronously.
-- Don't use any synchronization, locks, and other standard Java blocking concurrency-related classes besides those provided
-by the Workflow class. There is no need in explicit synchronization because multi-threaded code inside a workflow is
-executed one thread at a time and under a global lock.
-  - Call `WorkflowThread.sleep` instead of `Thread.sleep`.
-  - Use `Promise` and `CompletablePromise` instead of `Future` and `CompletableFuture`.
-  - Use `WorkflowQueue` instead of `BlockingQueue`.
-- Use `Workflow.getVersion` when making any changes to the workflow code. Without this, any deployment of updated workflow code
-might break already open workflows.  
-- Don’t access configuration APIs directly from a workflow because changes in the configuration might affect a workflow execution path.
-Pass it as an argument to a workflow function or use an activity to load it.
-
-Workflow method arguments and return values are serializable to a byte array using the provided
-[DataConverter](https://static.javadoc.io/com.uber.cadence/cadence-client/2.4.1/index.html?com/uber/cadence/converter/DataConverter.html)
-interface. The default implementation uses JSON serializer, but you can use any alternative serialization mechanism.
-
-The values passed to workflows through invocation parameters or returned through a result value are recorded in the execution history.
-The entire execution history is transferred from the Temporal service to workflow workers with every event that the workflow logic needs to process.
-A large execution history can thus adversely impact the performance of your workflow.
-Therefore, be mindful of the amount of data that you transfer via activity invocation parameters or return values.
-Otherwise, no additional limitations exist on activity implementations.
+Calling methods annotated with `@QueryMethod` is not allowed from within workflow code. Use an activity to call them.

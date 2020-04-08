@@ -171,7 +171,7 @@ Use `workflow.GetInfo` to get current search attributes.
 
 ### ContinueAsNew and Cron
 
-When performing a [ContinueAsNew](07_goclient/09_continueasnew) or using [Cron](07_goclient/16_distributed_cron), search attributes (and memo) will be carried over to the new run by default.
+When performing a [ContinueAsNew](07_go_sdk/09_continueasnew) or using [Cron](07_go_sdk/16_distributed_cron), search attributes (and memo) will be carried over to the new run by default.
 
 ## Query Capabilities
 

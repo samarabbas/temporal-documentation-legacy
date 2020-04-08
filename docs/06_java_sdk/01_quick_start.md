@@ -26,6 +26,7 @@ import io.temporal.workflow.Workflow;
 import io.temporal.workflow.WorkflowMethod;
 import org.slf4j.Logger;
 
+@WorkflowInterface
 public class GettingStarted {
 
     private static Logger logger = Workflow.getLogger(GettingStarted.class);
@@ -70,6 +71,7 @@ public class GettingStarted {
 
     private static Logger logger = Workflow.getLogger(GettingStarted.class);
 
+    @WorkflowInterface
     public interface HelloWorld {
         @WorkflowMethod
         void sayHello(String name);
@@ -230,6 +232,7 @@ OPTIONS:
 
 So far our workflow is not very interesting. Let's change it to listen on an external event and update state accordingly.
 ```java
+  @WorkflowInterface
   public interface HelloWorld {
     @WorkflowMethod
     void sayHello(String name);
@@ -338,6 +341,7 @@ Temporal provides a query feature that supports synchronously returning any info
 
 Update the workflow code to:
 ```java
+  @WorkflowInterface
   public interface HelloWorld {
     @WorkflowMethod
     void sayHello(String name);
@@ -423,13 +427,13 @@ Let's change our program to print the greeting from an activity on every change.
 
 First let's define an activities interface and implement it:
 ```java
+  @ActivityInterface
   public interface HelloWorldActivities {
-    @ActivityMethod(scheduleToCloseTimeoutSeconds = 100)
     void say(String message);
   }
 ```
-The `@ActivityMethod` annotation is not required, but `scheduleToCloseTimeoutSeconds` is required and annotation is a convenient way to specify it.
-It is allowed to have multiple activities on a single interface.
+`@ActivityInterface` annotation is required for an activity interface. Each method that belongs to an activity interface
+defines a separate activity type.
 
 Activity implementation is just a normal [POJO](https://en.wikipedia.org/wiki/Plain_old_Java_object).
 The `out` stream is passed as a parameter to the constructor to demonstrate that the
@@ -455,7 +459,9 @@ To make the activity implementation known to Temporal, register it with the work
 public class GettingStartedActivityWorker {
 
   public static void main(String[] args) {
-    Worker.Factory factory = new Worker.Factory("default");
+    WorkflowServiceStubs service = WorkflowServiceStubs.newInstance();
+    WorkflowClient client = WorkflowClient.newInstance(service);
+    WorkerFactory factory = WorkerFactory.newInstance(client);
     Worker worker = factory.newWorker("HelloWorldTaskList");
     worker.registerActivitiesImplementations(new HelloWordActivitiesImpl(System.out));
     factory.start();
@@ -656,6 +662,7 @@ _ActivityTaskCompleted_ event is recorded when activity completes. It contains t
 
 Let's look at various failure scenarios. Modify activity task timeout:
 ```java
+  @ActivityInterface
   public interface HelloWorldActivities {
     @ActivityMethod(scheduleToCloseTimeoutSeconds = 100)
     void say(String message);

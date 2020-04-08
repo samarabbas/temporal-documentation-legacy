@@ -36,8 +36,10 @@ go: go.temporal.io/temporal upgrade => v0.21.0
 
 ### Get User Activity
 
+Create file get_user.go
+
 ```go
-package activities
+package main
 
 import (
 	"context"
@@ -55,8 +57,10 @@ func GetUser(ctx context.Context) (string, error) {
 
 ### Send Greeting Activity
 
+Create file send_greeting.go
+
 ```go
-package activities
+package main
 
 import (
 	"context"
@@ -77,17 +81,16 @@ func SendGreeting(ctx context.Context, user string) error {
 
 ## Implement Greetings Workflow
 
+Create file greetings.go
+
 ```go
-package workflows
+package main
 
 import (
-    "time"
-    
-    "go.uber.org/zap"
+	"time"
 
-    "go.temporal.io/temporal/workflow"
-
-	"github.com/temporalio/tutorial-go-sdk/activities"
+	"go.temporal.io/temporal/workflow"
+	"go.uber.org/zap"
 )
 
 // Greetings is the implementation for Temporal workflow
@@ -102,12 +105,12 @@ func Greetings(ctx workflow.Context) error {
 	ctx = workflow.WithActivityOptions(ctx, ao)
 
 	var user string
-	err := workflow.ExecuteActivity(ctx, activities.GetUser).Get(ctx, &user)
+	err := workflow.ExecuteActivity(ctx, GetUser).Get(ctx, &user)
 	if err != nil {
 		return err
 	}
 
-	err = workflow.ExecuteActivity(ctx, activities.SendGreeting, user).Get(ctx, nil)
+	err = workflow.ExecuteActivity(ctx, SendGreeting, user).Get(ctx, nil)
 	if err != nil {
 		return err
 	}
@@ -119,14 +122,13 @@ func Greetings(ctx workflow.Context) error {
 
 ## Host Workflows and Activities inside Worker
 
+Create file main.go
+
 ```go
 package main
 
 import (
 	"go.uber.org/zap"
-
-	"github.com/temporalio/tutorial-go-sdk/activities"
-	"github.com/temporalio/tutorial-go-sdk/workflows"
 
 	"go.temporal.io/temporal/client"
 	"go.temporal.io/temporal/worker"
@@ -150,9 +152,9 @@ func main() {
 		Logger: logger,
 	})
 
-	worker.RegisterWorkflow(workflows.Greetings)
-	worker.RegisterActivity(activities.GetUser)
-	worker.RegisterActivity(activities.SendGreeting)
+	worker.RegisterWorkflow(Greetings)
+	worker.RegisterActivity(GetUser)
+	worker.RegisterActivity(SendGreeting)
 
 	err = worker.Start()
 	if err != nil {
@@ -168,7 +170,7 @@ func main() {
 Run your worker app which hosts workflow and activity implementations
 
 ```bash
-> go run main.go
+> go run *.go
 2020-04-07T22:44:53.073-0700    INFO    tutorial-go-sdk/main.go:19      Zap logger created
 2020-04-07T22:44:53.111-0700    INFO    internal/internal_worker.go:1021        Started Worker  {"Namespace": "default", "TaskList": "tutorial_tl", "WorkerID": "59260@local@"}
 ```
@@ -176,7 +178,7 @@ Run your worker app which hosts workflow and activity implementations
 ## Start workflow execution
 
 ```bash
-> docker run --rm temporalio/tctl:0.21.1 --address host.docker.internal:7233 wf start --tl tutorial_tl -w Greet_Temporal_1 --wt Greetings --et 3600 --dt 10
+> docker run --network=host --rm temporalio/tctl:0.21.1 wf start --tl tutorial_tl -w Greet_Temporal_1 --wt Greetings --et 3600 --dt 10
 Started Workflow Id: Greet_Temporal_1, run Id: b4f8957a-565c-40ad-8495-15a41338f8f4
 ```
 

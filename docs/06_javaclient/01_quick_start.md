@@ -12,7 +12,7 @@ Follow the Docker installation instructions found here: https://docs.docker.com/
 
 Download the Temporal docker-compose file:
 ```bash
-> curl -O https://raw.githubusercontent.com/temporalio/temporal/master/docker/docker-compose.yml
+> curl -O https://raw.githubusercontent.com/temporalio/temporal/v0.21.1/docker/docker-compose.yml
   % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
                                  Dload  Upload   Total   Spent    Left  Speed
 100   538  100   538    0     0   2468      0 --:--:-- --:--:-- --:--:--  2467

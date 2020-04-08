@@ -1,7 +1,5 @@
 # Java Hello World Workflow Implementation
 
-{% include youtubePlayer.html id="5mBLspVKOAI" %}
-
 Source code:
 
 ```java
@@ -42,6 +40,6 @@ public class Main {
 ```
 Commands:
 ```bash
-tctl -do samples-namespace workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
+docker run --network=host --rm temporalio/tctl:0.21.1 workflow start --et 300 --tl hello --wt HelloWorkflow_getGreeting --input \"World\"
 ```
 

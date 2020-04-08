@@ -15,10 +15,10 @@ set TEMPORAL_CLI_NAMESPACE=samples-namespace
 
 Check if samples-namespace exists:
 ```bash
-docker run --rm temporalio/tctl:latest n desc
+docker run --rm temporalio/tctl:0.21.1 n desc
 ```
 
 Create samples-namespace:
 ```bash
-docker run --rm temporalio/tctl:latest n register --rd 7
+docker run --rm temporalio/tctl:0.21.1 n register --rd 7
 ```

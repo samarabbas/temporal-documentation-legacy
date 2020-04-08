@@ -7,11 +7,11 @@ Commands executed during the tutorial:
 ```bash
 docker-compose up
 
-docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --namespace samples-namespace namespace register
+docker run --rm temporalio/tctl:0.21.1 --address host.docker.internal:7233 --namespace samples-namespace namespace register
 
-docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --namespace samples-namespace namespace describe
+docker run --rm temporalio/tctl:0.21.1 --address host.docker.internal:7233 --namespace samples-namespace namespace describe
 
-alias tctl="docker run --rm temporalio/tctl:latest --address host.docker.internal:7233"
+alias tctl="docker run --rm temporalio/tctl:0.21.1 --address host.docker.internal:7233"
 
 tctl --namespace samples-namespace namespace desc
 

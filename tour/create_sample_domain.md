@@ -19,7 +19,7 @@ with `docker-compose down`, that will wipe out the data and you'll need to creat
 The Temporal CLI can be used directly from the Docker image *temporalio/tctl* or by 
 [building the CLI tool](https://github.com/temporalio/temporal/tree/master/tools/cli#how) locally (which requires 
 cloning the server code). The samples in this tour will use the Docker image. If using a locally built 
-version, replace `docker run --rm temporalio/tctl:latest` with `tctl`.
+version, replace `docker run --rm temporalio/tctl:0.21.1` with `tctl`.
 
 ## Environment variables
 

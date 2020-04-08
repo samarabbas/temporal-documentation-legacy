@@ -11,13 +11,13 @@ locally.
 
 Example of using the docker image to describe a namespace:
 ```
-docker run --rm temporalio/tctl:latest --namespace samples-namespace namespace describe
+docker run --rm temporalio/tctl:0.21.1 --namespace samples-namespace namespace describe
 ```
 
 On Docker versions 18.03 and later, you may get a "connection refused" error. You can work around this by setting the host to "host.docker.internal" (see [here](https://docs.docker.com/docker-for-mac/networking/#use-cases-and-workarounds) for more info).
 
 ```
-docker run --rm temporalio/tctl:latest --address host.docker.internal:7233 --namespace samples-namespace namespace describe
+docker run --rm temporalio/tctl:0.21.1 --address host.docker.internal:7233 --namespace samples-namespace namespace describe
 ```
 
 To build the CLI tool locally, clone the [Temporal server repo](https://github.com/temporalio/temporal) and run

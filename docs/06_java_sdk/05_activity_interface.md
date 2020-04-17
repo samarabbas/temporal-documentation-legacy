@@ -19,7 +19,7 @@ public interface FileProcessingActivities {
 
     String download(String bucketName, String remoteName);
 
-    @ActivityMethod(scheduleToCloseTimeoutSeconds = 2)
+    @ActivityMethod(name="transcode_file")
     String processFile(String localName);
 
     void deleteLocalFile(String fileName);

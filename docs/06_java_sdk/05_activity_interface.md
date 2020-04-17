@@ -12,7 +12,7 @@ interface. The default implementation uses a JSON serializer, but an alternative
 Following is an example of an interface that defines four activities:
 
 ```java
-@ActivityAnnotation
+@ActivityInterface
 public interface FileProcessingActivities {
 
     void upload(String bucketName, String localName, String targetName);
